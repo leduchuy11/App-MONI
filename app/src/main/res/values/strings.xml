@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">App Moni</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register">Đăng ký</string>
+    <string name="confirmPassword">Xác nhận lại mật khẩu</string>
+    <string name="email">Nhập email</string>
+    <string name="name">Nhập tên hiển thị</string>
+    <string name="password">Nhập mật khẩu</string>
+    <string name="text_register">Đăng ký tài khoản</string>
+    <string name="login">Đăng nhập</string>
+    <string name="loginGoogle">Đăng nhập bằng Google</string>
+    <string name="todo">TODO</string>
+    <string name="text_login">Đăng nhập tài khoản</string>
+    <string name="text_acount">Bạn chưa có tài khoản?</string>
+    <string name="forgotPassword">Quên mật khẩu?</string>
+</resources>

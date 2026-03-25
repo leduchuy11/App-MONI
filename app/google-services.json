@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "500814810305",
+    "project_id": "appmoni-f85cb",
+    "storage_bucket": "appmoni-f85cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500814810305:android:a9ff2bdc5fd4f6cb511840",
+        "android_client_info": {
+          "package_name": "com.example.appmoni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500814810305-cokmpa6rk9fvb1186td7ollugnjvqar7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appmoni",
+            "certificate_hash": "ab8e2d5acef604f162d6b84d7eb408fc43b2efb7"
+          }
+        },
+        {
+          "client_id": "500814810305-eaeoadm2s2pisab9i0uir44uq5iek4qv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ2_axSPmSsfDjYtXE6-r_UdD3tNjFtmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500814810305-eaeoadm2s2pisab9i0uir44uq5iek4qv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

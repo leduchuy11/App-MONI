@@ -1,0 +1,36 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AppMoni" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<!--        <item name="android:statusBarColor">@color/white</item>-->
+    </style>
+
+    <style name="Theme.AppMoni" parent="Base.Theme.AppMoni" >
+        <item name="android:statusBarColor">@color/blue_bottomnav</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/blue_bottomnav</item>
+
+    </style>
+
+    //Themes của riêng activitty login
+    <style name="Theme.AppMoni.Login" parent="Base.Theme.AppMoni">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <style name="BottomNavTextStyle" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="SolidWhiteIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#FFFFFF</item>
+        <item name="android:width">56dp</item>
+        <item name="android:height">32dp</item>
+    </style>
+
+
+</resources>

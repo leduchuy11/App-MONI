@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AppMoni" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+    <style name="Theme.AppMoni" parent="Base.Theme.AppMoni" >
+        <item name="android:statusBarColor">@color/blue_bottomnav</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/blue_bottomnav</item>
+
+    </style>
+
+    //Themes của riêng activitty login
+    <style name="Theme.AppMoni.Login" parent="Base.Theme.AppMoni">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+
+</resources>

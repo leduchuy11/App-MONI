@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_main"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/blue_bottomnav"
+        android:background="@drawable/bg_floating_bottom_nav"
         app:itemActiveIndicatorStyle="@style/SolidWhiteIndicator"
         app:elevation="24dp"
         app:itemRippleColor="@android:color/transparent"
@@ -33,6 +33,9 @@
         app:itemIconTint="@color/bottom_nav_item_color"
 
         app:itemTextColor="@color/bottom_nav_text_color"
+
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
 
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"

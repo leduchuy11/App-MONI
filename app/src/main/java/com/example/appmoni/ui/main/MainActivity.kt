@@ -2,6 +2,8 @@ package com.example.appmoni.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.fragment.NavHostFragment
@@ -17,8 +19,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, true)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        enableEdgeToEdge(
+            // Status Bar Nền Xanh, Icon Trắng
+            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.parseColor("#008fd5")),
+
+            // Navigation Bar Nền Đen, Icon tự động thành Trắng
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.BLACK)
+        )
 
 
         // Thiết lập Navigation Component

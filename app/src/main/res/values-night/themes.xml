@@ -21,5 +21,11 @@
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
+    Avatar ở home -header
+    <style name="ShapeAppearanceOverlay.AppMoni.Circular" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 
 </resources>

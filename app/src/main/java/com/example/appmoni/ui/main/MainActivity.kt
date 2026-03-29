@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Ép app luôn chạy chế độ sáng
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         enableEdgeToEdge(
             // Status Bar Nền Xanh, Icon Trắng
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.parseColor("#008fd5")),

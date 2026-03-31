@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA"
     android:fillViewport="true"
-    tools:context=".ui.main.HomeFragment">
+    tools:context=".ui.main.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

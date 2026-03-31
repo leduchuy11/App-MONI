@@ -7,27 +7,36 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.appmoni.ui.main.HomeFragment"
+        android:name="com.example.appmoni.ui.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/walletFragment"
-        android:name="com.example.appmoni.ui.main.WalletFragment"
+        android:name="com.example.appmoni.ui.main.wallet.WalletFragment"
         android:label="fragment_wallet"
         tools:layout="@layout/fragment_wallet" />
     <fragment
         android:id="@+id/recordFragment"
-        android:name="com.example.appmoni.ui.main.RecordFragment"
+        android:name="com.example.appmoni.ui.main.record.RecordFragment"
         android:label="fragment_record"
-        tools:layout="@layout/fragment_record" />
+        tools:layout="@layout/fragment_record" >
+        <action
+            android:id="@+id/action_recordFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.example.appmoni.ui.main.ReportFragment"
+        android:name="com.example.appmoni.ui.main.report.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.appmoni.ui.main.ProfileFragment"
+        android:name="com.example.appmoni.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.appmoni.ui.main.record.category.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
 </navigation>

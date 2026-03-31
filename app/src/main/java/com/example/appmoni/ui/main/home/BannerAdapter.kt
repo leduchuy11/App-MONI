@@ -1,4 +1,4 @@
-package com.example.appmoni.ui.main
+package com.example.appmoni.ui.main.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

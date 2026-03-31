@@ -1,14 +1,15 @@
-package com.example.appmoni.ui.main
+package com.example.appmoni.ui.main.home
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentHomeBinding
+import com.example.appmoni.ui.main.home.BannerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA"
     android:fillViewport="true"
-    tools:context=".ui.main.RecordFragment">
+    tools:context=".ui.main.record.RecordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             app:strokeWidth="0dp">
 
             <LinearLayout
-                android:layout_width="220dp"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -68,8 +68,8 @@
 
                     <ImageView
                         android:id="@+id/iv_type_icon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_flying_money" />
                 </com.google.android.material.card.MaterialCardView>
@@ -78,15 +78,16 @@
                     android:id="@+id/tv_type_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="Chi tiền"
                     android:textColor="@color/blue_dark"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/ic_triangle"
                     app:tint="@color/blue_dark" />
             </LinearLayout>
@@ -176,6 +177,7 @@
             app:strokeWidth="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_qr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp">
@@ -233,19 +235,19 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp">
 
-                <include layout="@layout/record_item_category" />
+                <include android:id="@+id/item_category_expense" layout="@layout/record_item_category" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_acount_source" />
+                <include android:id="@+id/item_source_expense" layout="@layout/record_item_acount_source" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_date" />
+                <include android:id="@+id/item_date_expense" layout="@layout/record_item_date" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_note" />
+                <include android:id="@+id/item_note_expense" layout="@layout/record_item_note" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -270,19 +272,19 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp">
 
-                <include layout="@layout/record_item_category" />
+                <include android:id="@+id/item_category_income" layout="@layout/record_item_category" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_account_destination" />
+                <include android:id="@+id/item_destination_income" layout="@layout/record_item_account_destination" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_date" />
+                <include android:id="@+id/item_date_income" layout="@layout/record_item_date" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_note" />
+                <include android:id="@+id/item_note_income"  layout="@layout/record_item_note" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -307,19 +309,19 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp">
 
-                <include layout="@layout/record_item_acount_source" />
+                <include android:id="@+id/item_source_transfer"  layout="@layout/record_item_acount_source" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_account_destination" />
+                <include android:id="@+id/item_destination_transfer" layout="@layout/record_item_account_destination" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_date" />
+                <include android:id="@+id/item_date_transfer" layout="@layout/record_item_date" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_note" />
+                <include android:id="@+id/item_note_transfer" layout="@layout/record_item_note" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -344,19 +346,19 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp">
 
-                <include layout="@layout/record_item_debtor" />
+                <include android:id="@+id/item_name_lend" layout="@layout/record_item_debtor" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_acount_source" />
+                <include android:id="@+id/item_source_lend" layout="@layout/record_item_acount_source" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_date" />
+                <include android:id="@+id/item_date_lend" layout="@layout/record_item_date" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_note" />
+                <include android:id="@+id/item_note_lend" layout="@layout/record_item_note" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -381,21 +383,28 @@
                 android:orientation="vertical"
                 android:paddingVertical="8dp">
 
-                <include layout="@layout/record_item_creditor" />
+                <include android:id="@+id/item_name_borrow" layout="@layout/record_item_creditor" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_account_destination" />
+                <include android:id="@+id/item_destination_borrow" layout="@layout/record_item_account_destination" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_date" />
+                <include android:id="@+id/item_date_borrow" layout="@layout/record_item_date" />
 
                 <View style="@style/AddTransDividerStyle" />
 
-                <include layout="@layout/record_item_note" />
+                <include android:id="@+id/item_note_borrow" layout="@layout/record_item_note" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="card_details_expense,card_details_income,card_details_transfer,card_details_lend,card_details_borrow" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -413,6 +422,6 @@
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_details_expense" />
+            app:layout_constraintTop_toBottomOf="@id/barrier_details" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

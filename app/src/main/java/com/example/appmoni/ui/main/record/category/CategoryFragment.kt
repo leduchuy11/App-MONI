@@ -34,6 +34,9 @@ class CategoryFragment : Fragment() {
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
 
+        // Reset từ khóa tìm kiếm mỗi khi vào lại màn hình này cho sạch sẽ
+        sharedViewModel.updateQuery("")
+
         // Lắng nghe bàn phím và phát tín hiệu
         binding.etSearch.addTextChangedListener { text ->
             // Mỗi khi gõ 1 chữ, cập nhật chữ đó cho sharedViewModel

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentHomeBinding
 import com.example.appmoni.ui.main.home.BannerAdapter
@@ -64,6 +65,11 @@ class HomeFragment : Fragment() {
         }
 
         autoScrollHandler.postDelayed(autoScrollRunnable, 5000)
+
+
+        binding.llCategoryList.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageCategoryFragment)
+        }
     }
 
     override fun onDestroyView() {

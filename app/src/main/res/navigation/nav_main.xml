@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.appmoni.ui.main.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_manageCategoryFragment"
+            app:destination="@id/manageCategoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/walletFragment"
         android:name="com.example.appmoni.ui.main.wallet.WalletFragment"
@@ -39,4 +43,16 @@
         android:name="com.example.appmoni.ui.main.record.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/manageCategoryFragment"
+        android:name="com.example.appmoni.ui.main.home.manageCategory.ManageCategoryFragment"
+        android:label="ManageCategoryFragment" >
+        <action
+            android:id="@+id/action_manageCategoryFragment_to_addEditCategoryFragment"
+            app:destination="@id/addEditCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditCategoryFragment"
+        android:name="com.example.appmoni.ui.main.home.manageCategory.addAndEdit.AddEditCategoryFragment"
+        android:label="AddEditCategoryFragment" />
 </navigation>

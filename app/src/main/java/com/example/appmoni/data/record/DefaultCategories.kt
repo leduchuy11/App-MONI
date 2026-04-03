@@ -51,7 +51,7 @@ object DefaultCategories {
             CategoryExpenseItem("exp_22", "Rửa xe", "ic_category_car_wash", "Đi lại"),
             CategoryExpenseItem("exp_23", "Sửa chữa, bảo dưỡng xe", "ic_category_maintenance", "Đi lại"),
             CategoryExpenseItem("exp_24", "Taxi/thuê xe", "ic_category_taxi", "Đi lại"),
-            CategoryExpenseItem("exp_25", "Xăng xe", "ic_category_gas", "Đi lại"),
+            CategoryExpenseItem("exp_25", "Xăng xe", "ic_category_car_gas", "Đi lại"),
 
             // NHÓM HIẾU HỈ
             CategoryExpenseItem("exp_26", "Biếu tặng", "ic_category_gift_giving", "Hiếu hỉ"),

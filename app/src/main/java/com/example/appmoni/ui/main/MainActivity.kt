@@ -67,5 +67,24 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                // LIỆT KÊ CÁC MÀN HÌNH GỐC (Được phép hiện Bottom Nav)
+                R.id.homeFragment,
+                R.id.walletFragment,
+                R.id.recordFragment,
+                R.id.reportFragment,
+                R.id.profileFragment -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+
+                // TẤT CẢ CÁC MÀN HÌNH CÒN LẠI (Sẽ tự động ẩn Bottom Nav)
+                else -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+            }
+        }
+
     }
 }

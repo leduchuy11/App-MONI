@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appmoni.R
-import com.example.appmoni.data.record.CategoryIncomeItem
+import com.example.appmoni.data.model.category.CategoryIncomeItem
 import com.example.appmoni.databinding.ItemManageCategoryBinding
 
 class ManageIncomeAdapter(

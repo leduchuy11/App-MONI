@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.appmoni.ui.login.LoginFragment"
+        android:name="com.example.appmoni.ui.auth.LoginFragment"
         android:label=""
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.example.appmoni.ui.login.ForgotPasswordFragment"
+        android:name="com.example.appmoni.ui.auth.ForgotPasswordFragment"
         android:label="Quên mật khẩu"
         tools:layout="@layout/fragment_forgot_password" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.appmoni.ui.login.RegisterFragment"
+        android:name="com.example.appmoni.ui.auth.RegisterFragment"
         android:label="Đăng ký tài khoản"
         tools:layout="@layout/fragment_register" />
 </navigation>

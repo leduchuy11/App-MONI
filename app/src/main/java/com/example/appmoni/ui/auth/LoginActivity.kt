@@ -1,4 +1,4 @@
-package com.example.appmoni.ui.login
+package com.example.appmoni.ui.auth
 
 import android.content.Intent
 import android.os.Bundle

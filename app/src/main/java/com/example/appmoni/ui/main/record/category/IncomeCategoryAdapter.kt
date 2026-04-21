@@ -3,7 +3,7 @@ package com.example.appmoni.ui.main.record.category
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appmoni.data.record.CategoryIncomeItem
+import com.example.appmoni.data.model.category.CategoryIncomeItem
 import com.example.appmoni.databinding.ItemIncomeCategoryBinding
 
 class IncomeCategoryAdapter(

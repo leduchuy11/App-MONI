@@ -1,6 +1,4 @@
-package com.example.appmoni.data.record
-
-import androidx.annotation.DrawableRes
+package com.example.appmoni.data.model.category
 
 data class CategoryExpenseItem(
     var id: String = "",

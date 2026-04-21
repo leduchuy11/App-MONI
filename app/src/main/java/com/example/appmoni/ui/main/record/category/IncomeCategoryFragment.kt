@@ -1,5 +1,6 @@
 package com.example.appmoni.ui.main.record.category
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,27 +15,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
-import com.example.appmoni.data.record.CategoryIncomeItem
-import com.example.appmoni.data.record.DefaultCategories
+import com.example.appmoni.data.model.category.CategoryIncomeItem
 import com.example.appmoni.databinding.FragmentIncomeCategoryBinding
 import com.example.appmoni.ui.removeAccents
 import com.example.appmoni.ui.showCustomToast
 import com.example.appmoni.viewmodel.record.CategorySharedViewModel
+import com.example.appmoni.viewmodel.record.ManageCategoryViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class IncomeCategoryFragment : Fragment() {
 
     private var _binding: FragmentIncomeCategoryBinding? = null
     private val binding get() = _binding!!
 
-
-    private val db = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
-
     private lateinit var sharedViewModel: CategorySharedViewModel
+    private lateinit var viewModel: ManageCategoryViewModel
 
-    // Biến nhớ danh sách gốc
     private var originalList = listOf<CategoryIncomeItem>()
 
     override fun onCreateView(
@@ -50,11 +46,22 @@ class IncomeCategoryFragment : Fragment() {
 
         setupRecyclerView()
 
-        sharedViewModel = ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
-        sharedViewModel.searchQuery.observe(viewLifecycleOwner) { query ->
-            filterData(query)
+        sharedViewModel =
+            ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ManageCategoryViewModel::class.java)
+
+        // Lắng nghe sự kiện
+        setupObservers()
+
+        // Tải dữ liệu Thu tiền
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val sharedPref =
+                requireActivity().getSharedPreferences("AppMoniPrefs", Context.MODE_PRIVATE)
+            val isFirstTime = sharedPref.getBoolean("isFirstTime_${userId}", true)
+
+            viewModel.loadIncomeCategories(userId, isFirstTime)
         }
-        loadDataFromFirebase()
     }
 
     private fun setupRecyclerView() {
@@ -64,68 +71,53 @@ class IncomeCategoryFragment : Fragment() {
         binding.rvIncomeCategories.addItemDecoration(divider)
     }
 
-    // Đọc dữ liệu từ Firestore
-    private fun loadDataFromFirebase() {
-        // Lấy ID của người dùng đang đăng nhập hiện tại
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-            requireContext().showCustomToast(
-                "Lỗi: Chưa đăng nhập!",
-                R.drawable.avatar_app
-            )
-            return
+    private fun setupObservers() {
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.rvIncomeCategories.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
         }
-        val userId = currentUser.uid
 
-        binding.progressBar.visibility = View.VISIBLE
-        binding.rvIncomeCategories.visibility = View.INVISIBLE
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+            }
+        }
 
-        // Vào data của user
-        db.collection("users").document(userId)
-            .collection("categories")
-            .whereEqualTo("type", "income")
-            .get()
-            .addOnSuccessListener { documents ->
+        // Hóng data mảng Thu tiền
+        viewModel.incomeList.observe(viewLifecycleOwner) { list ->
+            originalList = list
+            val currentQuery = sharedViewModel.searchQuery.value ?: ""
+            filterData(currentQuery)
+        }
 
-                binding.progressBar.visibility = View.GONE
-                binding.rvIncomeCategories.visibility = View.VISIBLE
-
-                if (documents.isEmpty) {
-                    Log.d("Firebase", "Người dùng mới tinh, đang nạp dữ liệu mặc định...")
-                    uploadDefaultCategoriesToFirebase(userId)
-                } else {
-                    val incomeList = mutableListOf<CategoryIncomeItem>()
-                    for (doc in documents) {
-                        val item = doc.toObject(CategoryIncomeItem::class.java)
-                        item.id = doc.id
-                        incomeList.add(item)
-                    }
-                    originalList = incomeList
-                    updateUI(originalList)
+        viewModel.updateFirstTimeFlag.observe(viewLifecycleOwner) { shouldUpdate ->
+            if (shouldUpdate) {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                if (userId != null) {
+                    val sharedPref =
+                        requireActivity().getSharedPreferences("AppMoniPrefs", Context.MODE_PRIVATE)
+                    sharedPref.edit().putBoolean("isFirstTime_${userId}", false).apply()
                 }
             }
-            .addOnFailureListener { exception ->
-                requireContext().showCustomToast(
-                    "Lỗi tải dữ liệu: ${exception.message}",
-                    R.drawable.avatar_app
-                )
-            }
-    }
-
-    //Đẩy dữ liệu lên Firestore lần đầu
-    private fun uploadDefaultCategoriesToFirebase(userId: String) {
-        val defaultList = DefaultCategories.getIncomeCategories()
-        val userCategoriesRef = db.collection("users").document(userId).collection("categories")
-
-        for (item in defaultList) {
-            userCategoriesRef.document(item.id).set(item)
         }
 
-        // Đẩy xong thì gọi lại hàm lấy dữ liệu để hiển thị
-        loadDataFromFirebase()
+        sharedViewModel.searchQuery.observe(viewLifecycleOwner) { query ->
+            filterData(query)
+        }
     }
 
-    // Xử lý sự kiện click: chọn danh mục & đóng màn hình
+    private fun filterData(query: String) {
+        if (query.isEmpty()) {
+            updateUI(originalList)
+        } else {
+            val queryNoAccent = query.removeAccents().lowercase()
+            val filteredList = originalList.filter { item ->
+                item.name.removeAccents().lowercase().contains(queryNoAccent)
+            }
+            updateUI(filteredList)
+        }
+    }
+
     private fun updateUI(list: List<CategoryIncomeItem>) {
         val adapter = IncomeCategoryAdapter(list) { clickedItem ->
             val result = bundleOf(
@@ -138,21 +130,6 @@ class IncomeCategoryFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.rvIncomeCategories.adapter = adapter
-    }
-
-    private fun filterData(query: String) {
-        if (query.isEmpty()) {
-            updateUI(originalList)
-        } else {
-            val queryNoAccent = query.removeAccents().lowercase()
-
-            val filteredList = originalList.filter { item ->
-                val nameNoAccent = item.name.removeAccents().lowercase()
-                nameNoAccent.contains(queryNoAccent)
-            }
-
-            updateUI(filteredList)
-        }
     }
 
     override fun onDestroyView() {

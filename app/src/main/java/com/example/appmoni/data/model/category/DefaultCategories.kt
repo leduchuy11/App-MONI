@@ -1,4 +1,7 @@
-package com.example.appmoni.data.record
+package com.example.appmoni.data.model.category
+
+import com.example.appmoni.data.model.category.CategoryExpenseItem
+import com.example.appmoni.data.model.category.CategoryIncomeItem
 
 object DefaultCategories {
 
@@ -37,19 +40,39 @@ object DefaultCategories {
 
             // NHÓM DỊCH VỤ SINH HOẠT
             CategoryExpenseItem("exp_12", "Điện", "ic_category_electricity", "Dịch vụ sinh hoạt"),
-            CategoryExpenseItem("exp_13", "Điện thoại cố định", "ic_category_landline", "Dịch vụ sinh hoạt"),
-            CategoryExpenseItem("exp_14", "Điện thoại di động", "ic_category_mobile", "Dịch vụ sinh hoạt"),
+            CategoryExpenseItem(
+                "exp_13",
+                "Điện thoại cố định",
+                "ic_category_landline",
+                "Dịch vụ sinh hoạt"
+            ),
+            CategoryExpenseItem(
+                "exp_14",
+                "Điện thoại di động",
+                "ic_category_mobile",
+                "Dịch vụ sinh hoạt"
+            ),
             CategoryExpenseItem("exp_15", "Gas", "ic_category_gas", "Dịch vụ sinh hoạt"),
             CategoryExpenseItem("exp_16", "Internet", "ic_category_internet", "Dịch vụ sinh hoạt"),
             CategoryExpenseItem("exp_17", "Nước", "ic_category_water", "Dịch vụ sinh hoạt"),
-            CategoryExpenseItem("exp_18", "Thuê người giúp việc", "ic_category_maid", "Dịch vụ sinh hoạt"),
+            CategoryExpenseItem(
+                "exp_18",
+                "Thuê người giúp việc",
+                "ic_category_maid",
+                "Dịch vụ sinh hoạt"
+            ),
             CategoryExpenseItem("exp_19", "Truyền hình", "ic_category_tv", "Dịch vụ sinh hoạt"),
 
             // NHÓM ĐI LẠI
             CategoryExpenseItem("exp_20", "Bảo hiểm xe", "ic_category_insurance", "Đi lại"),
             CategoryExpenseItem("exp_21", "Gửi xe", "ic_category_parking", "Đi lại"),
             CategoryExpenseItem("exp_22", "Rửa xe", "ic_category_car_wash", "Đi lại"),
-            CategoryExpenseItem("exp_23", "Sửa chữa, bảo dưỡng xe", "ic_category_maintenance", "Đi lại"),
+            CategoryExpenseItem(
+                "exp_23",
+                "Sửa chữa, bảo dưỡng xe",
+                "ic_category_maintenance",
+                "Đi lại"
+            ),
             CategoryExpenseItem("exp_24", "Taxi/thuê xe", "ic_category_taxi", "Đi lại"),
             CategoryExpenseItem("exp_25", "Xăng xe", "ic_category_car_gas", "Đi lại"),
 
@@ -63,11 +86,26 @@ object DefaultCategories {
             CategoryExpenseItem("exp_30", "Du lịch", "ic_category_travel", "Hưởng thụ"),
             CategoryExpenseItem("exp_31", "Làm đẹp", "ic_category_beauty", "Hưởng thụ"),
             CategoryExpenseItem("exp_32", "Mỹ phẩm", "ic_category_cosmetics", "Hưởng thụ"),
-            CategoryExpenseItem("exp_33", "Phim ảnh ca nhạc", "ic_category_movies_music", "Hưởng thụ"),
-            CategoryExpenseItem("exp_34", "Vui chơi giải trí", "ic_category_entertainment", "Hưởng thụ"),
+            CategoryExpenseItem(
+                "exp_33",
+                "Phim ảnh ca nhạc",
+                "ic_category_movies_music",
+                "Hưởng thụ"
+            ),
+            CategoryExpenseItem(
+                "exp_34",
+                "Vui chơi giải trí",
+                "ic_category_entertainment",
+                "Hưởng thụ"
+            ),
 
             // NHÓM NGÂN HÀNG
-            CategoryExpenseItem("exp_35", "Phí chuyển khoản", "ic_category_transfer_fee", "Ngân hàng"),
+            CategoryExpenseItem(
+                "exp_35",
+                "Phí chuyển khoản",
+                "ic_category_transfer_fee",
+                "Ngân hàng"
+            ),
 
             // NHÓM NHÀ CỬA
             CategoryExpenseItem("exp_36", "Mua sắm đồ đạc", "ic_category_furniture", "Nhà cửa"),
@@ -75,8 +113,18 @@ object DefaultCategories {
             CategoryExpenseItem("exp_38", "Thuê nhà", "ic_category_house_rent", "Nhà cửa"),
 
             // NHÓM PHÁT TRIỂN BẢN THÂN
-            CategoryExpenseItem("exp_39", "Giao lưu, quan hệ", "ic_category_networking", "Phát triển bản thân"),
-            CategoryExpenseItem("exp_40", "Học hành", "ic_category_education", "Phát triển bản thân"),
+            CategoryExpenseItem(
+                "exp_39",
+                "Giao lưu, quan hệ",
+                "ic_category_networking",
+                "Phát triển bản thân"
+            ),
+            CategoryExpenseItem(
+                "exp_40",
+                "Học hành",
+                "ic_category_education",
+                "Phát triển bản thân"
+            ),
 
             // (BỔ SUNG MỚI) NHÓM SỨC KHỎE
             CategoryExpenseItem("exp_41", "Khám chữa bệnh", "ic_category_medical", "Sức khỏe"),

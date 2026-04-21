@@ -1,7 +1,6 @@
-package com.example.appmoni.data.record
+package com.example.appmoni.data.model.category
 
 import android.content.Context
-
 
 data class CategoryIncomeItem(
     var id: String = "",

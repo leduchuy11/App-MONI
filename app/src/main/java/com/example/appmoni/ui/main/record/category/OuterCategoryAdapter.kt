@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appmoni.data.record.CategoryExpenseItem
-import com.example.appmoni.data.record.CategoryExpenseGroup
+import com.example.appmoni.data.model.category.CategoryExpenseItem
+import com.example.appmoni.data.model.category.CategoryExpenseGroup
 import com.example.appmoni.databinding.ItemCategoryGroupBinding
 import com.example.appmoni.ui.main.record.category.InnerCategoryAdapter
 

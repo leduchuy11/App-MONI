@@ -1,4 +1,4 @@
-package com.example.appmoni.data.record
+package com.example.appmoni.data.model.category
 
 data class CategoryExpenseGroup(
     var groupName: String,

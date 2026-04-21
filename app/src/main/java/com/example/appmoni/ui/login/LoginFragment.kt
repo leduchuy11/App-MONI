@@ -9,22 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentLoginBinding
 import com.example.appmoni.ui.main.MainActivity
 import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.viewmodel.auth.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
+
+    private lateinit var viewModel: AuthViewModel
+
     private lateinit var googleSignInClient: GoogleSignInClient
 
     private val launcher =
@@ -33,7 +35,7 @@ class LoginFragment : Fragment() {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 try {
                     val account = task.getResult(ApiException::class.java)
-                    firebaseAuthWithGoogle(account.idToken!!)
+                    viewModel.loginWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     setLoadingState(false)
                     requireContext().showCustomToast(
@@ -57,7 +59,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        // Gọi hàm lắng nghe dữ liệu từ ViewModel
+        setupObservers()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -82,12 +87,34 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // Hàm quản lý trạng thái Loading
+    // HÀM OBSERVE KẾT QUẢ TỪ VIEWMODEL
+    private fun setupObservers() {
+        // Hóng trạng thái Loading để bật/tắt vòng xoay
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            setLoadingState(isLoading)
+        }
+
+        // Hóng thông báo lỗi để hiển thị Toast
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+            }
+        }
+
+        // Hóng trạng thái thành công để chuyển trang
+        viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                requireContext().showCustomToast("Đăng nhập thành công!", R.drawable.avatar_app)
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
+    }
+
     private fun setLoadingState(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-
         val enableUI = !isLoading
-
         binding.tilEmail.isEnabled = enableUI
         binding.tilPassword.isEnabled = enableUI
         binding.btnLogin.isEnabled = enableUI
@@ -103,7 +130,7 @@ class LoginFragment : Fragment() {
         binding.tilEmail.error = null
         binding.tilPassword.error = null
 
-        // Validate
+        // Kiểm tra lỗi giao diện (Validate)
         if (email.isEmpty()) {
             binding.tilEmail.error = "Vui lòng nhập email"
             binding.etEmail.requestFocus()
@@ -125,61 +152,7 @@ class LoginFragment : Fragment() {
             return
         }
 
-        setLoadingState(true)
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-
-                setLoadingState(false)
-
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    if (user != null && user.isEmailVerified) {
-                        requireContext().showCustomToast(
-                            "Đăng nhập thành công!",
-                            R.drawable.moni_toast
-                        )
-                        val intent = Intent(requireContext(), MainActivity::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
-                    } else {
-                        requireContext().showCustomToast(
-                            "Vui lòng vào email để xác thực tài khoản trước khi đăng nhập!",
-                            R.drawable.avatar_app
-                        )
-                        auth.signOut()
-                    }
-                } else {
-                    val errorMessage = task.exception?.message ?: "Đăng nhập thất bại"
-                    requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
-                }
-            }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-
-                setLoadingState(false)
-
-                if (task.isSuccessful) {
-                    requireContext().showCustomToast(
-                        "Đăng nhập Google thành công!",
-                        R.drawable.moni_toast
-                    )
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                } else {
-                    val errorMessage = task.exception?.message ?: "Đăng nhập thất bại"
-                    requireContext().showCustomToast(
-                        "Lỗi Firebase: $errorMessage",
-                        R.drawable.avatar_app
-                    )
-                }
-            }
+        viewModel.login(email, password)
     }
 
     override fun onDestroyView() {

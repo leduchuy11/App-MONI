@@ -2,35 +2,32 @@ package com.example.appmoni.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.ActivityLoginBinding
 import com.example.appmoni.ui.main.MainActivity
-import com.google.firebase.auth.FirebaseAuth
+import com.example.appmoni.viewmodel.auth.AuthViewModel
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var navController: NavController
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: AuthViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        //  Khởi tạo Firebase Auth
-        auth = FirebaseAuth.getInstance()
-        //  Kiểm tra trạng thái đăng nhập ngay lập tức
-        if (auth.currentUser != null && auth.currentUser?.isEmailVerified == true) {
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        // Hỏi ViewModel xem người dùng đã hợp lệ chưa
+        if (viewModel.isUserLoggedInAndVerified()) {
             // Người dùng đã đăng nhập -> Chuyển thẳng sang MainActivity
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -42,8 +39,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         // Thiết lập Toolbar thông qua binding
         setSupportActionBar(binding.toolbarLogin)
@@ -63,8 +58,18 @@ class LoginActivity : AppCompatActivity() {
             if (destination.id == R.id.loginFragment) {
                 supportActionBar?.hide()
 
-                binding.appBarLayout.setBackgroundColor(ContextCompat.getColor(this@LoginActivity, R.color.white))
-                binding.toolbarLogin.setBackgroundColor(ContextCompat.getColor(this@LoginActivity, R.color.white))
+                binding.appBarLayout.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LoginActivity,
+                        R.color.white
+                    )
+                )
+                binding.toolbarLogin.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@LoginActivity,
+                        R.color.white
+                    )
+                )
 
                 window.statusBarColor = ContextCompat.getColor(this@LoginActivity, R.color.white)
 
@@ -79,7 +84,8 @@ class LoginActivity : AppCompatActivity() {
                     ContextCompat.getColor(this@LoginActivity, R.color.blue_main)
                 )
 
-                window.statusBarColor = ContextCompat.getColor(this@LoginActivity, R.color.blue_dark)
+                window.statusBarColor =
+                    ContextCompat.getColor(this@LoginActivity, R.color.blue_dark)
 
                 windowInsetsController.isAppearanceLightStatusBars = false
             }

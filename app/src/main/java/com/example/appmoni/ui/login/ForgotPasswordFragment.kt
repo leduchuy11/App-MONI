@@ -6,16 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentForgotPasswordBinding
 import com.example.appmoni.ui.showCustomToast
-import com.google.firebase.auth.FirebaseAuth
+import com.example.appmoni.viewmodel.auth.AuthViewModel
 
 class ForgotPasswordFragment : Fragment() {
     private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
+
+    private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,14 +30,43 @@ class ForgotPasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        // Gọi hàm lắng nghe kết quả từ ViewModel
+        setupObservers()
 
         // Bắt sự kiện khi nhấn nút "Tiếp tục"
         binding.btnContinue.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
-            // Nếu email hợp lệ thì mới gọi hàm gửi mail
+            // Nếu email hợp lệ thì giao việc cho ViewModel gửi mail
             if (validateEmail(email)) {
-                sendResetPasswordEmail(email)
+                viewModel.resetPassword(email)
+            }
+        }
+    }
+
+    // HÀM QUAN SÁT TỪ VIEWMODEL
+    private fun setupObservers() {
+        // Hóng Loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            setLoadingState(isLoading)
+        }
+
+        // Hóng Lỗi
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+            }
+        }
+
+        // Hóng Thành công (Gửi mail xong)
+        viewModel.isResetEmailSent.observe(viewLifecycleOwner) { isSent ->
+            if (isSent) {
+                requireContext().showCustomToast(
+                    "Link đặt lại mật khẩu đã được gửi vào Email của bạn!",
+                    R.drawable.avatar_app
+                )
+                findNavController().popBackStack()
             }
         }
     }
@@ -57,30 +88,7 @@ class ForgotPasswordFragment : Fragment() {
         return true
     }
 
-    // Hàm gọi Firebase để gửi email đặt lại mật khẩu
-    private fun sendResetPasswordEmail(email: String) {
-        setLoadingState(true)
-
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                setLoadingState(false)
-
-                if (task.isSuccessful) {
-                    // Thành công: Hiện Toast và quay lại màn hình Đăng nhập
-                    requireContext().showCustomToast(
-                        "Link đặt lại mật khẩu đã được gửi vào Email của bạn!",
-                        R.drawable.moni_toast
-                    )
-                    findNavController().popBackStack()
-                } else {
-                    // Thất bại: Hiện Toast báo lỗi
-                    val error = task.exception?.message ?: "Gửi mail thất bại"
-                    requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
-                }
-            }
-    }
-
-    //Hàm hiện processBar để load
+    // Hàm hiện processBar để load
     private fun setLoadingState(isLoading: Boolean) {
         if (isLoading) {
             binding.loadingOverlay.visibility = View.VISIBLE
@@ -93,6 +101,4 @@ class ForgotPasswordFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

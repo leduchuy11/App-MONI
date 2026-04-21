@@ -6,16 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentRegisterBinding
 import com.example.appmoni.ui.showCustomToast
-import com.google.firebase.auth.FirebaseAuth
+import com.example.appmoni.viewmodel.auth.AuthViewModel
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
+
+    private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,20 +30,47 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+
+        // Gọi hàm lắng nghe kết quả
+        setupObservers()
 
         binding.btnRegister.setOnClickListener {
             performRegister()
         }
     }
 
+    // HÀM OBSERVE TỪ VIEWMODEL
+    private fun setupObservers() {
+        // Hóng Loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            setLoadingState(isLoading)
+        }
+
+        // Hóng Lỗi
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+            }
+        }
+
+        // Hóng Thành công
+        viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                requireContext().showCustomToast(
+                    "Đăng ký thành công! Vui lòng kiểm tra email để xác thực.",
+                    R.drawable.avatar_app
+                )
+                findNavController().popBackStack() // Quay lại màn hình đăng nhập
+            }
+        }
+    }
+
     // Hàm quản lý trạng thái Loading
     private fun setLoadingState(isLoading: Boolean) {
-
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 
         val enableUI = !isLoading
-
         binding.tilEmail.isEnabled = enableUI
         binding.tilPassword.isEnabled = enableUI
         binding.tilConfirmpassword.isEnabled = enableUI
@@ -86,79 +115,7 @@ class RegisterFragment : Fragment() {
             return
         }
 
-        setLoadingState(true)
-
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-
-                    if (user != null) {
-                        // Tạo yêu cầu cập nhật tên
-                        val profileUpdates =
-                            com.google.firebase.auth.UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build()
-
-                        // Đẩy tên lên server
-                        user.updateProfile(profileUpdates)
-                            .addOnCompleteListener { profileTask ->
-                                if (profileTask.isSuccessful) {
-                                    // Thành công 100% -> Gửi email xác thực
-                                    sendVerificationEmail()
-                                } else {
-                                    // Lỗi tên thì báo lỗi nhưng vẫn cho gửi email xác thực
-                                    requireContext().showCustomToast(
-                                        "Lỗi cập nhật tên: ${profileTask.exception?.message}",
-                                        R.drawable.avatar_app
-                                    )
-                                    sendVerificationEmail()
-                                }
-                            }
-                    } else {
-                        // Tắt loading nếu lỗi hệ thống
-                        setLoadingState(false)
-                        requireContext().showCustomToast(
-                            "Lỗi hệ thống: Không tìm thấy tài khoản vừa tạo",
-                            R.drawable.avatar_app
-                        )
-                    }
-
-                } else {
-                    // Đăng ký thất bại -> Tắt loading
-                    setLoadingState(false)
-                    val errorMessage = task.exception?.message ?: "Đăng ký thất bại"
-                    requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
-                }
-            }
-    }
-
-    private fun sendVerificationEmail() {
-        val user = auth.currentUser
-
-        if (user != null) {
-            user.sendEmailVerification().addOnCompleteListener { task ->
-                // Mọi thứ hoàn tất (dù gửi mail thành công hay lỗi) -> Tắt loading
-                setLoadingState(false)
-
-                if (task.isSuccessful) {
-                    requireContext().showCustomToast(
-                        "Đăng ký thành công! Vui lòng kiểm tra email để xác thực.",
-                        R.drawable.moni_toast
-                    )
-                    auth.signOut()
-                    findNavController().popBackStack() // Quay lại màn hình đăng nhập
-                } else {
-                    requireContext().showCustomToast(
-                        "Lỗi gửi email xác thực: ${task.exception?.message}",
-                        R.drawable.avatar_app
-                    )
-                }
-            }
-        } else {
-            setLoadingState(false)
-            requireContext().showCustomToast("Không thể gửi email lúc này", R.drawable.avatar_app)
-        }
+        viewModel.register(email, password, name)
     }
 
     override fun onDestroyView() {

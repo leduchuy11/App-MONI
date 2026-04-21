@@ -9,13 +9,21 @@
     android:paddingHorizontal="24dp"
     android:paddingVertical="5dp">
 
-    <ImageView
-        android:id="@+id/img_toast_icon"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="12dp"
-        android:src="@drawable/moni_toast"
-        />
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp">
+
+        <ImageView
+            android:id="@+id/img_toast_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/avatar_app"
+            android:scaleType="centerCrop"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tv_toast_message"

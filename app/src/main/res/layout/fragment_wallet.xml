@@ -114,6 +114,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btn_go_spending"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:clickable="true"
@@ -189,6 +190,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardBackgroundColor="#FFFFFF"
                         app:cardCornerRadius="14dp"
                         app:cardElevation="0dp"

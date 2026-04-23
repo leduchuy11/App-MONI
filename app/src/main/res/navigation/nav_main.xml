@@ -18,7 +18,11 @@
         android:id="@+id/walletFragment"
         android:name="com.example.appmoni.ui.main.wallet.WalletFragment"
         android:label="fragment_wallet"
-        tools:layout="@layout/fragment_wallet" />
+        tools:layout="@layout/fragment_wallet" >
+        <action
+            android:id="@+id/action_walletFragment_to_manageSpendingFragment"
+            app:destination="@id/manageSpendingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/recordFragment"
         android:name="com.example.appmoni.ui.main.record.RecordFragment"
@@ -55,4 +59,24 @@
         android:id="@+id/addEditCategoryFragment"
         android:name="com.example.appmoni.ui.main.home.manageCategory.addAndEdit.AddEditCategoryFragment"
         android:label="AddEditCategoryFragment" />
+    <fragment
+        android:id="@+id/manageSpendingFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSpending.ManageSpendingFragment"
+        android:label="ManageSpendingFragment" >
+        <action
+            android:id="@+id/action_manageSpendingFragment_to_addWalletFragment"
+            app:destination="@id/addWalletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectInstitutionFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSpending.addEditWallet.SelectInstitutionFragment"
+        android:label="SelectInstitutionFragment" />
+    <fragment
+        android:id="@+id/addWalletFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSpending.addEditWallet.AddWalletFragment"
+        android:label="AddWalletFragment" >
+        <action
+            android:id="@+id/action_addWalletFragment_to_selectInstitutionFragment"
+            app:destination="@id/selectInstitutionFragment" />
+    </fragment>
 </navigation>

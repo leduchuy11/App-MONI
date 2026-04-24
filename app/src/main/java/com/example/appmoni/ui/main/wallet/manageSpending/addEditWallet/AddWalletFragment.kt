@@ -48,6 +48,7 @@ class AddWalletFragment : Fragment() {
             viewModel.updateInstitutionInfo(selectedName, selectedIcon)
         }
 
+        setupBalanceFormatter()
         setupClickListeners()
         setupObservers()
     }
@@ -61,14 +62,18 @@ class AddWalletFragment : Fragment() {
 
         // Hóng thành công
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
-            requireContext().showCustomToast(message, R.drawable.avatar_app)
-            findNavController().navigateUp()
+            if (message.isNotEmpty()) {
+                requireContext().showCustomToast(message, R.drawable.avatar_app)
+                viewModel.clearActionSuccess()
+                findNavController().navigateUp()
+            }
         }
 
         // Hóng lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                viewModel.clearErrorMessage()
             }
         }
 
@@ -85,7 +90,8 @@ class AddWalletFragment : Fragment() {
 
         viewModel.accountTypeIcon.observe(viewLifecycleOwner) { typeIcon ->
             currentIconName = typeIcon
-            val iconResId = resources.getIdentifier(typeIcon, "drawable", requireContext().packageName)
+            val iconResId =
+                resources.getIdentifier(typeIcon, "drawable", requireContext().packageName)
             if (iconResId != 0) binding.ivTypeIcon.setImageResource(iconResId)
         }
 
@@ -103,7 +109,8 @@ class AddWalletFragment : Fragment() {
         viewModel.selectedInstitutionIcon.observe(viewLifecycleOwner) { iconName ->
             if (iconName.isNotEmpty()) {
                 currentIconName = iconName
-                val iconResId = resources.getIdentifier(iconName, "drawable", requireContext().packageName)
+                val iconResId =
+                    resources.getIdentifier(iconName, "drawable", requireContext().packageName)
                 if (iconResId != 0) {
                     binding.ivBankIcon.setImageResource(iconResId)
                     binding.ivEwalletIcon.setImageResource(iconResId)
@@ -126,10 +133,12 @@ class AddWalletFragment : Fragment() {
             "cash" -> {
                 binding.layoutAccountName.visibility = View.VISIBLE
             }
+
             "bank" -> {
                 binding.layoutAccountName.visibility = View.VISIBLE
                 binding.layoutSelectBank.visibility = View.VISIBLE
             }
+
             "ewallet" -> {
                 binding.layoutAccountName.visibility = View.VISIBLE
                 binding.layoutSelectEwallet.visibility = View.VISIBLE
@@ -152,12 +161,18 @@ class AddWalletFragment : Fragment() {
 
         binding.btnSelectBank.setOnClickListener {
             val bundle = Bundle().apply { putString("type", "bank") }
-            findNavController().navigate(R.id.action_addWalletFragment_to_selectInstitutionFragment, bundle)
+            findNavController().navigate(
+                R.id.action_addWalletFragment_to_selectInstitutionFragment,
+                bundle
+            )
         }
 
         binding.btnSelectEwallet.setOnClickListener {
             val bundle = Bundle().apply { putString("type", "ewallet") }
-            findNavController().navigate(R.id.action_addWalletFragment_to_selectInstitutionFragment, bundle)
+            findNavController().navigate(
+                R.id.action_addWalletFragment_to_selectInstitutionFragment,
+                bundle
+            )
         }
     }
 
@@ -189,8 +204,8 @@ class AddWalletFragment : Fragment() {
     }
 
     private fun saveWallet() {
-        val balanceStr = binding.etInitialBalance.text.toString()
-        val balance = if (balanceStr.isNotEmpty()) balanceStr.toLong() else 0L
+        val balanceRaw = binding.etInitialBalance.text.toString().replace(".", "")
+        val balance = if (balanceRaw.isNotEmpty()) balanceRaw.toLong() else 0L
 
         var walletName = viewModel.accountTypeName.value ?: "Tiền mặt"
         if (binding.layoutAccountName.isVisible) {
@@ -216,6 +231,36 @@ class AddWalletFragment : Fragment() {
         )
 
         viewModel.addWallet(userId, newWallet)
+    }
+
+    fun setupBalanceFormatter() {
+        binding.etInitialBalance.addTextChangedListener(object : android.text.TextWatcher {
+            private var isUpdating = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (isUpdating) return
+                isUpdating = true
+
+                val originalText = s.toString()
+                val cleanString = originalText.replace(".", "")
+
+                if (cleanString.isNotEmpty()) {
+                    try {
+                        val parsed = cleanString.toLong()
+                        val formatter = java.text.DecimalFormat("#,###")
+                        val formattedString = formatter.format(parsed).replace(",", ".")
+
+                        binding.etInitialBalance.setText(formattedString)
+                        binding.etInitialBalance.setSelection(formattedString.length)
+                    } catch (e: Exception) {
+                    }
+                }
+                isUpdating = false
+            }
+        })
     }
 
     override fun onDestroyView() {

@@ -64,20 +64,7 @@ class WalletViewModel : ViewModel() {
             }
     }
 
-    // GỌI REPOSITORY XÓA DATA
-    fun deleteWallet(userId: String, walletId: String) {
-        _isLoading.value = true
-        repository.deleteWallet(userId, walletId)
-            .addOnSuccessListener {
-                _actionSuccess.value = "Đã xóa tài khoản!"
-                // Xóa xong thì tự động tải lại danh sách mới
-                loadWallets(userId, "spending")
-            }
-            .addOnFailureListener {
-                _errorMessage.value = it.message
-                _isLoading.value = false
-            }
-    }
+
 
     // THÊM VÍ MỚI
     fun addWallet(userId: String, wallet: WalletItem) {
@@ -118,5 +105,74 @@ class WalletViewModel : ViewModel() {
         } else {
             institutionRepository.getRealEWallets()
         }
+    }
+
+    // Hàm sửa 1 ví
+    fun updateWalletInfo(userId: String, updatedWallet: WalletItem) {
+        _isLoading.value = true
+
+        // Gọi sang tầng Repository
+        repository.updateWallet(userId, updatedWallet)
+            .addOnSuccessListener {
+                _isLoading.value = false
+                _actionSuccess.value = "Cập nhật tài khoản thành công!"
+            }
+            .addOnFailureListener { e ->
+                _isLoading.value = false
+                _errorMessage.value = e.message
+            }
+    }
+
+    // Hàm ngưng sử dụng 1 ví
+    fun archiveWallet(userId: String, walletId: String) {
+        _isLoading.value = true
+        repository.archiveWallet(userId, walletId)
+            .addOnSuccessListener {
+                _actionSuccess.value = "Đã ngừng sử dụng tài khoản!"
+                loadWallets(userId, "spending") // Tải lại danh sách
+            }
+            .addOnFailureListener {
+                _errorMessage.value = it.message
+                _isLoading.value = false
+            }
+    }
+
+    // Hàm xóa ví nếu ví chưa có giao dịch nào
+    fun deleteWalletSafely(userId: String, walletId: String) {
+        _isLoading.value = true
+
+        // Kiểm tra xem có giao dịch không
+        repository.checkHasTransactions(userId, walletId)
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    // Không có giao dịch nào -> Tiến hành XÓA THẬT
+                    repository.deleteWallet(userId, walletId)
+                        .addOnSuccessListener {
+                            _actionSuccess.value = "Đã xóa tài khoản!"
+                            loadWallets(userId, "spending")
+                        }
+                        .addOnFailureListener { e ->
+                            _errorMessage.value = "Lỗi khi xóa: ${e.message}"
+                            _isLoading.value = false
+                        }
+                } else {
+                    // CÓ GIAO DỊCH -> Chặn lại và báo lỗi
+                    _isLoading.value = false
+                    _errorMessage.value =
+                        "Không thể xóa vì đã có giao dịch. Hãy chuyển sang Ngưng sử dụng hoặc xóa hết lịch sử các giao dịch trước để tránh sai lệch dữ liệu'."
+                }
+            }
+            .addOnFailureListener { e ->
+                _isLoading.value = false
+                _errorMessage.value = "Lỗi kiểm tra dữ liệu: ${e.message}"
+            }
+    }
+
+    fun clearActionSuccess() {
+        _actionSuccess.value = ""
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
     }
 }

@@ -21,8 +21,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_account_icon"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp"
             android:backgroundTint="@color/white"
@@ -46,7 +46,7 @@
             android:layout_marginStart="16dp"
             android:text="Ví tiền mặt"
             android:textColor="#333333"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_account_balance"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
             android:layout_marginTop="2dp"
             android:text="4.389.000 đ"
             android:textColor="#808080"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/card_account_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/card_account_icon"

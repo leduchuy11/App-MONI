@@ -13,6 +13,7 @@ class WalletRepository {
         return db.collection("users").document(userId)
             .collection("wallets")
             .whereEqualTo("type", type)
+            .whereEqualTo("isActive", true)
             .get()
     }
 
@@ -30,5 +31,28 @@ class WalletRepository {
         wallet.id = docRef.id
         // Bắt đầu lưu toàn bộ cục data lên mây
         return docRef.set(wallet)
+    }
+
+    // 4. CẬP NHẬT THÔNG TIN VÍ
+    fun updateWallet(userId: String, wallet: WalletItem): Task<Void> {
+        return db.collection("users").document(userId)
+            .collection("wallets").document(wallet.id)
+            .set(wallet)
+    }
+
+    // 5. Ngưng sử dụng 1 ví
+    fun archiveWallet(userId: String, walletId: String): Task<Void> {
+        return db.collection("users").document(userId)
+            .collection("wallets").document(walletId)
+            .update("isActive", false) // Chỉ cập nhật đúng trường isActive
+    }
+
+    // 6. Hàm kiểm tra xem ví này đã có giao dịch nào chưa
+    fun checkHasTransactions(userId: String, walletId: String): Task<QuerySnapshot> {
+        return db.collection("users").document(userId)
+            .collection("transactions")
+            .whereEqualTo("walletId", walletId)
+            .limit(1)
+            .get()
     }
 }

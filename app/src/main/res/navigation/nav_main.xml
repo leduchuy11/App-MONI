@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_manageSpendingFragment_to_addWalletFragment"
             app:destination="@id/addWalletFragment" />
+        <action
+            android:id="@+id/action_manageSpendingFragment_to_editWalletFragment"
+            app:destination="@id/editWalletFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectInstitutionFragment"
@@ -77,6 +80,15 @@
         android:label="AddWalletFragment" >
         <action
             android:id="@+id/action_addWalletFragment_to_selectInstitutionFragment"
+            app:destination="@id/selectInstitutionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editWalletFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSpending.addEditWallet.EditWalletFragment"
+        android:label="fragment_edit_wallet"
+        tools:layout="@layout/fragment_edit_wallet" >
+        <action
+            android:id="@+id/action_editWalletFragment_to_selectInstitutionFragment"
             app:destination="@id/selectInstitutionFragment" />
     </fragment>
 </navigation>

@@ -63,10 +63,23 @@ class WalletFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        // Hóng danh sách ví từ Firebase đổ về
         viewModel.walletList.observe(viewLifecycleOwner) { wallets ->
             if (wallets != null) {
-                adapter.updateData(wallets)
+                if (wallets.isEmpty()) {
+                    // Ẩn danh sách, hiện cái Card hướng dẫn
+                    binding.rvSpendingAccounts.visibility = View.GONE
+                    binding.cardEmptySpending.visibility = View.VISIBLE
+
+                    // Bấm vào nguyên cái Card để nhảy sang màn quản lý
+                    binding.cardEmptySpending.setOnClickListener {
+                        findNavController().navigate(R.id.action_walletFragment_to_manageSpendingFragment)
+                    }
+                } else {
+                    // Có ví rồi thì hiện danh sách, ẩn cái Card kia đi
+                    binding.cardEmptySpending.visibility = View.GONE
+                    binding.rvSpendingAccounts.visibility = View.VISIBLE
+                    adapter.updateData(wallets)
+                }
                 calculateAndDisplayTotalBalance(wallets)
             }
         }

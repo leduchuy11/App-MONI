@@ -87,9 +87,9 @@ class ManageSpendingFragment : Fragment() {
             if (isLoading) {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.rvWallets.visibility = View.INVISIBLE
+                binding.tvEmptyWallet.visibility = View.GONE
             } else {
                 binding.progressBar.visibility = View.GONE
-                binding.rvWallets.visibility = View.VISIBLE
             }
         }
 

@@ -31,10 +31,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Tiền mặt"
-        android:textColor="#333333"
+        android:text="Chọn tài khoản"
+        android:textColor="#999999"
         android:textSize="14sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_chevron"
         app:layout_constraintTop_toTopOf="parent" />

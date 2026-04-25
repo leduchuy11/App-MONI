@@ -307,6 +307,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
                 android:text="Lưu tài khoản"
+                android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"

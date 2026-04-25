@@ -123,7 +123,8 @@ class IncomeCategoryFragment : Fragment() {
             val result = bundleOf(
                 "selected_id" to clickedItem.id,
                 "selected_name" to clickedItem.name,
-                "selected_type" to clickedItem.type
+                "selected_type" to clickedItem.type,
+                "selected_icon" to clickedItem.iconName
             )
 
             requireParentFragment().setFragmentResult("REQUEST_KEY_CATEGORY", result)

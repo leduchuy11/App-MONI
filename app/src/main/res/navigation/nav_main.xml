@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_recordFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_recordFragment_to_selectWalletFragment"
+            app:destination="@id/selectWalletFragment" />
     </fragment>
     <fragment
         android:id="@+id/reportFragment"
@@ -91,4 +94,8 @@
             android:id="@+id/action_editWalletFragment_to_selectInstitutionFragment"
             app:destination="@id/selectInstitutionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/selectWalletFragment"
+        android:name="com.example.appmoni.ui.main.record.selectWallet.SelectWalletFragment"
+        android:label="SelectWalletFragment" />
 </navigation>

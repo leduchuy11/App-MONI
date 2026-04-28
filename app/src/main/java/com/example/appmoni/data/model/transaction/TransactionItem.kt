@@ -1,6 +1,14 @@
 package com.example.appmoni.data.model.transaction
 
+import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
+
+@Entity(tableName = "transactions")
+@Parcelize
 data class TransactionItem(
+    @PrimaryKey(autoGenerate = false)
     var id: String = "",
     var userId: String = "",
     var type: String = "", // expense, income, transfer, lend, borrow
@@ -25,4 +33,4 @@ data class TransactionItem(
 
     // Tên người (CHỈ DÙNG cho Cho vay / Đi vay)
     var personName: String = ""
-)
+) : Parcelable

@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentHomeBinding
 import com.example.appmoni.ui.main.home.BannerAdapter
+import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeFragment : Fragment() {
 
@@ -20,6 +23,8 @@ class HomeFragment : Fragment() {
 
     private val autoScrollHandler = Handler(Looper.getMainLooper())
     private lateinit var autoScrollRunnable: Runnable
+
+    private val viewModel: TransactionViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +36,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId != null) {
+            // BẬT ĐỒNG BỘ NGAY KHI MỞ TRANG CHỦ
+            viewModel.startSyncing(currentUserId)
+        }
 
         val imageList = listOf(
             R.drawable.img_banner_1,
@@ -69,6 +80,9 @@ class HomeFragment : Fragment() {
 
         binding.llCategoryList.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_manageCategoryFragment)
+        }
+        binding.llCategoryHistory.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
         }
     }
 

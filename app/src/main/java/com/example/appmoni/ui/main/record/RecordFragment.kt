@@ -51,8 +51,8 @@ class RecordFragment : Fragment() {
     private var selectedIncomeCategoryName: String = "Lương"
 
     // 2 biến này để lưu icon danh mục:
-    private var selectedExpenseCategoryIcon: String = "ic_food"
-    private var selectedIncomeCategoryIcon: String = "ic_salary"
+    private var selectedExpenseCategoryIcon: String = "ic_category_breakfast"
+    private var selectedIncomeCategoryIcon: String = "ic_category_salary"
 
     // CÁC BIẾN LƯU VÍ ĐƯỢC CHỌN TỪ SELECTFRAGMENT
 
@@ -139,8 +139,7 @@ class RecordFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        // Gọi hàm phục hồi ở đây để nó chạy SAU cơ chế tự động của Android
-        // Đảm bảo chữ của bạn là người chiến thắng cuối cùng!
+        // Phục hồi giao diện UI
         restoreUIState()
     }
 

@@ -199,7 +199,7 @@ class ManageSpendingFragment : Fragment() {
             bottomSheetDialog.dismiss()
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Xóa tài khoản")
-                .setMessage("Bạn có chắc chắn muốn xóa tài khoản '${wallet.name}' không? Hành động này không thể hoàn tác.")
+                .setMessage("   Bạn có chắc chắn muốn xóa tài khoản '${wallet.name}' không? Hành động này không thể hoàn tác.")
                 .setPositiveButton("Xóa") { dialog, _ ->
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
                     if (userId != null) {

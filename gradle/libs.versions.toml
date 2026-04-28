@@ -27,4 +27,3 @@ firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-fires
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-

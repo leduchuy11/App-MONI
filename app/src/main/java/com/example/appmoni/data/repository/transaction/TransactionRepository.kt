@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class TransactionRepository (private val transactionDao: TransactionDao) {
+class TransactionRepository(private val transactionDao: TransactionDao) {
     private val db = FirebaseFirestore.getInstance()
 
     // Hàm kéo dữ liệu từ room lên màn hình lịch sử ghi chép
@@ -28,43 +28,37 @@ class TransactionRepository (private val transactionDao: TransactionDao) {
                 .collection("transactions")
                 .document()
 
-            transaction.id = transactionRef.id // Gắn ID ngược lại vào object
+            transaction.id = transactionRef.id
 
             transactionDao.insertTransaction(transaction)
 
-            // Thêm lệnh tạo giao dịch vào batch
             batch.set(transactionRef, transaction)
 
             val userWalletsRef =
                 db.collection("users").document(transaction.userId).collection("wallets")
-
-            // Thêm lệnh cập nhật số dư ví vào batch tùy theo loại giao dịch
             when (transaction.type) {
                 "expense", "lend" -> {
-                    // Trừ tiền ví nguồn
                     val walletRef = userWalletsRef.document(transaction.walletId)
                     batch.update(walletRef, "balance", FieldValue.increment(-transaction.amount))
                 }
 
                 "income", "borrow" -> {
-                    // Cộng tiền ví đích
                     val walletRef = userWalletsRef.document(transaction.walletId)
                     batch.update(walletRef, "balance", FieldValue.increment(transaction.amount))
                 }
 
                 "transfer" -> {
-                    // Trừ tiền ví nguồn
                     val sourceRef = userWalletsRef.document(transaction.walletId)
                     batch.update(sourceRef, "balance", FieldValue.increment(-transaction.amount))
 
-                    // Cộng tiền ví đích
                     val destRef = userWalletsRef.document(transaction.destWalletId)
                     batch.update(destRef, "balance", FieldValue.increment(transaction.amount))
                 }
             }
 
-            // THỰC THI TẤT CẢ CÁC LỆNH CÙNG LÚC
-            batch.commit().await()
+            // firebase commit nhưng không await (Để tự động dùng hàng đợi Offline)
+            batch.commit()
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -99,6 +93,8 @@ class TransactionRepository (private val transactionDao: TransactionDao) {
     // HÀM XÓA GIAO DỊCH VÀ ĐẢO NGƯỢC SỐ DƯ
     suspend fun deleteTransaction(transaction: TransactionItem): Result<Unit> {
         return try {
+            transactionDao.deleteTransaction(transaction.id)
+
             val batch = db.batch()
 
             val transactionRef = db.collection("users")
@@ -108,24 +104,21 @@ class TransactionRepository (private val transactionDao: TransactionDao) {
 
             batch.delete(transactionRef)
 
-            val userWalletsRef = db.collection("users").document(transaction.userId).collection("wallets")
+            val userWalletsRef =
+                db.collection("users").document(transaction.userId).collection("wallets")
 
-            // THỰC HIỆN ĐẢO NGƯỢC DÒNG TIỀN
             when (transaction.type) {
                 "expense", "lend" -> {
-                    // Lúc trước trừ tiền -> Giờ cộng lại vào ví nguồn
                     val walletRef = userWalletsRef.document(transaction.walletId)
                     batch.update(walletRef, "balance", FieldValue.increment(transaction.amount))
                 }
 
                 "income", "borrow" -> {
-                    // Lúc trước cộng tiền -> Giờ trừ đi khỏi ví đích
                     val walletRef = userWalletsRef.document(transaction.walletId)
                     batch.update(walletRef, "balance", FieldValue.increment(-transaction.amount))
                 }
 
                 "transfer" -> {
-                    // Lúc trước trừ ví A, cộng ví B -> Giờ cộng lại ví A, trừ đi ví B
                     val sourceRef = userWalletsRef.document(transaction.walletId)
                     batch.update(sourceRef, "balance", FieldValue.increment(transaction.amount))
 
@@ -134,10 +127,8 @@ class TransactionRepository (private val transactionDao: TransactionDao) {
                 }
             }
 
-            batch.commit().await()
-
-            // XÓA LUÔN KHỎI ROOM LOCAL ĐỂ GIAO DIỆN CẬP NHẬT NGAY
-            transactionDao.deleteTransaction(transaction.id)
+            // firebase commit nhưng không await (Để tự động dùng hàng đợi Offline)
+            batch.commit()
 
             Result.success(Unit)
         } catch (e: Exception) {

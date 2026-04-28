@@ -4,17 +4,33 @@ import com.example.appmoni.data.model.wallet.WalletItem
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.Source
 
 class WalletRepository {
     private val db = FirebaseFirestore.getInstance()
 
     // 1. Lấy danh sách ví
-    fun getWalletsByType(userId: String, type: String): Task<QuerySnapshot> {
-        return db.collection("users").document(userId)
+    fun listenToWalletsByType(
+        userId: String,
+        type: String,
+        onResult: (List<WalletItem>) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        db.collection("users").document(userId)
             .collection("wallets")
             .whereEqualTo("type", type)
             .whereEqualTo("isActive", true)
-            .get()
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                if (snapshots != null) {
+                    // Dữ liệu trong Local Cache thay đổi là nó tự đẩy lên UI ngay
+                    val list = snapshots.toObjects(WalletItem::class.java)
+                    onResult(list)
+                }
+            }
     }
 
     // 2. Xóa một ví dựa vào ID
@@ -33,11 +49,48 @@ class WalletRepository {
         return docRef.set(wallet)
     }
 
-    // 4. CẬP NHẬT THÔNG TIN VÍ
-    fun updateWallet(userId: String, wallet: WalletItem): Task<Void> {
-        return db.collection("users").document(userId)
+    // 4. Cập nhật thông tin ví và đồng bộ lịch sử giao dịch
+    fun updateWallet(userId: String, wallet: WalletItem) {
+        // Cập nhật thông tin bản thân cái ví
+        db.collection("users").document(userId)
             .collection("wallets").document(wallet.id)
             .set(wallet)
+
+        // Đi tìm các giao dịch cũ (Ví nguồn) ngay trong bộ nhớ tạm
+        db.collection("users").document(userId).collection("transactions")
+            .whereEqualTo("walletId", wallet.id)
+            .get(Source.CACHE)
+            .addOnSuccessListener { snapshots ->
+                if (!snapshots.isEmpty) {
+                    val batch = db.batch()
+                    for (doc in snapshots.documents) {
+                        batch.update(
+                            doc.reference,
+                            "walletName", wallet.name,
+                            "walletIcon", wallet.iconName
+                        )
+                    }
+                    batch.commit() // Firebase tự xử lý: offline thì lưu tạm, online thì đẩy lên
+                }
+            }
+
+        // Đi tìm các giao dịch Chuyển khoản (Ví đích) ngay trong bộ nhớ tạm
+        db.collection("users").document(userId).collection("transactions")
+            .whereEqualTo("destWalletId", wallet.id)
+            .get(Source.CACHE)
+            .addOnSuccessListener { snapshots ->
+                if (!snapshots.isEmpty) {
+                    val batch = db.batch()
+                    for (doc in snapshots.documents) {
+                        batch.update(
+                            doc.reference,
+                            "destWalletName", wallet.name,
+                            "destWalletIcon", wallet.iconName
+                        )
+                    }
+                    batch.commit()
+                }
+            }
     }
 
     // 5. Ngưng sử dụng 1 ví

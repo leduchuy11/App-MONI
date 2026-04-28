@@ -86,7 +86,6 @@ class ManageSpendingFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 binding.progressBar.visibility = View.VISIBLE
-                binding.rvWallets.visibility = View.INVISIBLE
                 binding.tvEmptyWallet.visibility = View.GONE
             } else {
                 binding.progressBar.visibility = View.GONE
@@ -166,7 +165,7 @@ class ManageSpendingFragment : Fragment() {
                 // Hiện Dialog cảnh báo
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Ngưng sử dụng tài khoản")
-                    .setMessage("Khi đã ngưng sử dụng, bạn sẽ không thể thực hiện giao dịch hay mở lại tài khoản này nữa. Bạn có chắc chắn không?")
+                    .setMessage(" Khi đã ngưng sử dụng, bạn sẽ không thể thực hiện giao dịch hay mở lại tài khoản này nữa. Bạn có chắc chắn không?")
                     .setPositiveButton("Xác nhận") { dialog, _ ->
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
@@ -191,15 +190,19 @@ class ManageSpendingFragment : Fragment() {
 
         btnAdjust.setOnClickListener {
             bottomSheetDialog.dismiss()
-            Toast.makeText(requireContext(), "Đang xây dựng: Điều chỉnh số dư", Toast.LENGTH_SHORT)
-                .show()
+            // Truyền cục dữ liệu Ví và mở màn hình Điều chỉnh
+            val bundle = Bundle().apply { putSerializable("walletItem", wallet) }
+            findNavController().navigate(
+                R.id.action_manageSpendingFragment_to_adjustBalanceFragment,
+                bundle
+            )
         }
 
         btnDelete.setOnClickListener {
             bottomSheetDialog.dismiss()
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Xóa tài khoản")
-                .setMessage("   Bạn có chắc chắn muốn xóa tài khoản '${wallet.name}' không? Hành động này không thể hoàn tác.")
+                .setMessage(" Nếu tài khoản này chưa phát sinh giao dịch mới có thể xóa và hành động này không thể hoàn tác. Bạn có chắc chắn muốn xóa tài khoản '${wallet.name}' không?")
                 .setPositiveButton("Xóa") { dialog, _ ->
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
                     if (userId != null) {

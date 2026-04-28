@@ -311,7 +311,7 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:backgroundTint="#167AC5"
+                app:backgroundTint="#2C93E4"
                 app:cornerRadius="16dp" />
 
         </LinearLayout>

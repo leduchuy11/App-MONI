@@ -121,7 +121,7 @@ class DetailTransactionFragment : Fragment() {
         binding.btnDelete.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Xác nhận xóa")
-                .setMessage("   Bạn có chắc chắn muốn xóa giao dịch này? Nếu xóa số tiền sẽ được hoàn trả lại vào ví tương ứng.")
+                .setMessage(" Bạn có chắc chắn muốn xóa giao dịch này? Nếu xóa số tiền sẽ được hoàn trả lại vào ví tương ứng.")
                 .setPositiveButton("Xóa") { _, _ ->
                     transaction?.let { viewModel.deleteTransaction(it) }
                 }

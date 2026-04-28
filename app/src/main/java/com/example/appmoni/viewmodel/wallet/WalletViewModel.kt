@@ -52,16 +52,16 @@ class WalletViewModel : ViewModel() {
     // GỌI REPOSITORY LẤY DATA
     fun loadWallets(userId: String, type: String = "spending") {
         _isLoading.value = true
-        repository.getWalletsByType(userId, type)
-            .addOnSuccessListener { documents ->
-                val list = documents.toObjects(WalletItem::class.java)
+        repository.listenToWalletsByType(userId, type,
+            onResult = { list ->
                 _walletList.value = list
                 _isLoading.value = false
-            }
-            .addOnFailureListener {
-                _errorMessage.value = it.message
+            },
+            onError = { error ->
+                _errorMessage.value = error.message
                 _isLoading.value = false
             }
+        )
     }
 
 
@@ -69,15 +69,12 @@ class WalletViewModel : ViewModel() {
     // THÊM VÍ MỚI
     fun addWallet(userId: String, wallet: WalletItem) {
         _isLoading.value = true
+
         repository.addWallet(userId, wallet)
-            .addOnSuccessListener {
-                _isLoading.value = false
-                _actionSuccess.value = "Thêm tài khoản thành công!"
-            }
-            .addOnFailureListener { e ->
-                _isLoading.value = false
-                _errorMessage.value = e.message
-            }
+
+        // Phản hồi UI ngay lập tức
+        _isLoading.value = false
+        _actionSuccess.value = "Thêm tài khoản thành công!"
     }
 
     //Cập nhật Loại tài khoản (Tiền mặt / Ngân hàng / Ví điện tử) từ BottomSheet.
@@ -111,30 +108,18 @@ class WalletViewModel : ViewModel() {
     fun updateWalletInfo(userId: String, updatedWallet: WalletItem) {
         _isLoading.value = true
 
-        // Gọi sang tầng Repository
         repository.updateWallet(userId, updatedWallet)
-            .addOnSuccessListener {
-                _isLoading.value = false
-                _actionSuccess.value = "Cập nhật tài khoản thành công!"
-            }
-            .addOnFailureListener { e ->
-                _isLoading.value = false
-                _errorMessage.value = e.message
-            }
+
+        // Phản hồi UI ngay
+        _isLoading.value = false
+        _actionSuccess.value = "Cập nhật tài khoản thành công!"
     }
 
     // Hàm ngưng sử dụng 1 ví
     fun archiveWallet(userId: String, walletId: String) {
-        _isLoading.value = true
         repository.archiveWallet(userId, walletId)
-            .addOnSuccessListener {
-                _actionSuccess.value = "Đã ngừng sử dụng tài khoản!"
-                loadWallets(userId, "spending") // Tải lại danh sách
-            }
-            .addOnFailureListener {
-                _errorMessage.value = it.message
-                _isLoading.value = false
-            }
+
+        _actionSuccess.value = "Đã ngừng sử dụng tài khoản!"
     }
 
     // Hàm xóa ví nếu ví chưa có giao dịch nào
@@ -149,7 +134,6 @@ class WalletViewModel : ViewModel() {
                     repository.deleteWallet(userId, walletId)
                         .addOnSuccessListener {
                             _actionSuccess.value = "Đã xóa tài khoản!"
-                            loadWallets(userId, "spending")
                         }
                         .addOnFailureListener { e ->
                             _errorMessage.value = "Lỗi khi xóa: ${e.message}"
@@ -159,7 +143,7 @@ class WalletViewModel : ViewModel() {
                     // CÓ GIAO DỊCH -> Chặn lại và báo lỗi
                     _isLoading.value = false
                     _errorMessage.value =
-                        "Không thể xóa vì đã có giao dịch. Hãy chuyển sang Ngưng sử dụng hoặc xóa hết lịch sử các giao dịch trước để tránh sai lệch dữ liệu'."
+                        "Không thể xóa vì đã có giao dịch. Hãy chuyển sang Ngưng sử dụng hoặc xóa hết lịch sử các giao dịch trước để tránh sai lệch dữ liệu."
                 }
             }
             .addOnFailureListener { e ->

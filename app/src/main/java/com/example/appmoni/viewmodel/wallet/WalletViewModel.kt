@@ -87,10 +87,7 @@ class WalletViewModel : ViewModel() {
         _selectedInstitutionIcon.value = ""
     }
 
-    /**
-     * Lưu trữ thông tin Tổ chức tài chính cụ thể (Tên và Icon của Ngân hàng hoặc Ví điện tử)
-     * sau khi người dùng chọn xong từ màn hình danh sách và quay trở lại.
-     */
+
     fun updateInstitutionInfo(name: String, icon: String) {
         _selectedInstitutionName.value = name
         _selectedInstitutionIcon.value = icon

@@ -84,6 +84,12 @@ class HomeFragment : Fragment() {
         binding.llCategoryHistory.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
         }
+        binding.llCategoryAccount.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageSpendingFragment)
+        }
+        binding.llCategorySaving.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageSavingsFragment)
+        }
     }
 
     override fun onDestroyView() {

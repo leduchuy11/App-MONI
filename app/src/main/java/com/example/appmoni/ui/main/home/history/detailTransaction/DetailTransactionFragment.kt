@@ -119,11 +119,20 @@ class DetailTransactionFragment : Fragment() {
         }
 
         binding.btnDelete.setOnClickListener {
+            val currentTransaction = transaction ?: return@setOnClickListener
+
+            if (currentTransaction.categoryId == "SYSTEM_SAVINGS" || currentTransaction.categoryName == "Gửi tiết kiệm") {
+                requireContext().showCustomToast(
+                    "Đây là giao dịch tự động không thể xóa.Nếu muốn xóa vui lòng tất toán hoặc xóa Sổ tiết kiệm này trước.",
+                    R.drawable.avatar_app
+                )
+                return@setOnClickListener
+            }
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Xác nhận xóa")
-                .setMessage(" Bạn có chắc chắn muốn xóa giao dịch này? Nếu xóa số tiền sẽ được hoàn trả lại vào ví tương ứng.")
+                .setMessage("Bạn có chắc chắn muốn xóa giao dịch này? Nếu xóa, số tiền sẽ được hoàn trả lại vào ví tương ứng.")
                 .setPositiveButton("Xóa") { _, _ ->
-                    transaction?.let { viewModel.deleteTransaction(it) }
+                    viewModel.deleteTransaction(currentTransaction)
                 }
                 .setNegativeButton("Hủy", null)
                 .show()

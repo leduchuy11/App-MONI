@@ -126,30 +126,26 @@ class WalletViewModel : ViewModel() {
     fun deleteWalletSafely(userId: String, walletId: String) {
         _isLoading.value = true
 
-        // Kiểm tra xem có giao dịch không
-        repository.checkHasTransactions(userId, walletId)
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.isEmpty) {
-                    // Không có giao dịch nào -> Tiến hành XÓA THẬT
+        repository.checkHasTransactions(userId, walletId,
+            onResult = { hasTransactions ->
+                if (!hasTransactions) {
                     repository.deleteWallet(userId, walletId)
-                        .addOnSuccessListener {
-                            _actionSuccess.value = "Đã xóa tài khoản!"
+                        .addOnFailureListener {
                         }
-                        .addOnFailureListener { e ->
-                            _errorMessage.value = "Lỗi khi xóa: ${e.message}"
-                            _isLoading.value = false
-                        }
-                } else {
-                    // CÓ GIAO DỊCH -> Chặn lại và báo lỗi
+
                     _isLoading.value = false
-                    _errorMessage.value =
-                        "Không thể xóa vì đã có giao dịch. Hãy chuyển sang Ngưng sử dụng hoặc xóa hết lịch sử các giao dịch trước để tránh sai lệch dữ liệu."
+                    _actionSuccess.value = "Đã xóa tài khoản!"
+
+                } else {
+                    _isLoading.value = false
+                    _errorMessage.value = "Không thể xóa vì đã có giao dịch. Hãy chuyển sang Ngưng sử dụng hoặc xóa hết lịch sử các giao dịch trước để tránh sai lệch dữ liệu."
                 }
-            }
-            .addOnFailureListener { e ->
+            },
+            onError = { e ->
                 _isLoading.value = false
                 _errorMessage.value = "Lỗi kiểm tra dữ liệu: ${e.message}"
             }
+        )
     }
 
     fun clearActionSuccess() {

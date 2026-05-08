@@ -11,7 +11,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="80dp">
+        android:clipToPadding="false"
+        android:paddingBottom="120dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_wallet_header"
@@ -223,7 +224,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="30dp"
             app:cardBackgroundColor="#E8F5E9"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
@@ -236,7 +237,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -256,6 +257,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btn_go_savings"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:clickable="true"
@@ -278,17 +280,73 @@
                     </com.google.android.material.card.MaterialCardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tv_empty_savings"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_empty_savings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"
-                    android:gravity="center"
-                    android:text="Bạn hiện chưa có sổ tiết kiệm nào"
-                    android:textColor="#81C784"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:visibility="gone" />
+                    android:layout_marginVertical="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#F4F8F4"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#E0E0E0"
+                    app:strokeWidth="1dp"
+                    tools:visibility="visible">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="14dp">
+
+                        <ImageView
+                            android:id="@+id/iv_savings_icon_empty"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_pig_gold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/blue_main" />
+
+                        <TextView
+                            android:id="@+id/tv_add_savings_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="-4dp"
+                            android:text="Tạo sổ tiết kiệm"
+                            android:textColor="#333333"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@id/iv_arrow_next_savings"
+                            app:layout_constraintStart_toEndOf="@id/iv_savings_icon_empty"
+                            app:layout_constraintTop_toTopOf="@id/iv_savings_icon_empty" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Tiết kiệm cho tương lai"
+                            android:textColor="#808080"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toEndOf="@id/tv_add_savings_title"
+                            app:layout_constraintStart_toStartOf="@id/tv_add_savings_title"
+                            app:layout_constraintTop_toBottomOf="@id/tv_add_savings_title" />
+
+                        <ImageView
+                            android:id="@+id/iv_arrow_next_savings"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_horizontal_triangle"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#808080" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_savings_accounts"

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F6F8"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            app:tint="#333333" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Chi tiết sổ tiết kiệm"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <TextView
+                android:id="@+id/tv_savings_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:textColor="#191919"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="Sổ TK số 1" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#E0E0E0"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Số dư ban đầu:" />
+
+                        <TextView
+                            android:id="@+id/tv_initial_amount"
+                            style="@style/DetailValueStyle"
+                            android:textStyle="bold"
+                            tools:text="500.000 đ" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Tổ chức / Ngân hàng:" />
+
+                        <TextView
+                            android:id="@+id/tv_institution"
+                            style="@style/DetailValueStyle"
+                            tools:text="MB Bank" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Ngày gửi:" />
+
+                        <TextView
+                            android:id="@+id/tv_deposit_date"
+                            style="@style/DetailValueStyle"
+                            tools:text="01/10/2023" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Ngày đáo hạn:" />
+
+                        <TextView
+                            android:id="@+id/tv_maturity_date"
+                            style="@style/DetailValueStyle"
+                            android:textColor="#333333"
+                            tools:text="01/04/2024" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Kỳ hạn:" />
+
+                        <TextView
+                            android:id="@+id/tv_term"
+                            style="@style/DetailValueStyle"
+                            tools:text="6 tháng" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Lãi suất:" />
+
+                        <TextView
+                            android:id="@+id/tv_interest_rate"
+                            style="@style/DetailValueStyle"
+                            android:background="#FFF3E0"
+                            android:textColor="#FF9800"
+                            tools:text="5.5 %/năm" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Lãi suất rút trước hạn:" />
+
+                        <TextView
+                            android:id="@+id/tv_early_withdrawal_rate"
+                            style="@style/DetailValueStyle"
+                            android:background="#FFF3E0"
+                            android:textColor="#FF9800"
+                            tools:text="0.1 %/năm" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Hình thức trả lãi:" />
+
+                        <TextView
+                            android:id="@+id/tv_interest_payment_type"
+                            style="@style/DetailValueStyle"
+                            android:textStyle="bold"
+                            tools:text="Cuối kỳ" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Dự kiến tất toán:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_settlement_amount"
+                            style="@style/DetailValueStyle"
+                            android:textColor="#4CAF50"
+                            android:textStyle="bold"
+                            tools:text="513.750 đ" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#E0E0E0"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Trích từ tài khoản:" />
+
+                        <TextView
+                            android:id="@+id/tv_source_wallet"
+                            style="@style/DetailValueStyle"
+                            android:textStyle="bold"
+                            tools:text="Tiền mặt" />
+                    </LinearLayout>
+
+                    <View style="@style/DetailDividerStyle" />
+
+                    <LinearLayout style="@style/DetailRowStyle">
+
+                        <TextView
+                            style="@style/DetailLabelStyle"
+                            android:text="Ghi chú:" />
+
+                        <TextView
+                            android:id="@+id/tv_note"
+                            style="@style/DetailValueStyle"
+                            tools:text="Tiết kiệm mua xe" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

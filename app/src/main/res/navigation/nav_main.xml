@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_homeFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_manageSpendingFragment"
+            app:destination="@id/manageSpendingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_manageSavingsFragment"
+            app:destination="@id/manageSavingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -25,6 +31,9 @@
         <action
             android:id="@+id/action_walletFragment_to_manageSpendingFragment"
             app:destination="@id/manageSpendingFragment" />
+        <action
+            android:id="@+id/action_walletFragment_to_manageSavingsFragment"
+            app:destination="@id/manageSavingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/recordFragment"
@@ -120,4 +129,52 @@
         android:id="@+id/adjustBalanceFragment"
         android:name="com.example.appmoni.ui.main.wallet.manageSpending.adjustBalance.AdjustBalanceFragment"
         android:label="AdjustBalanceFragment" />
+    <fragment
+        android:id="@+id/addSavingsFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSavings.addEditSavings.AddSavingsFragment"
+        android:label="AddSavingsFragment" >
+        <action
+            android:id="@+id/action_addSavingsFragment_to_selectInstitutionFragment"
+            app:destination="@id/selectInstitutionFragment" />
+        <action
+            android:id="@+id/action_addSavingsFragment_to_selectWalletFragment"
+            app:destination="@id/selectWalletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageSavingsFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSavings.ManageSavingsFragment"
+        android:label="ManageSavingsFragment" >
+        <action
+            android:id="@+id/action_manageSavingsFragment_to_addSavingsFragment"
+            app:destination="@id/addSavingsFragment" />
+        <action
+            android:id="@+id/action_manageSavingsFragment_to_detailSavingsFragment"
+            app:destination="@id/detailSavingsFragment" />
+        <action
+            android:id="@+id/action_manageSavingsFragment_to_editSavingsFragment"
+            app:destination="@id/editSavingsFragment" />
+        <action
+            android:id="@+id/action_manageSavingsFragment_to_settleSavingsFragment"
+            app:destination="@id/settleSavingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailSavingsFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSavings.detail.DetailSavingsFragment"
+        android:label="DetailSavingsFragment" />
+    <fragment
+        android:id="@+id/editSavingsFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSavings.addEditSavings.EditSavingsFragment"
+        android:label="EditSavingsFragment" >
+        <action
+            android:id="@+id/action_editSavingsFragment_to_selectInstitutionFragment"
+            app:destination="@id/selectInstitutionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settleSavingsFragment"
+        android:name="com.example.appmoni.ui.main.wallet.manageSavings.settle.SettleSavingsFragment"
+        android:label="SettleSavingsFragment" >
+        <action
+            android:id="@+id/action_settleSavingsFragment_to_selectWalletFragment"
+            app:destination="@id/selectWalletFragment" />
+    </fragment>
 </navigation>

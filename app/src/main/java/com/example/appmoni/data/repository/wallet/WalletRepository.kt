@@ -91,6 +91,23 @@ class WalletRepository {
                     batch.commit()
                 }
             }
+
+        // Đi tìm các Sổ tiết kiệm có nguồn tiền từ ví này để cập nhật lại tên ví
+        db.collection("users").document(userId).collection("savings")
+            .whereEqualTo("sourceWalletId", wallet.id)
+            .get(Source.CACHE)
+            .addOnSuccessListener { snapshots ->
+                if (!snapshots.isEmpty) {
+                    val batch = db.batch()
+                    for (doc in snapshots.documents) {
+                        batch.update(
+                            doc.reference,
+                            "sourceWalletName", wallet.name
+                        )
+                    }
+                    batch.commit()
+                }
+            }
     }
 
     // 5. Ngưng sử dụng 1 ví
@@ -101,11 +118,26 @@ class WalletRepository {
     }
 
     // 6. Hàm kiểm tra xem ví này đã có giao dịch nào chưa
-    fun checkHasTransactions(userId: String, walletId: String): Task<QuerySnapshot> {
-        return db.collection("users").document(userId)
-            .collection("transactions")
-            .whereEqualTo("walletId", walletId)
-            .limit(1)
-            .get()
+    fun checkHasTransactions(
+        userId: String,
+        walletId: String,
+        onResult: (Boolean) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val transactionsRef = db.collection("users").document(userId).collection("transactions")
+
+        transactionsRef.whereEqualTo("walletId", walletId).limit(1).get()
+            .addOnSuccessListener { srcSnapshot ->
+                if (!srcSnapshot.isEmpty) {
+                    onResult(true)
+                } else {
+                    transactionsRef.whereEqualTo("destWalletId", walletId).limit(1).get()
+                        .addOnSuccessListener { destSnapshot ->
+                            onResult(!destSnapshot.isEmpty)
+                        }
+                        .addOnFailureListener { e -> onError(e) }
+                }
+            }
+            .addOnFailureListener { e -> onError(e) }
     }
 }

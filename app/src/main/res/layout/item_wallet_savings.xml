@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="14dp">
+        android:paddingVertical="10dp">
 
         <ImageView
             android:id="@+id/iv_bank_logo"
@@ -36,7 +36,7 @@
             android:layout_marginStart="16dp"
             android:text="Sổ tiết kiệm A"
             android:textColor="#333333"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/iv_bank_logo"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +61,7 @@
                 android:paddingVertical="2dp"
                 android:text="0%"
                 android:textColor="#FF9800"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -72,7 +72,7 @@
             android:layout_marginTop="4dp"
             android:text="5.000.000 đ"
             android:textColor="#808080"
-            android:textSize="15sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_savings_name"
             app:layout_constraintTop_toBottomOf="@id/tv_savings_name" />
@@ -84,7 +84,7 @@
             android:layout_marginTop="4dp"
             android:text="Đáo hạn: 20/06/2026"
             android:textColor="#808080"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_savings_name"
             app:layout_constraintTop_toBottomOf="@id/tv_savings_balance" />

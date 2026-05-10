@@ -22,6 +22,12 @@
         <action
             android:id="@+id/action_homeFragment_to_manageSavingsFragment"
             app:destination="@id/manageSavingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_manageLimitFragment"
+            app:destination="@id/manageLimitFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_limitDetailFragment"
+            app:destination="@id/limitDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -176,5 +182,47 @@
         <action
             android:id="@+id/action_settleSavingsFragment_to_selectWalletFragment"
             app:destination="@id/selectWalletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageLimitFragment"
+        android:name="com.example.appmoni.ui.main.home.manageLimit.ManageLimitFragment"
+        android:label="fragment_manage_limit"
+        tools:layout="@layout/fragment_manage_limit" >
+        <action
+            android:id="@+id/action_manageLimitFragment_to_addLimitFragment"
+            app:destination="@id/addLimitFragment" />
+        <action
+            android:id="@+id/action_manageLimitFragment_to_limitDetailFragment"
+            app:destination="@id/limitDetailFragment" />
+        <action
+            android:id="@+id/action_manageLimitFragment_to_editLimitFragment"
+            app:destination="@id/editLimitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLimitFragment"
+        android:name="com.example.appmoni.ui.main.home.manageLimit.addEditLimit.AddLimitFragment"
+        android:label="fragment_add_limit"
+        tools:layout="@layout/fragment_add_limit" >
+        <action
+            android:id="@+id/action_addLimitFragment_to_selectCategoryLimitFragment"
+            app:destination="@id/selectCategoryLimitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectCategoryLimitFragment"
+        android:name="com.example.appmoni.ui.main.home.manageLimit.addEditLimit.SelectCategoryLimitFragment"
+        android:label="fragment_select_category_limit"
+        tools:layout="@layout/fragment_select_category_limit" />
+    <fragment
+        android:id="@+id/limitDetailFragment"
+        android:name="com.example.appmoni.ui.main.home.manageLimit.detail.LimitDetailFragment"
+        android:label="LimitDetailFragment" />
+    <fragment
+        android:id="@+id/editLimitFragment"
+        android:name="com.example.appmoni.ui.main.home.manageLimit.addEditLimit.EditLimitFragment"
+        android:label="fragment_edit_limit"
+        tools:layout="@layout/fragment_edit_limit" >
+        <action
+            android:id="@+id/action_editLimitFragment_to_selectCategoryLimitFragment"
+            app:destination="@id/selectCategoryLimitFragment" />
     </fragment>
 </navigation>

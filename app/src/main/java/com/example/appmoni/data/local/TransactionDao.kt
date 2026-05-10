@@ -22,7 +22,78 @@ interface TransactionDao {
     @Query("DELETE FROM transactions WHERE id = :transactionId")
     suspend fun deleteTransaction(transactionId: String)
 
-    // 4. LÀM SẠCH KHO (Dùng khi đăng xuất)
+    // 4. LÀM SẠCH (Dùng khi đăng xuất)
     @Query("DELETE FROM transactions")
     suspend fun clearAll()
+
+    // 5. Lấy tổng số tiền chi của 1 user, trong 1 khoảng thời gian, và thuộc 1 nhóm danh mục nhất định
+    @Query(
+        """
+        SELECT SUM(amount) FROM transactions 
+        WHERE userId = :userId 
+        AND type = 'expense' 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate 
+        AND categoryId IN (:categoryIds)
+    """
+    )
+    suspend fun getTotalExpenseForLimit(
+        userId: String,
+        startDate: Long,
+        endDate: Long,
+        categoryIds: List<String>
+    ): Long?
+
+    // 6. Hàm tính tổng nết chọn "Tất cả hạng mục"
+    @Query(
+        """
+        SELECT SUM(amount) FROM transactions 
+        WHERE userId = :userId 
+        AND type = 'expense' 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate
+    """
+    )
+    suspend fun getTotalExpenseForAllCategories(
+        userId: String,
+        startDate: Long,
+        endDate: Long
+    ): Long?
+
+    // 7. Lấy toàn bộ giao dịch của một Hạn mức (Lọc theo danh sách Category)
+    @Query(
+        """
+        SELECT * FROM transactions 
+        WHERE userId = :userId 
+        AND type = 'expense' 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate 
+        AND categoryId IN (:categoryIds)
+        ORDER BY dateInMillis ASC
+    """
+    )
+    suspend fun getTransactionsForLimit(
+        userId: String,
+        startDate: Long,
+        endDate: Long,
+        categoryIds: List<String>
+    ): List<TransactionItem>
+
+    // 8. Lấy toàn bộ giao dịch (Dùng khi người dùng chọn "Tất cả hạng mục")
+    @Query(
+        """
+        SELECT * FROM transactions 
+        WHERE userId = :userId 
+        AND type = 'expense' 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate
+        ORDER BY dateInMillis ASC
+    """
+    )
+    suspend fun getTransactionsForAllCategories(
+        userId: String,
+        startDate: Long,
+        endDate: Long
+    ): List<TransactionItem>
+
 }

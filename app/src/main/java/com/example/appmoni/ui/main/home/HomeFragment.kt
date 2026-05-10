@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentHomeBinding
+import com.example.appmoni.viewmodel.home.ManageLimitViewModel
 import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.example.appmoni.viewmodel.wallet.SavingsViewModel
 import com.example.appmoni.viewmodel.wallet.WalletViewModel
@@ -36,6 +38,9 @@ class HomeFragment : Fragment() {
     private val walletViewModel: WalletViewModel by viewModels()
     private val savingsViewModel: SavingsViewModel by viewModels()
 
+    private val limitViewModel: ManageLimitViewModel by viewModels()
+    private lateinit var limitAdapter: HomeLimitAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,13 +60,17 @@ class HomeFragment : Fragment() {
             walletViewModel.loadWallets(currentUserId)
             savingsViewModel.loadSavings(currentUserId)
 
+            limitViewModel.loadLimits(currentUserId)
+
             // Gọi hàm lắng nghe dữ liệu để vẽ biểu đồ
             setupChartObserver(currentUserId)
             setupTotalBalanceObserver()
+            setupLimitObserver()
         }
 
         setupBanner()
         setupListeners()
+        setupLimitRecyclerView()
     }
 
 
@@ -224,6 +233,9 @@ class HomeFragment : Fragment() {
         binding.llCategorySaving.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_manageSavingsFragment)
         }
+        binding.llCategoryLimit.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageLimitFragment)
+        }
     }
 
     // Hàm tính tổng số dư
@@ -260,6 +272,41 @@ class HomeFragment : Fragment() {
             val formatter = DecimalFormat("#,###")
             val formattedTotal = formatter.format(total ?: 0L).replace(",", ".")
             binding.tvTotalBalance.text = "$formattedTotal đ"
+        }
+    }
+
+    //  setup recycler view & nút bấm
+    private fun setupLimitRecyclerView() {
+        limitAdapter = HomeLimitAdapter { limit ->
+            val bundle = Bundle().apply { putParcelable("limit_item", limit) }
+            findNavController().navigate(R.id.action_homeFragment_to_limitDetailFragment, bundle)
+        }
+        binding.rvLimitsHome.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvLimitsHome.isNestedScrollingEnabled = false
+        binding.rvLimitsHome.adapter = limitAdapter
+
+        binding.tvLimitViewAll.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageLimitFragment)
+        }
+
+        binding.cardLimitEmpty.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_manageLimitFragment)
+        }
+    }
+
+    private fun setupLimitObserver() {
+        limitViewModel.limitList.observe(viewLifecycleOwner) { limits ->
+            if (limits.isNullOrEmpty()) {
+                // Rỗng -> Hiện thẻ trống, ẩn list
+                binding.cardLimitEmpty.visibility = View.VISIBLE
+                binding.rvLimitsHome.visibility = View.GONE
+            } else {
+                // Có data -> Hiện list, ẩn thẻ trống
+                binding.cardLimitEmpty.visibility = View.GONE
+                binding.rvLimitsHome.visibility = View.VISIBLE
+
+                limitAdapter.submitData(limits.take(3))
+            }
         }
     }
 

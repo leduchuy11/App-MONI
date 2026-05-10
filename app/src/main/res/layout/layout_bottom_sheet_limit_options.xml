@@ -5,30 +5,35 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
     android:orientation="vertical"
-    android:paddingHorizontal="20dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="24dp">
 
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="14dp"
+        android:layout_marginTop="12dp"
         android:background="#E0E0E0" />
 
     <TextView
-        android:id="@+id/tv_sheet_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_limit_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:text="Tùy chọn"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        android:text="Tên hạn mức"
+        android:gravity="center"
         android:textColor="#333333"
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0" />
+
     <LinearLayout
-        android:id="@+id/btn_view_detail"
+        android:id="@+id/layout_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -36,7 +41,8 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingVertical="12dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp">
 
         <ImageView
             android:layout_width="24dp"
@@ -54,7 +60,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/btn_settle"
+        android:id="@+id/layout_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -62,33 +68,8 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingVertical="12dp">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_note_tick"
-            app:tint="#5B5858" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Tất toán sổ"
-            android:textColor="#333333"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/btn_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingVertical="12dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp">
 
         <ImageView
             android:layout_width="24dp"
@@ -100,13 +81,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Sửa"
+            android:text="Sửa hạn mức"
             android:textColor="#333333"
             android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/btn_delete"
+        android:id="@+id/layout_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -114,7 +95,8 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingVertical="12dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp">
 
         <ImageView
             android:layout_width="24dp"
@@ -126,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Xóa sổ tiết kiệm"
+            android:text="Xóa hạn mức"
             android:textColor="#E53935"
             android:textSize="16sp" />
     </LinearLayout>

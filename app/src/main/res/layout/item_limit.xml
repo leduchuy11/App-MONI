@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_limit_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_square_rounded_gray"
+            android:padding="4dp"
+            android:src="@drawable/ic_all_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_limit_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btn_more_options"
+            app:layout_constraintStart_toEndOf="@id/iv_limit_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_limit_icon"
+            tools:text="Ăn uống tháng 3" />
+
+        <TextView
+            android:id="@+id/tv_limit_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tv_limit_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_limit_name"
+            tools:text="01/03 - 31/03" />
+
+        <ImageView
+            android:id="@+id/btn_more_options"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_more_vert"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#808080" />
+
+        <TextView
+            android:id="@+id/tv_total_limit_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_limit_date"
+            tools:text="100.000.000 đ" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_limit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:max="100"
+            app:indicatorColor="#FF9800"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_total_limit_amount"
+            app:trackColor="#F0F0F0"
+            app:trackCornerRadius="10dp"
+            app:trackThickness="8dp"
+            tools:progress="60" />
+
+        <TextView
+            android:id="@+id/tv_days_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress_limit"
+            tools:text="Còn 10 ngày" />
+
+        <TextView
+            android:id="@+id/tv_remaining_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_days_left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_days_left"
+            tools:text="Còn lại 3.000.000 đ" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

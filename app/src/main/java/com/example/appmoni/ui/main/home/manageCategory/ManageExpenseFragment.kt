@@ -56,7 +56,7 @@ class ManageExpenseFragment : Fragment() {
                 requireActivity().getSharedPreferences("AppMoniPrefs", Context.MODE_PRIVATE)
             val isFirstTime = sharedPref.getBoolean("isFirstTime_${userId}", true)
 
-            // Giao việc cho bồi bàn: "Lấy data chi tiền cho user này đi, kiểm tra xem có phải first time ko"
+            // Lấy data chi tiền cho user này , kiểm tra xem có phải first time ko
             viewModel.loadExpenseCategories(userId, isFirstTime)
         }
     }

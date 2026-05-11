@@ -46,6 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="-24dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
@@ -213,14 +215,30 @@
                     android:id="@+id/tv_structure_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cơ cấu chi tiêu:"
+                    android:text="Cơ cấu chi tiêu"
                     android:textColor="#333333"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_structure_detail"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_structure_detail" />
+
+                <TextView
+                    android:id="@+id/tv_structure_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:text="Xem chi tiết >"
+                    android:textColor="#008FD5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/layout_chart_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -230,37 +248,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_structure_title">
 
-                    <FrameLayout
-                        android:id="@+id/pieChartContainer"
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
                         android:layout_width="0dp"
                         android:layout_height="180dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_weight="1.2">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="Gắn PieChart\nvào đây (Kotlin)"
-                            android:textColor="#DCDCDC"
-                            android:textSize="14sp"
-                            android:textStyle="italic" />
-                    </FrameLayout>
+                        android:layout_weight="1.3" />
 
                     <LinearLayout
                         android:id="@+id/layout_legend_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
+                        android:layout_weight="1.0"
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/layout_top_1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/view_color_1"
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:background="@drawable/bg_report_note" />
@@ -271,7 +281,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="Dịch vụ sinh hoạt"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="---"
                                 android:textColor="#333333"
                                 android:textSize="13sp" />
 
@@ -280,9 +292,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="58.7%"
+                                android:text="0%"
                                 android:textColor="#808080"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <View
@@ -290,12 +302,14 @@
                             android:layout_height="10dp" />
 
                         <LinearLayout
+                            android:id="@+id/layout_top_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/view_color_2"
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:background="@drawable/bg_report_note" />
@@ -306,7 +320,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="Ăn uống"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="---"
                                 android:textColor="#333333"
                                 android:textSize="13sp" />
 
@@ -315,9 +331,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="12%"
+                                android:text="0%"
                                 android:textColor="#808080"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <View
@@ -325,12 +341,14 @@
                             android:layout_height="10dp" />
 
                         <LinearLayout
+                            android:id="@+id/layout_top_3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/view_color_3"
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:background="@drawable/bg_report_note" />
@@ -341,7 +359,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="Sức khỏe"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="---"
                                 android:textColor="#333333"
                                 android:textSize="13sp" />
 
@@ -350,9 +370,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="5%"
+                                android:text="0%"
                                 android:textColor="#808080"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <View
@@ -360,12 +380,14 @@
                             android:layout_height="10dp" />
 
                         <LinearLayout
+                            android:id="@+id/layout_top_4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/view_color_4"
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:background="@drawable/bg_report_note" />
@@ -376,7 +398,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
-                                android:text="P/v bản thân"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="---"
                                 android:textColor="#333333"
                                 android:textSize="13sp" />
 
@@ -385,9 +409,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="2.9%"
+                                android:text="0%"
                                 android:textColor="#808080"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <View
@@ -395,12 +419,14 @@
                             android:layout_height="10dp" />
 
                         <LinearLayout
+                            android:id="@+id/layout_other"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/view_color_other"
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
                                 android:background="@drawable/bg_report_note"
@@ -412,23 +438,52 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:maxLines="1"
                                 android:text="Khác"
                                 android:textColor="#333333"
-                                android:textSize="13sp"
-                                android:textStyle="italic" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:id="@+id/tv_other_percent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="21.4%"
+                                android:text="0%"
                                 android:textColor="#808080"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
                         </LinearLayout>
-
                     </LinearLayout>
+                </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_empty_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="40dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_structure_title">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_empty"
+                        android:alpha="0.4"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Tháng này chưa có khoản chi nào."
+                        android:textColor="#808080"
+                        android:textStyle="italic"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -470,9 +525,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="start"
+                        android:orientation="vertical"
                         android:paddingStart="20dp"
-                        android:paddingTop="20dp"
-                        android:orientation="vertical">
+                        android:paddingTop="20dp">
 
                         <ImageView
                             android:layout_width="32dp"
@@ -510,9 +565,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="start"
+                        android:orientation="vertical"
                         android:paddingStart="20dp"
-                        android:paddingTop="20dp"
-                        android:orientation="vertical">
+                        android:paddingTop="20dp">
 
                         <ImageView
                             android:layout_width="32dp"
@@ -558,9 +613,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="start"
+                        android:orientation="vertical"
                         android:paddingStart="20dp"
-                        android:paddingTop="20dp"
-                        android:orientation="vertical">
+                        android:paddingTop="20dp">
 
                         <ImageView
                             android:layout_width="32dp"
@@ -598,9 +653,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="start"
+                        android:orientation="vertical"
                         android:paddingStart="20dp"
-                        android:paddingTop="20dp"
-                        android:orientation="vertical">
+                        android:paddingTop="20dp">
 
                         <ImageView
                             android:layout_width="32dp"

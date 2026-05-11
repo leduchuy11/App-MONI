@@ -3,6 +3,7 @@ package com.example.appmoni.data.model.transaction
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "transactions")
@@ -32,5 +33,8 @@ data class TransactionItem(
     var destWalletIcon: String = "",
 
     // Tên người (CHỈ DÙNG cho Cho vay / Đi vay)
-    var personName: String = ""
+    var personName: String = "",
+    @get:PropertyName("isPaid")
+    @set:PropertyName("isPaid")
+    var isPaid: Boolean = false
 ) : Parcelable

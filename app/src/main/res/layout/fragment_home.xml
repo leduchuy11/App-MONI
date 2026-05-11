@@ -109,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="127.389.000 đ"
+                    android:text="0 đ"
                     android:textColor="#000000"
                     android:textSize="26sp"
                     android:textStyle="bold"

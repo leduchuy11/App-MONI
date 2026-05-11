@@ -72,4 +72,21 @@ class CategoryRepository {
     fun deleteCategory(userId: String, categoryId: String): Task<Void> {
         return db.collection("users").document(userId).collection("categories").document(categoryId).delete()
     }
+
+    fun listenToCategoriesByType(
+        userId: String,
+        type: String,
+        onResult: (List<CategoryExpenseItem>) -> Unit
+    ) {
+        db.collection("users").document(userId).collection("categories")
+            .whereEqualTo("type", type)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null || snapshot == null) {
+                    onResult(emptyList())
+                    return@addSnapshotListener
+                }
+                val list = snapshot.toObjects(CategoryExpenseItem::class.java)
+                onResult(list)
+            }
+    }
 }

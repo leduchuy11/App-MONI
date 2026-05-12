@@ -76,8 +76,13 @@ class ReportFragment : Fragment() {
 
     private fun setupListeners() {
         binding.tvStructureDetail.setOnClickListener {
-            // Điều hướng sang màn ExpenseStructureFragment
             findNavController().navigate(R.id.action_reportFragment_to_expenseStructureFragment)
+        }
+        binding.cardCurrentFinance.setOnClickListener {
+            findNavController().navigate(R.id.action_reportFragment_to_currentFinanceFragment)
+        }
+        binding.cardFinanceDetail.setOnClickListener {
+            findNavController().navigate(R.id.action_reportFragment_to_currentFinanceFragment)
         }
     }
 

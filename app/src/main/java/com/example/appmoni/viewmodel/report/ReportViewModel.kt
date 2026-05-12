@@ -59,6 +59,25 @@ class ReportViewModel(
     private val _isLoadingStructure = MutableLiveData<Boolean>()
     val isLoadingStructure: LiveData<Boolean> get() = _isLoadingStructure
 
+    // Các biến bóc tách chi tiết cho màn Tài chính hiện tại
+    private val _cashBalance = MediatorLiveData<Long>()
+    val cashBalance: LiveData<Long> get() = _cashBalance
+
+    private val _bankBalance = MediatorLiveData<Long>()
+    val bankBalance: LiveData<Long> get() = _bankBalance
+
+    private val _eWalletBalance = MediatorLiveData<Long>()
+    val eWalletBalance: LiveData<Long> get() = _eWalletBalance
+
+    private val _savingsBalance = MediatorLiveData<Long>()
+    val savingsBalance: LiveData<Long> get() = _savingsBalance
+
+    private val _lendBalance = MediatorLiveData<Long>()
+    val lendBalance: LiveData<Long> get() = _lendBalance
+
+    private val _borrowBalance = MediatorLiveData<Long>()
+    val borrowBalance: LiveData<Long> get() = _borrowBalance
+
     init {
         // 1. tổng nợ
         _totalLiabilities.addSource(_transactions) { txList ->
@@ -110,6 +129,29 @@ class ReportViewModel(
         _detailListSelectedMonth.addSource(_transactions) { updateSelectedMonthStructure() }
         _detailListSelectedMonth.addSource(_expenseCategories) { updateSelectedMonthStructure() }
         _detailListSelectedMonth.addSource(_currentMonthFilter) { updateSelectedMonthStructure() }
+
+
+        val updateWalletBreakdown = {
+            val list = _wallets.value ?: emptyList()
+            _cashBalance.value = list.filter { it.accountType == "cash" && it.isActive }.sumOf { it.balance }
+            _bankBalance.value = list.filter { it.accountType == "bank" && it.isActive }.sumOf { it.balance }
+            _eWalletBalance.value = list.filter { it.accountType == "ewallet" && it.isActive }.sumOf { it.balance }
+        }
+        _cashBalance.addSource(_wallets) { updateWalletBreakdown() }
+        _bankBalance.addSource(_wallets) { updateWalletBreakdown() }
+        _eWalletBalance.addSource(_wallets) { updateWalletBreakdown() }
+
+        _savingsBalance.addSource(_savings) { list ->
+            _savingsBalance.value = list?.filter { it.status == "active" }?.sumOf { it.amount } ?: 0L
+        }
+
+        val updateDebtBreakdown = {
+            val list = _transactions.value ?: emptyList()
+            _lendBalance.value = list.filter { it.type == "lend" && !it.isPaid }.sumOf { it.amount }
+            _borrowBalance.value = list.filter { it.type == "borrow" && !it.isPaid }.sumOf { it.amount }
+        }
+        _lendBalance.addSource(_transactions) { updateDebtBreakdown() }
+        _borrowBalance.addSource(_transactions) { updateDebtBreakdown() }
     }
 
     private fun updateNetWorth() {

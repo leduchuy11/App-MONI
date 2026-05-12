@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_reportFragment_to_expenseStructureFragment"
             app:destination="@id/expenseStructureFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_currentFinanceFragment"
+            app:destination="@id/currentFinanceFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -233,4 +236,15 @@
         android:id="@+id/expenseStructureFragment"
         android:name="com.example.appmoni.ui.main.report.expenseStructure.ExpenseStructureFragment"
         android:label="ExpenseStructureFragment" />
+    <fragment
+        android:id="@+id/currentFinanceFragment"
+        android:name="com.example.appmoni.ui.main.report.currentFinance.CurrentFinanceFragment"
+        android:label="CurrentFinanceFragment" >
+        <action
+            android:id="@+id/action_currentFinanceFragment_to_manageSpendingFragment"
+            app:destination="@id/manageSpendingFragment" />
+        <action
+            android:id="@+id/action_currentFinanceFragment_to_manageSavingsFragment"
+            app:destination="@id/manageSavingsFragment" />
+    </fragment>
 </navigation>

@@ -57,7 +57,11 @@
         android:id="@+id/reportFragment"
         android:name="com.example.appmoni.ui.main.report.ReportFragment"
         android:label="fragment_report"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment_to_expenseStructureFragment"
+            app:destination="@id/expenseStructureFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.appmoni.ui.main.profile.ProfileFragment"
@@ -225,4 +229,8 @@
             android:id="@+id/action_editLimitFragment_to_selectCategoryLimitFragment"
             app:destination="@id/selectCategoryLimitFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/expenseStructureFragment"
+        android:name="com.example.appmoni.ui.main.report.expenseStructure.ExpenseStructureFragment"
+        android:label="ExpenseStructureFragment" />
 </navigation>

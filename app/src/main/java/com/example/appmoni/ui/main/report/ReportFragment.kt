@@ -16,6 +16,8 @@ import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.text.DecimalFormat
 import androidx.core.graphics.toColorInt
+import androidx.navigation.fragment.findNavController
+import com.example.appmoni.R
 import com.example.appmoni.data.model.report.ExpenseCategoryReport
 
 class ReportFragment : Fragment() {
@@ -65,9 +67,17 @@ class ReportFragment : Fragment() {
 
         observeFinanceData()
         setupPieChart()
+        setupListeners()
 
         reportViewModel.expenseStructure.observe(viewLifecycleOwner) { structure ->
             updatePieChartUI(structure)
+        }
+    }
+
+    private fun setupListeners() {
+        binding.tvStructureDetail.setOnClickListener {
+            // Điều hướng sang màn ExpenseStructureFragment
+            findNavController().navigate(R.id.action_reportFragment_to_expenseStructureFragment)
         }
     }
 

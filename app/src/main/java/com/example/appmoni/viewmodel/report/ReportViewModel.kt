@@ -41,10 +41,29 @@ class ReportViewModel(
     private val _expenseStructure = MediatorLiveData<List<ExpenseCategoryReport>>()
     val expenseStructure: LiveData<List<ExpenseCategoryReport>> get() = _expenseStructure
 
+
+    // Biến lưu tháng đang chọn
+    private val _currentMonthFilter = MutableLiveData<String>("Tháng này")
+
+    private val _totalExpenseSelectedMonth = MutableLiveData<Long>()
+    val totalExpenseSelectedMonth: LiveData<Long> get() = _totalExpenseSelectedMonth
+
+    // Data cho Biểu đồ (Chỉ chứa tối đa 5 item: Top 4 + Khác)
+    private val _pieChartDataSelectedMonth = MediatorLiveData<List<ExpenseCategoryReport>>()
+    val pieChartDataSelectedMonth: LiveData<List<ExpenseCategoryReport>> get() = _pieChartDataSelectedMonth
+
+    // Data cho Danh sách (Chứa TẤT CẢ các nhóm)
+    private val _detailListSelectedMonth = MediatorLiveData<List<ExpenseCategoryReport>>()
+    val detailListSelectedMonth: LiveData<List<ExpenseCategoryReport>> get() = _detailListSelectedMonth
+
+    private val _isLoadingStructure = MutableLiveData<Boolean>()
+    val isLoadingStructure: LiveData<Boolean> get() = _isLoadingStructure
+
     init {
         // 1. tổng nợ
         _totalLiabilities.addSource(_transactions) { txList ->
-            val totalBorrow = txList?.filter { it.type == "borrow" && !it.isPaid }?.sumOf { it.amount } ?: 0L
+            val totalBorrow =
+                txList?.filter { it.type == "borrow" && !it.isPaid }?.sumOf { it.amount } ?: 0L
             _totalLiabilities.value = totalBorrow
             updateNetWorth()
         }
@@ -54,7 +73,8 @@ class ReportViewModel(
             var sum = 0L
             sum += _wallets.value?.filter { it.isActive }?.sumOf { it.balance } ?: 0L
             sum += _savings.value?.filter { it.status == "active" }?.sumOf { it.amount } ?: 0L
-            sum += _transactions.value?.filter { it.type == "lend" && !it.isPaid }?.sumOf { it.amount } ?: 0L
+            sum += _transactions.value?.filter { it.type == "lend" && !it.isPaid }
+                ?.sumOf { it.amount } ?: 0L
 
             _totalAssets.value = sum
             updateNetWorth()
@@ -74,6 +94,22 @@ class ReportViewModel(
         _expenseStructure.addSource(_expenseCategories) { catList ->
             calculateExpenseStructure(_transactions.value, catList)
         }
+
+        val updateSelectedMonthStructure = {
+            calculateForSelectedMonth(
+                _transactions.value,
+                _expenseCategories.value,
+                _currentMonthFilter.value ?: "Tháng này"
+            )
+        }
+
+        _pieChartDataSelectedMonth.addSource(_transactions) { updateSelectedMonthStructure() }
+        _pieChartDataSelectedMonth.addSource(_expenseCategories) { updateSelectedMonthStructure() }
+        _pieChartDataSelectedMonth.addSource(_currentMonthFilter) { updateSelectedMonthStructure() }
+
+        _detailListSelectedMonth.addSource(_transactions) { updateSelectedMonthStructure() }
+        _detailListSelectedMonth.addSource(_expenseCategories) { updateSelectedMonthStructure() }
+        _detailListSelectedMonth.addSource(_currentMonthFilter) { updateSelectedMonthStructure() }
     }
 
     private fun updateNetWorth() {
@@ -83,7 +119,9 @@ class ReportViewModel(
     }
 
     fun loadData(userId: String) {
-        walletRepo.listenToWalletsByType(userId, "spending",
+        _isLoadingStructure.value = true
+        walletRepo.listenToWalletsByType(
+            userId, "spending",
             onResult = { _wallets.postValue(it) },
             onError = { }
         )
@@ -139,12 +177,24 @@ class ReportViewModel(
         val result = mutableListOf<ExpenseCategoryReport>()
         if (grouped.size <= 5) {
             grouped.forEach { (name, amount) ->
-                result.add(ExpenseCategoryReport(name, amount, (amount.toFloat() / totalExpense) * 100))
+                result.add(
+                    ExpenseCategoryReport(
+                        name,
+                        amount,
+                        (amount.toFloat() / totalExpense) * 100
+                    )
+                )
             }
         } else {
             for (i in 0 until 4) {
                 val (name, amount) = grouped[i]
-                result.add(ExpenseCategoryReport(name, amount, (amount.toFloat() / totalExpense) * 100))
+                result.add(
+                    ExpenseCategoryReport(
+                        name,
+                        amount,
+                        (amount.toFloat() / totalExpense) * 100
+                    )
+                )
             }
             val otherAmount = grouped.subList(4, grouped.size).sumOf { it.second }
 
@@ -157,10 +207,98 @@ class ReportViewModel(
                     "Khác", newAmount, (newAmount.toFloat() / totalExpense) * 100
                 )
             } else {
-                result.add(ExpenseCategoryReport("Khác", otherAmount, (otherAmount.toFloat() / totalExpense) * 100))
+                result.add(
+                    ExpenseCategoryReport(
+                        "Khác",
+                        otherAmount,
+                        (otherAmount.toFloat() / totalExpense) * 100
+                    )
+                )
             }
         }
 
         _expenseStructure.postValue(result)
+    }
+
+    // Hàm này giờ chỉ làm nhiệm vụ Cập nhật bộ lọc tháng
+    fun filterExpenseStructureByMonth(filterMonth: String) {
+        _currentMonthFilter.value = filterMonth
+    }
+
+    private fun calculateForSelectedMonth(
+        txList: List<TransactionItem>?,
+        categoryList: List<CategoryExpenseItem>?,
+        filterMonth: String
+    ) {
+
+        if (categoryList == null || txList == null) return
+
+        if (txList.isEmpty()) {
+            _pieChartDataSelectedMonth.postValue(emptyList())
+            _detailListSelectedMonth.postValue(emptyList())
+            _totalExpenseSelectedMonth.postValue(0L)
+            _isLoadingStructure.postValue(false)
+            return
+        }
+
+        val categoryMap = categoryList.associateBy { it.id } ?: emptyMap()
+
+        // Tính tháng/năm
+        val (targetMonth, targetYear) = if (filterMonth == "Tháng này") {
+            val cal = Calendar.getInstance()
+            Pair(cal.get(Calendar.MONTH), cal.get(Calendar.YEAR))
+        } else {
+            val parts = filterMonth.split("/")
+            if (parts.size == 2) Pair(parts[0].toInt() - 1, parts[1].toInt()) else Pair(-1, -1)
+        }
+
+        val filteredExpenses = txList.filter { tx ->
+            val txCal = Calendar.getInstance().apply { timeInMillis = tx.dateInMillis }
+            tx.type == "expense" && txCal.get(Calendar.MONTH) == targetMonth && txCal.get(Calendar.YEAR) == targetYear
+        }
+
+        val totalExpense = filteredExpenses.sumOf { it.amount }
+        _totalExpenseSelectedMonth.postValue(totalExpense)
+
+        if (totalExpense == 0L) {
+            _pieChartDataSelectedMonth.postValue(emptyList())
+            _detailListSelectedMonth.postValue(emptyList())
+            _isLoadingStructure.postValue(false)
+            return
+        }
+
+        val groupedTransactions = filteredExpenses.groupBy { tx ->
+            categoryMap[tx.categoryId]?.group ?: "Khác"
+        }
+
+        val fullList = mutableListOf<ExpenseCategoryReport>()
+        for ((groupName, txListInGroup) in groupedTransactions) {
+            val groupTotal = txListInGroup.sumOf { it.amount }
+            val groupPercent = (groupTotal.toFloat() / totalExpense) * 100
+
+            val firstTx = txListInGroup.firstOrNull()
+            val iconName = firstTx?.let { categoryMap[it.categoryId]?.iconName } ?: ""
+
+            fullList.add(ExpenseCategoryReport(groupName, groupTotal, groupPercent, iconName))
+        }
+
+        fullList.sortByDescending { it.amount }
+        _detailListSelectedMonth.postValue(fullList)
+
+        // tạo danh sách rút gọn (cho pie chart)
+        val chartData = mutableListOf<ExpenseCategoryReport>()
+        if (fullList.size <= 5) {
+            chartData.addAll(fullList)
+        } else {
+            for (i in 0 until 4) {
+                chartData.add(fullList[i])
+            }
+            val otherAmount = fullList.subList(4, fullList.size).sumOf { it.amount }
+            val otherPercent = (otherAmount.toFloat() / totalExpense) * 100
+            chartData.add(ExpenseCategoryReport("Khác", otherAmount, otherPercent, ""))
+        }
+
+        _pieChartDataSelectedMonth.postValue(chartData)
+        _isLoadingStructure.postValue(false)
     }
 }

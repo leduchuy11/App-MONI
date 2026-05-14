@@ -74,11 +74,19 @@ class CurrentFinanceFragment : Fragment() {
             findNavController().navigate(R.id.action_currentFinanceFragment_to_manageSavingsFragment)
         }
 
-        val showDevelopToast = View.OnClickListener {
-            Toast.makeText(requireContext(), "Tính năng đang được phát triển!", Toast.LENGTH_SHORT).show()
+        binding.layoutItemLend.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("initial_tab_position", 0)
+            }
+            findNavController().navigate(R.id.action_currentFinanceFragment_to_debtTrackingFragment, bundle)
         }
-        binding.layoutItemLend.setOnClickListener(showDevelopToast)
-        binding.layoutItemBorrow.setOnClickListener(showDevelopToast)
+
+        binding.layoutItemBorrow.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("initial_tab_position", 1)
+            }
+            findNavController().navigate(R.id.action_currentFinanceFragment_to_debtTrackingFragment, bundle)
+        }
     }
 
     private fun observeData() {

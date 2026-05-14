@@ -28,6 +28,12 @@
         <action
             android:id="@+id/action_homeFragment_to_limitDetailFragment"
             app:destination="@id/limitDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_debtTrackingFragment"
+            app:destination="@id/debtTrackingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_debtDetailFragment"
+            app:destination="@id/debtDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -64,6 +70,9 @@
         <action
             android:id="@+id/action_reportFragment_to_currentFinanceFragment"
             app:destination="@id/currentFinanceFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_debtTrackingFragment"
+            app:destination="@id/debtTrackingFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -246,5 +255,20 @@
         <action
             android:id="@+id/action_currentFinanceFragment_to_manageSavingsFragment"
             app:destination="@id/manageSavingsFragment" />
+        <action
+            android:id="@+id/action_currentFinanceFragment_to_debtTrackingFragment"
+            app:destination="@id/debtTrackingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/debtTrackingFragment"
+        android:name="com.example.appmoni.ui.main.report.debtTracking.DebtTrackingFragment"
+        android:label="DebtTrackingFragment" >
+        <action
+            android:id="@+id/action_debtTrackingFragment_to_debtDetailFragment"
+            app:destination="@id/debtDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/debtDetailFragment"
+        android:name="com.example.appmoni.ui.main.report.debtTracking.DebtDetailFragment"
+        android:label="DebtDetailFragment" />
 </navigation>

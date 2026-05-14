@@ -135,4 +135,27 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
             Result.failure(e)
         }
     }
+
+    // Hàm đánh dấu đã trả nợ/thu nọ
+    suspend fun markDebtAsPaid(transaction: TransactionItem): Result<Unit> {
+        return try {
+            val batch = db.batch()
+
+            transaction.isPaid = true
+
+            transactionDao.insertTransaction(transaction)
+
+            val transactionRef = db.collection("users")
+                .document(transaction.userId)
+                .collection("transactions")
+                .document(transaction.id)
+            batch.set(transactionRef, transaction)
+
+            batch.commit()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

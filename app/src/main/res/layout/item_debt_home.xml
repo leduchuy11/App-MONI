@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:id="@+id/layout_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <ImageView
+            android:id="@+id/iv_debt_icon"
+            android:layout_width="40dp"
+            android:background="@drawable/bg_square_rounded_yellow"
+            android:padding="5dp"
+            android:layout_height="40dp"
+            tools:src="@drawable/ic_loan" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_debt_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Cho vay" />
+
+            <TextView
+                android:id="@+id/tv_debt_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="#808080"
+                android:textSize="14sp"
+                tools:text="Cho Minh vay" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_debt_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="1.000.000 đ"
+            tools:textColor="#E53935" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

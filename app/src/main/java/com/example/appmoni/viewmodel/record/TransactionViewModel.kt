@@ -24,6 +24,9 @@ class TransactionViewModel (application: Application) : AndroidViewModel(applica
     private val _deleteResult = MutableLiveData<Result<Unit>?>()
     val deleteResult: LiveData<Result<Unit>?> get() = _deleteResult
 
+    private val _updateStatusResult = MutableLiveData<Result<Unit>?>()
+    val updateStatusResult: LiveData<Result<Unit>?> get() = _updateStatusResult
+
     fun saveTransaction(transaction: TransactionItem) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -56,6 +59,19 @@ class TransactionViewModel (application: Application) : AndroidViewModel(applica
             _deleteResult.value = result
             _isLoading.value = false
         }
+    }
+
+    fun markDebtAsPaid(transaction: TransactionItem) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.markDebtAsPaid(transaction)
+            _updateStatusResult.value = result
+            _isLoading.value = false
+        }
+    }
+
+    fun resetUpdateStatus() {
+        _updateStatusResult.value = null
     }
 
     // Reset lại trạng thái để không bị hiện Toast nhiều lần

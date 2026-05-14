@@ -41,6 +41,11 @@ class HomeFragment : Fragment() {
     private val limitViewModel: ManageLimitViewModel by viewModels()
     private lateinit var limitAdapter: HomeLimitAdapter
 
+    private lateinit var debtAdapter: HomeDebtAdapter
+
+    // Biến lưu vị trí cuộn của màn hình Home
+    private var scrollYPosition = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,11 +71,17 @@ class HomeFragment : Fragment() {
             setupChartObserver(currentUserId)
             setupTotalBalanceObserver()
             setupLimitObserver()
+            setupDebtObserver(currentUserId)
         }
 
         setupBanner()
         setupListeners()
         setupLimitRecyclerView()
+        setupDebtRecyclerView()
+
+        binding.scrollViewHome.post {
+            binding.scrollViewHome.scrollTo(0, scrollYPosition)
+        }
     }
 
 
@@ -310,7 +321,54 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupDebtRecyclerView() {
+        debtAdapter = HomeDebtAdapter { item ->
+            // Truyền data sang màn chi tiết khi click
+            val bundle = Bundle().apply {
+                putParcelable("transaction_item", item)
+            }
+            findNavController().navigate(R.id.action_homeFragment_to_debtDetailFragment, bundle)
+        }
+        binding.rvDebts.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvDebts.isNestedScrollingEnabled = false
+        binding.rvDebts.adapter = debtAdapter
+
+        // Bấm "Xem tất cả" hoặc Card Empty -> Sang màn danh sách vay nợ
+        val navigateToDebtTracking = {
+            findNavController().navigate(R.id.action_homeFragment_to_debtTrackingFragment)
+        }
+        binding.tvDebtsViewAll.setOnClickListener { navigateToDebtTracking() }
+        binding.cardDebtsEmpty.setOnClickListener { navigateToDebtTracking() }
+    }
+
+    // Lắng nghe, lọc và lấy tối đa 3 item
+    private fun setupDebtObserver(userId: String) {
+        viewModel.getAllTransactions(userId).observe(viewLifecycleOwner) { transactions ->
+            if (transactions.isNullOrEmpty()) {
+                binding.cardDebtsEmpty.visibility = View.VISIBLE
+                binding.rvDebts.visibility = View.GONE
+                return@observe
+            }
+
+            // Lọc: Là khoản vay nợ (lend/borrow) + Chưa thanh toán (!isPaid) + Mới nhất
+            val activeDebts = transactions.filter {
+                (it.type == "lend" || it.type == "borrow") && !it.isPaid
+            }.sortedByDescending { it.dateInMillis }
+
+            if (activeDebts.isEmpty()) {
+                binding.cardDebtsEmpty.visibility = View.VISIBLE
+                binding.rvDebts.visibility = View.GONE
+            } else {
+                binding.cardDebtsEmpty.visibility = View.GONE
+                binding.rvDebts.visibility = View.VISIBLE
+
+                debtAdapter.submitList(activeDebts.take(3))
+            }
+        }
+    }
+
     override fun onDestroyView() {
+        scrollYPosition = binding.scrollViewHome.scrollY
         super.onDestroyView()
         autoScrollHandler.removeCallbacks(autoScrollRunnable)
         _binding = null

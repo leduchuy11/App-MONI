@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#F0F0F0" />
+
+    <LinearLayout
+        android:id="@+id/layout_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardBackgroundColor="#36A0FD"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#B0B0B0"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/tv_avatar_initial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="H" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_person_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Hùng" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:textColor="#ec453f"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="100.000 đ" />
+
+        <ImageView
+            android:id="@+id/iv_more_options"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_more_vert"
+            app:tint="#808080" />
+
+    </LinearLayout>
+</LinearLayout>

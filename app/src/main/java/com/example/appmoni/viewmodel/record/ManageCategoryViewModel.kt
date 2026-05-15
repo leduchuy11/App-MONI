@@ -1,6 +1,5 @@
 package com.example.appmoni.viewmodel.record
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,10 +23,8 @@ class ManageCategoryViewModel : ViewModel() {
     private val _incomeList = MutableLiveData<List<CategoryIncomeItem>>()
     val incomeList: LiveData<List<CategoryIncomeItem>> get() = _incomeList
 
-    // Biến này để ra hiệu cho Fragment biết: "Đã tạo dữ liệu mặc định xong rồi, cập nhật cờ FirstTime đi!"
     private val _updateFirstTimeFlag = MutableLiveData<Boolean>()
     val updateFirstTimeFlag: LiveData<Boolean> get() = _updateFirstTimeFlag
-
 
     // HÀM XỬ LÝ LẤY DỮ LIỆU MỤC CHI TIỀN
     fun loadExpenseCategories(userId: String, isFirstTime: Boolean) {
@@ -36,17 +33,18 @@ class ManageCategoryViewModel : ViewModel() {
         repository.getCategoriesByType(userId, "expense")
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
-                    // Nếu có data -> Ép kiểu và ném ra cho UI
                     _expenseList.value = documents.toObjects(CategoryExpenseItem::class.java)
                     _isLoading.value = false
                 } else {
-                    // Nếu rỗng
                     if (isFirstTime) {
-                        val defaults = DefaultCategories.getExpenseCategories()
-                        repository.createDefaultExpenseCategories(userId, defaults)
+                        val expenses = DefaultCategories.getExpenseCategories()
+                        val incomes = DefaultCategories.getIncomeCategories()
+
+                        // Đẩy CẢ HAI lên Firebase
+                        repository.createAllDefaultCategories(userId, expenses, incomes)
                             .addOnSuccessListener {
-                                _expenseList.value = defaults // Trả luôn list mặc định ra UI cho nhanh
-                                _updateFirstTimeFlag.value = true // Phát tín hiệu báo UI lưu cờ
+                                _expenseList.value = expenses
+                                _updateFirstTimeFlag.value = true
                                 _isLoading.value = false
                             }
                             .addOnFailureListener {
@@ -54,7 +52,6 @@ class ManageCategoryViewModel : ViewModel() {
                                 _isLoading.value = false
                             }
                     } else {
-                        // Người cũ đã xóa hết danh mục
                         _expenseList.value = emptyList()
                         _isLoading.value = false
                     }
@@ -77,10 +74,13 @@ class ManageCategoryViewModel : ViewModel() {
                     _isLoading.value = false
                 } else {
                     if (isFirstTime) {
-                        val defaults = DefaultCategories.getIncomeCategories()
-                        repository.createDefaultIncomeCategories(userId, defaults)
+                        val expenses = DefaultCategories.getExpenseCategories()
+                        val incomes = DefaultCategories.getIncomeCategories()
+
+                        // Đẩy CẢ HAI lên Firebase
+                        repository.createAllDefaultCategories(userId, expenses, incomes)
                             .addOnSuccessListener {
-                                _incomeList.value = defaults
+                                _incomeList.value = incomes
                                 _updateFirstTimeFlag.value = true
                                 _isLoading.value = false
                             }

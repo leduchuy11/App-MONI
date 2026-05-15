@@ -18,32 +18,24 @@ class CategoryRepository {
             .get()
     }
 
-    // 2. Đẩy danh sách Mặc định của Mục CHI lên mây
-    fun createDefaultExpenseCategories(
+    fun createAllDefaultCategories(
         userId: String,
-        items: List<CategoryExpenseItem>
+        expenseItems: List<CategoryExpenseItem>,
+        incomeItems: List<CategoryIncomeItem>
     ): Task<Void> {
         val batch = db.batch()
         val categoryRef = db.collection("users").document(userId).collection("categories")
 
-        for (item in items) {
-            val docRef = categoryRef.document(item.id)
-            batch.set(docRef, item)
+        // Nạp mục Chi vào gói hàng
+        for (item in expenseItems) {
+            batch.set(categoryRef.document(item.id), item)
+        }
+        // Nạp mục Thu vào chung gói hàng
+        for (item in incomeItems) {
+            batch.set(categoryRef.document(item.id), item)
         }
 
-        return batch.commit()
-    }
-
-    // 3. Đẩy danh sách Mặc định của Mục THU lên mây
-    fun createDefaultIncomeCategories(userId: String, items: List<CategoryIncomeItem>): Task<Void> {
-        val batch = db.batch()
-        val categoryRef = db.collection("users").document(userId).collection("categories")
-
-        for (item in items) {
-            val docRef = categoryRef.document(item.id)
-            batch.set(docRef, item)
-        }
-
+        // Đẩy lên mây trong 1 lần duy nhất
         return batch.commit()
     }
 

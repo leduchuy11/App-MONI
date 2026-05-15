@@ -44,7 +44,7 @@ class ManageExpenseFragment : Fragment() {
 
         sharedViewModel =
             ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
-        viewModel = ViewModelProvider(this).get(ManageCategoryViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(ManageCategoryViewModel::class.java)
 
         // Lắng nghe sự kiện
         setupObservers()

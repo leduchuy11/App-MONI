@@ -48,6 +48,15 @@ class HomeLimitAdapter(private val onItemClick: (LimitItem) -> Unit) :
             val endStr = dateFormatter.format(limit.endDateInMillis)
             binding.tvLimitPeriod.text = "$startStr - $endStr"
 
+            val context = binding.root.context
+            val resId = context.resources.getIdentifier(limit.icon, "drawable", context.packageName)
+            if (resId != 0) {
+                binding.ivLimitIcon.setImageResource(resId)
+            } else {
+                val defaultResId = context.resources.getIdentifier("ic_all_in", "drawable", context.packageName)
+                if (defaultResId != 0) binding.ivLimitIcon.setImageResource(defaultResId)
+            }
+
             val currentCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)

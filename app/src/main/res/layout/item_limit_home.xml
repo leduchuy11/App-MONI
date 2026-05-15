@@ -16,18 +16,40 @@
         android:layout_height="wrap_content"
         android:padding="20dp">
 
+        <ImageView
+            android:id="@+id/iv_limit_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/bg_square_rounded_gray"
+            android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_all_in" />
+
         <TextView
             android:id="@+id/tv_limit_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:textColor="#333333"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tv_total_limit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_limit_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_limit_icon"
             tools:text="Mục tiêu" />
+
+        <TextView
+            android:id="@+id/tv_limit_period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tv_limit_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_limit_name"
+            tools:text="01/03 - 31/03" />
 
         <TextView
             android:id="@+id/tv_total_limit"
@@ -41,27 +63,16 @@
             app:layout_constraintTop_toTopOf="@+id/tv_limit_period"
             tools:text="100.000.000 đ" />
 
-        <TextView
-            android:id="@+id/tv_limit_period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:textColor="#808080"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_limit_name"
-            tools:text="01/03 - 31/03" />
-
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress_limit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:max="100"
             app:indicatorColor="#FF9800"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_limit_period"
+            app:layout_constraintTop_toBottomOf="@id/iv_limit_icon"
             app:trackColor="#F0F0F0"
             app:trackCornerRadius="10dp"
             app:trackThickness="8dp"

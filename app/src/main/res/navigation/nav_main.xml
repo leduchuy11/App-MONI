@@ -73,6 +73,9 @@
         <action
             android:id="@+id/action_reportFragment_to_debtTrackingFragment"
             app:destination="@id/debtTrackingFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_incomeExpenseReportFragment"
+            app:destination="@id/incomeExpenseReportFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -271,4 +274,8 @@
         android:id="@+id/debtDetailFragment"
         android:name="com.example.appmoni.ui.main.report.debtTracking.DebtDetailFragment"
         android:label="DebtDetailFragment" />
+    <fragment
+        android:id="@+id/incomeExpenseReportFragment"
+        android:name="com.example.appmoni.ui.main.report.incomeExpense.IncomeExpenseReportFragment"
+        android:label="IncomeExpenseReportFragment" />
 </navigation>

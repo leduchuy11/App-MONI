@@ -87,6 +87,9 @@ class ReportFragment : Fragment() {
         binding.cardBtnDebtTracking.setOnClickListener {
             findNavController().navigate(R.id.action_reportFragment_to_debtTrackingFragment)
         }
+        binding.cardBtnCashflow.setOnClickListener {
+            findNavController().navigate(R.id.action_reportFragment_to_incomeExpenseReportFragment)
+        }
     }
 
     // Quan sát 3 biến tổng và in ra UI

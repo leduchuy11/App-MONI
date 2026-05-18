@@ -247,6 +247,9 @@ class HomeFragment : Fragment() {
         binding.llCategoryLimit.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_manageLimitFragment)
         }
+        binding.llCategorySearch.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_exchangeRateFragment)
+        }
     }
 
     // Hàm tính tổng số dư

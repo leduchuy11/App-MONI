@@ -96,4 +96,20 @@ interface TransactionDao {
         endDate: Long
     ): List<TransactionItem>
 
+    @Query(
+        """
+        SELECT * FROM transactions 
+        WHERE userId = :userId 
+        AND type = 'income' 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate
+        ORDER BY dateInMillis ASC
+    """
+    )
+    suspend fun getAllTransactionsIncome(
+        userId: String,
+        startDate: Long,
+        endDate: Long
+    ): List<TransactionItem>
+
 }

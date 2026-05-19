@@ -79,6 +79,12 @@
         <action
             android:id="@+id/action_reportFragment_to_incomeExpenseReportFragment"
             app:destination="@id/incomeExpenseReportFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_expenseAnalysisFragment"
+            app:destination="@id/expenseAnalysisFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_incomeAnalysisFragment"
+            app:destination="@id/incomeAnalysisFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -293,4 +299,12 @@
         android:id="@+id/currencySelectionFragment"
         android:name="com.example.appmoni.ui.main.home.exchangeRate.CurrencySelectionFragment"
         android:label="CurrencySelectionFragment" />
+    <fragment
+        android:id="@+id/expenseAnalysisFragment"
+        android:name="com.example.appmoni.ui.main.report.expenseAnalysis.ExpenseAnalysisFragment"
+        android:label="ExpenseAnalysisFragment" />
+    <fragment
+        android:id="@+id/incomeAnalysisFragment"
+        android:name="com.example.appmoni.ui.main.report.incomeAnalysis.IncomeAnalysisFragment"
+        android:label="IncomeAnalysisFragment" />
 </navigation>

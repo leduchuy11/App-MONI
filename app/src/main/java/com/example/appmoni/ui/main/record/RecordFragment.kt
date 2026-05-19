@@ -689,7 +689,7 @@ class RecordFragment : Fragment() {
             // Khóa nút bấm khi đang lưu để tránh user bấm liên tục 2 lần
             binding.btnSaveTransaction.isEnabled = !isLoading
             if (isLoading) {
-                binding.btnSaveTransaction.text = "Đang lưu..."
+                binding.btnSaveTransaction.text = "Lưu giao dịch"
             } else {
                 binding.btnSaveTransaction.text = "Lưu giao dịch"
             }

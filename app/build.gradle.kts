@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.appmoni"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -70,4 +70,7 @@ dependencies {
     // Retrofit & Gson để gọi API
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("org.apache.poi:poi:3.17")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
 }

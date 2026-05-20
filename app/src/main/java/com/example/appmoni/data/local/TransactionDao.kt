@@ -112,4 +112,20 @@ interface TransactionDao {
         endDate: Long
     ): List<TransactionItem>
 
+    // Lấy tất cả giao dịch trong khoảng thời gian
+    @Query(
+        """
+        SELECT * FROM transactions 
+        WHERE userId = :userId 
+        AND dateInMillis >= :startDate 
+        AND dateInMillis <= :endDate
+        ORDER BY dateInMillis ASC
+    """
+    )
+    suspend fun getTransactionsForExport(
+        userId: String,
+        startDate: Long,
+        endDate: Long
+    ): List<TransactionItem>
+
 }

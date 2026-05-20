@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_homeFragment_to_exchangeRateFragment"
             app:destination="@id/exchangeRateFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_exportDataFragment"
+            app:destination="@id/exportDataFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -307,4 +310,8 @@
         android:id="@+id/incomeAnalysisFragment"
         android:name="com.example.appmoni.ui.main.report.incomeAnalysis.IncomeAnalysisFragment"
         android:label="IncomeAnalysisFragment" />
+    <fragment
+        android:id="@+id/exportDataFragment"
+        android:name="com.example.appmoni.ui.main.home.exportData.ExportDataFragment"
+        android:label="ExportDataFragment" />
 </navigation>

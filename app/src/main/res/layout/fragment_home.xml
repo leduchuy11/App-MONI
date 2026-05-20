@@ -203,18 +203,18 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_category_share_money"
+                    android:id="@+id/ll_category_export_data"
                     style="@style/CategoryItemStyle"
                     app:layout_columnWeight="1">
 
                     <ImageView
                         android:id="@+id/iv_category_share_money"
                         style="@style/CategoryIconStyle"
-                        android:src="@drawable/ic_share_money" />
+                        android:src="@drawable/ic_export" />
 
                     <TextView
                         style="@style/CategoryTextStyle"
-                        android:text="Chia tiền" />
+                        android:text="Xuất dữ liệu" />
                 </LinearLayout>
 
                 <LinearLayout

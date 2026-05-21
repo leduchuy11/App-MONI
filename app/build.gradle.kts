@@ -73,4 +73,14 @@ dependencies {
 
     implementation("org.apache.poi:poi:3.17")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
+
+    // Thư viện quản lý tác vụ ngầm khi có/mất mạng
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+// Thư viện kho chứa file của Firebase
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+
+    // Thư viện gọi API
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+// Thư viện load ảnh từ URL
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

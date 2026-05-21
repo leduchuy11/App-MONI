@@ -1,60 +1,157 @@
 package com.example.appmoni.ui.main.profile
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.appmoni.R
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.bumptech.glide.Glide
+import com.example.appmoni.databinding.FragmentProfileBinding
+import com.example.appmoni.ui.showCustomToast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
+import java.io.FileOutputStream
+import androidx.core.net.toUri
+import androidx.core.content.edit
+import com.example.appmoni.ui.main.profile.changeAvatar.AvatarUploadWorker
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            handleImagePicked(uri)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    ): View {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        loadUserInfo()
+
+        binding.btnChangeAvatar.setOnClickListener {
+            pickImageLauncher.launch("image/*")  // Mở album ảnh trên điện thoại
+        }
+    }
+
+    private fun loadUserInfo() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            binding.tvEmail.text = user.email ?: "Chưa cập nhật email"
+
+            val sharedPref =
+                requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
+            val pendingAvatar = sharedPref.getString("pending_avatar", null)
+
+            if (pendingAvatar != null) {
+                // TH 1: Đang chờ upload (offline), dùng Glide load thẳng file ảnh cục bộ lên
+                Glide.with(this)
+                    .load(pendingAvatar.toUri())
+                    .into(binding.ivAvatar)
+            } else {
+                // TH 2: Không có ảnh chờ, load URL ảnh từ Firestore về
+                FirebaseFirestore.getInstance().collection("users").document(user.uid)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        val avatarUrl = document.getString("avatarUrl")
+                        if (avatarUrl != null) {
+                            Glide.with(this)
+                                .load(avatarUrl)
+                                .placeholder(com.example.appmoni.R.drawable.avatar_app)
+                                .error(com.example.appmoni.R.drawable.avatar_app)
+                                .into(binding.ivAvatar)
+                        } else {
+                            binding.ivAvatar.setImageResource(com.example.appmoni.R.drawable.avatar_app)
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun handleImagePicked(uri: Uri) {
+        // 1. Copy ảnh vào vùng nhớ của App
+        val localUri = copyUriToInternalStorage(uri)
+
+        if (localUri == null) {
+            requireContext().showCustomToast(
+                "Không thể mở ảnh này khi offline. Vui lòng chọn ảnh khác đã có sẵn trên máy!",
+                com.example.appmoni.R.drawable.avatar_app
+            )
+            return
+        }
+
+        // 2. Cập nhật giao diện Ngay Lập Tức bằng Glide
+        Glide.with(this)
+            .load(localUri)
+            .into(binding.ivAvatar)
+
+        // 3. Lưu avatar vào SharedPreferences
+        requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
+            .edit { putString("pending_avatar", localUri.toString()) }
+
+        // 4. Đẩy sang WorkManager chờ xử lý up ngầm lên ImgBB khi có mạng trở lại
+        val inputData = Data.Builder().putString("LOCAL_URI", localUri.toString()).build()
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val uploadWorkRequest =
+            OneTimeWorkRequest.Builder(AvatarUploadWorker::class.java)
+                .setConstraints(constraints)
+                .setInputData(inputData)
+                .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(uploadWorkRequest)
+    }
+
+    private fun copyUriToInternalStorage(uri: Uri): Uri? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri) ?: return null
+
+            // tạo tên file theo thời gian để tránh lỗi trùng cache hình ảnh
+            val fileName = "avatar_${System.currentTimeMillis()}.jpg"
+            val file = File(requireContext().filesDir, fileName)
+
+            // Xóa các file ảnh avatar cũ đã lưu trước đó để sạch bộ nhớ máy
+            requireContext().filesDir.listFiles()?.forEach {
+                if (it.name.startsWith("avatar_") && it.name.endsWith(".jpg")) {
+                    it.delete()
                 }
             }
+
+            val outputStream = FileOutputStream(file)
+            inputStream.copyTo(outputStream)
+            inputStream.close()
+            outputStream.close()
+            Uri.fromFile(file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

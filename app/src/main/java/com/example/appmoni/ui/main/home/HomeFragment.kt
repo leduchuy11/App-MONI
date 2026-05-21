@@ -253,6 +253,9 @@ class HomeFragment : Fragment() {
         binding.llCategoryExportData.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_exportDataFragment)
         }
+        binding.ivNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+        }
     }
 
     // Hàm tính tổng số dư

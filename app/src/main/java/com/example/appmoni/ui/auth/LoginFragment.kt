@@ -1,7 +1,9 @@
 package com.example.appmoni.ui.auth
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
@@ -14,12 +16,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentLoginBinding
 import com.example.appmoni.ui.main.MainActivity
+import com.example.appmoni.ui.main.home.notification.AlarmScheduler
 import com.example.appmoni.ui.showCustomToast
 import com.example.appmoni.viewmodel.auth.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -47,6 +52,22 @@ class LoginFragment : Fragment() {
                 setLoadingState(false)
             }
         }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            AlarmScheduler.scheduleDailyReminders(requireContext())
+            showWelcomeNotification()
+        } else {
+            requireContext().showCustomToast(
+                "Bạn đã tắt thông báo, Moni sẽ không thể nhắc nhở bạn ghi chép!",
+                R.drawable.avatar_app
+            )
+        }
+        // Xử lý quyền xong xuôi mới được chuyển màn hình
+        navigateToMain()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,12 +125,16 @@ class LoginFragment : Fragment() {
         // Hóng trạng thái thành công để chuyển trang
         viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                requireContext().showCustomToast("Đăng nhập thành công!", R.drawable.avatar_app)
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
+                checkAndRequestNotificationPermission()
             }
         }
+    }
+
+    private fun navigateToMain() {
+        requireContext().showCustomToast("Đăng nhập thành công!", R.drawable.avatar_app)
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun setLoadingState(isLoading: Boolean) {
@@ -153,6 +178,54 @@ class LoginFragment : Fragment() {
         }
 
         viewModel.login(email, password)
+    }
+
+    private fun showWelcomeNotification() {
+        val channelId = "welcome_channel"
+        val notificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = android.app.NotificationChannel(
+                channelId,
+                "Chào mừng",
+                android.app.NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val builder = androidx.core.app.NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(R.drawable.ic_congratulations) // Đảm bảo bạn có icon này
+            .setContentTitle("Chào mừng bạn đến với Moni")
+            .setContentText("Hãy bắt đầu ghi chép chi tiêu ngay hôm nay nhé!")
+            .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        notificationManager.notify(0, builder.build())
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            val db = FirebaseFirestore.getInstance()
+            val notiItem = com.example.appmoni.data.model.notification.NotificationItem(
+                message = "Chào mừng bạn đến với Moni. Hãy bắt đầu ghi chép chi tiêu ngay hôm nay nhé!",
+                timeInMillis = System.currentTimeMillis(),
+                type = "system",
+                isRead = false
+            )
+            db.collection("users").document(userId).collection("notifications").add(notiItem)
+        }
+    }
+
+    private fun checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+: Bật bảng xin quyền (Hàm launcher ở trên sẽ gọi navigateToMain sau)
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            // Android 12 trở xuống: Cài báo thức luôn và chuyển trang ngay lập tức
+            AlarmScheduler.scheduleDailyReminders(requireContext())
+            showWelcomeNotification()
+            navigateToMain()
+        }
     }
 
     override fun onDestroyView() {

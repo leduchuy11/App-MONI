@@ -85,8 +85,12 @@ class ProfileFragment : Fragment() {
         binding.btnSyncData.setOnClickListener {
             performSyncData()
         }
+        binding.btnDeleteData.setOnClickListener {
+            showDeleteDataConfirmDialog()
+        }
     }
 
+    // Hàm hiển thị ảnh và tên hiển thị
     private fun loadUserInfo() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
@@ -207,6 +211,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    // PHẦN XỬ LÍ ĐĂNG XUẤT
     private fun showLogoutConfirmDialog() {
         com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
             .setTitle("Đăng xuất")
@@ -247,6 +252,7 @@ class ProfileFragment : Fragment() {
         startActivity(intent)
     }
 
+    // PHẦN XỬ LÍ CÀI GIAO DIỆN VÀ NGÔN NGỮ
     private fun showThemeBottomSheet() {
         val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_theme, null)
@@ -287,6 +293,7 @@ class ProfileFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
+    // PHẦN ĐỒNG BỘ DỮ LIỆU
     private fun performSyncData() {
         binding.layoutLoading.visibility = View.VISIBLE
 
@@ -311,6 +318,105 @@ class ProfileFragment : Fragment() {
             activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> true
             activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             else -> false
+        }
+    }
+
+    // PHẦN XÓA DỮ LIỆU
+    private fun showDeleteDataConfirmDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Cảnh báo xóa dữ liệu")
+            .setMessage("Hành động này sẽ xóa toàn bộ dữ liệu của bạn. Chỉ duy nhất danh mục thu chi được giữ lại.\nHành động này không thế hoàn tác. Bạn có đồng ý không?")
+            .setPositiveButton("Đồng ý") { dialog, _ ->
+                performDeleteData()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Hủy") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun performDeleteData() {
+        // Kiểm tra mạng
+        if (!isNetworkAvailable()) {
+            requireContext().showCustomToast("Vui lòng kết nối Internet để thực hiện thao tác này!", R.drawable.avatar_app)
+            return
+        }
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        binding.layoutLoading.visibility = View.VISIBLE
+
+        val collectionsToDelete = listOf("wallets", "transactions", "savings", "limits", "notifications")
+
+        // Tổng số tiến trình = 5 bảng dữ liệu + 1 bảng gốc (chứa Tên, Ảnh)
+        val totalTasks = collectionsToDelete.size + 1
+        var completedTasks = 0
+        var hasError = false
+
+        // B1: Ghi đè tệp rỗng để xóa sạch displayName và avatarUrl ở ngoài cùng
+        db.collection("users").document(userId).set(emptyMap<String, Any>())
+            .addOnSuccessListener {
+                checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+            }
+            .addOnFailureListener {
+                hasError = true
+                checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+            }
+
+        // B2: Quét và dùng WriteBatch dọn dẹp 5 bảng dữ liệu
+        for (collectionName in collectionsToDelete) {
+            db.collection("users").document(userId).collection(collectionName)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.isEmpty) {
+                        checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+                        return@addOnSuccessListener
+                    }
+
+                    val batch = db.batch()
+                    for (doc in snapshot.documents) {
+                        batch.delete(doc.reference)
+                    }
+
+                    batch.commit()
+                        .addOnSuccessListener {
+                            checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+                        }
+                        .addOnFailureListener {
+                            hasError = true
+                            checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+                        }
+                }
+                .addOnFailureListener {
+                    hasError = true
+                    checkDeleteCompletion(++completedTasks, totalTasks, hasError)
+                }
+        }
+    }
+
+    // Hàm kiểm tra tiến độ và báo kết quả
+    private fun checkDeleteCompletion(completedCount: Int, total: Int, hasError: Boolean) {
+        if (completedCount == total) {
+            binding.layoutLoading.visibility = View.GONE
+
+            if (hasError) {
+                requireContext().showCustomToast("Có lỗi xảy ra trong quá trình xóa. Vui lòng thử lại!", R.drawable.avatar_app)
+            } else {
+                // Xóa sạch bộ nhớ đệm cục bộ để ảnh và tên trên UI biến mất ngay lập tức
+                requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
+                    .edit {
+                        clear()
+                    }
+
+                // Trả UI về trạng thái mặc định ban đầu
+                val email = FirebaseAuth.getInstance().currentUser?.email ?: ""
+                binding.tvUsername.text = if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
+                binding.ivAvatar.setImageResource(R.drawable.avatar_app)
+
+                requireContext().showCustomToast("Xóa dữ liệu thành công!", R.drawable.avatar_app)
+            }
         }
     }
 

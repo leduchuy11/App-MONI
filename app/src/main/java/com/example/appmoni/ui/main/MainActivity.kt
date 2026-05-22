@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.ActivityMainBinding
+import com.example.appmoni.ui.main.home.notification.AlarmScheduler
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -85,6 +86,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        AlarmScheduler.scheduleDailyReminders(this)
 
     }
 }

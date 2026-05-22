@@ -74,6 +74,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:background="#FFFFFF"
+        android:paddingBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_header_earlier"

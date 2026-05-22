@@ -57,7 +57,6 @@ class LoginFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            AlarmScheduler.scheduleDailyReminders(requireContext())
             showWelcomeNotification()
         } else {
             requireContext().showCustomToast(
@@ -218,11 +217,8 @@ class LoginFragment : Fragment() {
 
     private fun checkAndRequestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+: Bật bảng xin quyền (Hàm launcher ở trên sẽ gọi navigateToMain sau)
             requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         } else {
-            // Android 12 trở xuống: Cài báo thức luôn và chuyển trang ngay lập tức
-            AlarmScheduler.scheduleDailyReminders(requireContext())
             showWelcomeNotification()
             navigateToMain()
         }

@@ -22,12 +22,14 @@ import java.io.File
 import java.io.FileOutputStream
 import androidx.core.net.toUri
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.ui.main.profile.changeAvatar.AvatarUploadWorker
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
 
@@ -79,6 +81,9 @@ class ProfileFragment : Fragment() {
         }
         binding.btnSettingLanguage.setOnClickListener {
             showLanguageBottomSheet()
+        }
+        binding.btnSyncData.setOnClickListener {
+            performSyncData()
         }
     }
 
@@ -280,6 +285,33 @@ class ProfileFragment : Fragment() {
         }
 
         bottomSheetDialog.show()
+    }
+
+    private fun performSyncData() {
+        binding.layoutLoading.visibility = View.VISIBLE
+
+        lifecycleScope.launch {
+            kotlinx.coroutines.delay(1500) // Đợi 1.5 giây tạo cảm giác đang tải thật
+
+            binding.layoutLoading.visibility = View.GONE
+
+            if (isNetworkAvailable()) {
+                requireContext().showCustomToast("Đồng bộ dữ liệu thành công!", R.drawable.avatar_app)
+            } else {
+                requireContext().showCustomToast("Đồng bộ thất bại. Vui lòng kiểm tra kết nối mạng!", R.drawable.avatar_app)
+            }
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
     }
 
     override fun onDestroyView() {

@@ -428,7 +428,7 @@
                     android:background="#F0F0F0" />
 
                 <LinearLayout
-                    android:id="@+id/btn_fetch_data"
+                    android:id="@+id/btn_delete_data"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:clickable="true"
@@ -441,27 +441,27 @@
                     <ImageView
                         android:layout_width="26dp"
                         android:layout_height="26dp"
-                        android:src="@drawable/ic_profile_get_data"
-                        app:tint="#008fd6" />
+                        android:src="@drawable/ic_profile_delete"
+                        app:tint="#F04B52" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Lấy dữ liệu từ máy chủ"
-                        android:textColor="#333333"
+                        android:text="Xóa dữ liệu"
+                        android:textColor="#F04B52"
                         android:textSize="16sp" />
                 </LinearLayout>
 
                 <View
-                    android:id="@+id/divider_fetch_to_delete"
+                    android:id="@+id/divider_data_to_account"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="56dp"
                     android:background="#F0F0F0" />
 
                 <LinearLayout
-                    android:id="@+id/btn_delete_data"
+                    android:id="@+id/btn_delete_account"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:clickable="true"
@@ -481,7 +481,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Xoá dữ liệu"
+                        android:text="Xoá tài khoản"
                         android:textColor="#F04B52"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -620,6 +620,27 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
+
+        <FrameLayout
+            android:id="@+id/layout_loading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#66FFFFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="#008fd6"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

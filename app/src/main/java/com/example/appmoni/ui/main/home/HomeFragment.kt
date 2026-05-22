@@ -1,5 +1,6 @@
 package com.example.appmoni.ui.main.home
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.DecimalFormat
 import java.util.Calendar
 
@@ -72,6 +74,8 @@ class HomeFragment : Fragment() {
             setupTotalBalanceObserver()
             setupLimitObserver()
             setupDebtObserver(currentUserId)
+
+            setupUserGreeting(currentUserId)
         }
 
         setupBanner()
@@ -374,6 +378,38 @@ class HomeFragment : Fragment() {
                 debtAdapter.submitList(activeDebts.take(3))
             }
         }
+    }
+
+    // Hàm xử lý hiển thị tên
+    private fun setupUserGreeting(userId: String) {
+        val user = FirebaseAuth.getInstance().currentUser ?: return
+        val sharedPref = requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
+
+        val localName = sharedPref.getString("display_name", null)
+
+        // 1. Gán ngay tên đệm hoặc email để UI không bị đơ khi Offline
+        val displayName = if (localName != null) {
+            localName
+        } else {
+            val email = user.email ?: ""
+            if (email.contains("@")) email.substringBefore("@") else "bạn"
+        }
+        binding.tvGreeting.text = "Xin chào!\n$displayName"
+
+        // 2. Chọc ngầm lên server để kiểm tra tên mới nhất
+        FirebaseFirestore.getInstance().collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (_binding == null) return@addOnSuccessListener
+
+                val nameFromServer = document.getString("displayName")
+                if (!nameFromServer.isNullOrEmpty() && nameFromServer != localName) {
+                    binding.tvGreeting.text = "Xin chào!\n$nameFromServer"
+                    sharedPref.edit().putString("display_name", nameFromServer).apply()
+                }
+            }
+            .addOnFailureListener {
+            }
     }
 
     override fun onDestroyView() {

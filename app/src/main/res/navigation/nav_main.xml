@@ -96,7 +96,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.appmoni.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_changeNameFragment"
+            app:destination="@id/changeNameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.appmoni.ui.main.record.category.CategoryFragment"
@@ -321,4 +325,8 @@
         android:id="@+id/notificationFragment"
         android:name="com.example.appmoni.ui.main.home.notification.NotificationFragment"
         android:label="NotificationFragment" />
+    <fragment
+        android:id="@+id/changeNameFragment"
+        android:name="com.example.appmoni.ui.main.profile.changeName.ChangeNameFragment"
+        android:label="ChangeNameFragment" />
 </navigation>

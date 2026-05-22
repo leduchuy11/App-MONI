@@ -22,7 +22,10 @@ import java.io.File
 import java.io.FileOutputStream
 import androidx.core.net.toUri
 import androidx.core.content.edit
+import androidx.navigation.fragment.findNavController
+import com.example.appmoni.R
 import com.example.appmoni.ui.main.profile.changeAvatar.AvatarUploadWorker
+import com.google.firebase.firestore.ListenerRegistration
 
 class ProfileFragment : Fragment() {
 
@@ -36,6 +39,8 @@ class ProfileFragment : Fragment() {
             handleImagePicked(uri)
         }
     }
+
+    private var nameSnapshotListener: ListenerRegistration? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +57,14 @@ class ProfileFragment : Fragment() {
 
         binding.btnChangeAvatar.setOnClickListener {
             pickImageLauncher.launch("image/*")  // Mở album ảnh trên điện thoại
+        }
+
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        binding.btnChangeName.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changeNameFragment)
         }
     }
 
@@ -86,6 +99,29 @@ class ProfileFragment : Fragment() {
                         }
                     }
             }
+            val localName = sharedPref.getString("display_name", null)
+
+            if (localName != null) {
+                binding.tvUsername.text = localName
+            } else {
+                val email = user.email ?: ""
+                binding.tvUsername.text = if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
+            }
+
+            // Gán vào biến để quản lý và tránh crash
+            nameSnapshotListener = FirebaseFirestore.getInstance().collection("users").document(user.uid)
+                .addSnapshotListener { document, error ->
+                    if (error != null || document == null) return@addSnapshotListener
+
+                    // CHỐNG CRASH: Nếu giao diện đã bị tiêu hủy thì dừng lại ngay
+                    if (_binding == null) return@addSnapshotListener
+
+                    val nameFromServer = document.getString("displayName")
+                    if (!nameFromServer.isNullOrEmpty() && nameFromServer != localName) {
+                        binding.tvUsername.text = nameFromServer
+                        sharedPref.edit { putString("display_name", nameFromServer) }
+                    }
+                }
         }
     }
 
@@ -152,6 +188,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        nameSnapshotListener?.remove()
         _binding = null
     }
 }

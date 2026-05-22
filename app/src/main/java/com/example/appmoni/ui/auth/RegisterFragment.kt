@@ -74,7 +74,6 @@ class RegisterFragment : Fragment() {
         binding.tilEmail.isEnabled = enableUI
         binding.tilPassword.isEnabled = enableUI
         binding.tilConfirmpassword.isEnabled = enableUI
-        binding.tilName.isEnabled = enableUI
         binding.btnRegister.isEnabled = enableUI
     }
 
@@ -82,20 +81,10 @@ class RegisterFragment : Fragment() {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
         val confirmPassword = binding.etConfirmpw.text.toString().trim()
-        val name = binding.etName.text.toString().trim()
 
-        // Xóa lỗi cũ
         binding.tilEmail.error = null
         binding.tilPassword.error = null
         binding.tilConfirmpassword.error = null
-        binding.tilName.error = null
-
-        // Validation cơ bản
-        if (name.isEmpty()) {
-            binding.tilName.error = "Vui lòng nhập họ tên"
-            binding.etName.requestFocus()
-            return
-        }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.tilEmail.error = "Email không hợp lệ"
@@ -115,7 +104,7 @@ class RegisterFragment : Fragment() {
             return
         }
 
-        viewModel.register(email, password, name)
+        viewModel.register(email, password)
     }
 
     override fun onDestroyView() {

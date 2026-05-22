@@ -42,21 +42,19 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun register(email: String, password: String, name: String) {
+    fun register(email: String, password: String) {
         _isLoading.value = true
         repository.registerWithEmail(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = repository.getCurrentUser()
                 if (user != null) {
-                    repository.updateDisplayName(user, name).addOnCompleteListener { profileTask ->
-                        repository.sendEmailVerification(user).addOnCompleteListener { verifyTask ->
-                            _isLoading.value = false
-                            if (verifyTask.isSuccessful) {
-                                _isAuthSuccess.value = true
-                                repository.signOut()
-                            } else {
-                                _errorMessage.value = verifyTask.exception?.message
-                            }
+                    repository.sendEmailVerification(user).addOnCompleteListener { verifyTask ->
+                        _isLoading.value = false
+                        if (verifyTask.isSuccessful) {
+                            _isAuthSuccess.value = true
+                            repository.signOut()
+                        } else {
+                            _errorMessage.value = verifyTask.exception?.message
                         }
                     }
                 }

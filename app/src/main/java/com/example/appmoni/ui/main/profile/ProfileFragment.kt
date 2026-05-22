@@ -113,7 +113,7 @@ class ProfileFragment : Fragment() {
                 .addSnapshotListener { document, error ->
                     if (error != null || document == null) return@addSnapshotListener
 
-                    // CHỐNG CRASH: Nếu giao diện đã bị tiêu hủy thì dừng lại ngay
+                    // chống crash: Nếu giao diện đã bị tiêu hủy thì dừng lại ngay
                     if (_binding == null) return@addSnapshotListener
 
                     val nameFromServer = document.getString("displayName")

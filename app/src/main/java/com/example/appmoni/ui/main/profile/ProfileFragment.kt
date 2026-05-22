@@ -74,6 +74,12 @@ class ProfileFragment : Fragment() {
         binding.btnChangePassword.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
         }
+        binding.btnSettingTheme.setOnClickListener {
+            showThemeBottomSheet()
+        }
+        binding.btnSettingLanguage.setOnClickListener {
+            showLanguageBottomSheet()
+        }
     }
 
     private fun loadUserInfo() {
@@ -234,6 +240,46 @@ class ProfileFragment : Fragment() {
         intent.flags =
             android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun showThemeBottomSheet() {
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_theme, null)
+        bottomSheetDialog.setContentView(view)
+
+        val btnLight = view.findViewById<View>(R.id.btn_theme_light)
+        val btnDark = view.findViewById<View>(R.id.btn_theme_dark)
+
+        btnLight.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        btnDark.setOnClickListener {
+            requireContext().showCustomToast("Chức năng này hiện tại không khả dụng!", R.drawable.avatar_app)
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
+    }
+
+    private fun showLanguageBottomSheet() {
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_language, null)
+        bottomSheetDialog.setContentView(view)
+
+        val btnLangVi = view.findViewById<View>(R.id.btn_lang_vi)
+        val btnLangEn = view.findViewById<View>(R.id.btn_lang_en)
+
+        btnLangVi.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        btnLangEn.setOnClickListener {
+            requireContext().showCustomToast("Chức năng này hiện tại không khả dụng!", R.drawable.avatar_app)
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
     }
 
     override fun onDestroyView() {

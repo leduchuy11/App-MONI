@@ -1,6 +1,7 @@
 package com.example.appmoni.data.repository.auth
 
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -50,5 +51,23 @@ class AuthRepository {
     fun loginWithGoogle(idToken: String): Task<AuthResult> {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         return auth.signInWithCredential(credential)
+    }
+
+    // 9. Đổi mật khẩu
+    fun changePassword(oldPassword: String, newPassword: String): Task<Void> {
+        val user = auth.currentUser
+            ?: return Tasks.forException(Exception("Người dùng chưa đăng nhập"))
+        val email = user.email
+            ?: return Tasks.forException(Exception("Không lấy được thông tin email"))
+
+        val credential = com.google.firebase.auth.EmailAuthProvider.getCredential(email, oldPassword)
+
+        return user.reauthenticate(credential).continueWithTask { task ->
+            if (task.isSuccessful) {
+                user.updatePassword(newPassword)
+            } else {
+                Tasks.forException(task.exception ?: Exception("Xác thực mật khẩu cũ thất bại"))
+            }
+        }
     }
 }

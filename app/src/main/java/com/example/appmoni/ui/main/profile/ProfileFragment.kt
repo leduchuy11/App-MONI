@@ -25,6 +25,8 @@ import androidx.core.content.edit
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.ui.main.profile.changeAvatar.AvatarUploadWorker
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.ListenerRegistration
 
 class ProfileFragment : Fragment() {
@@ -58,6 +60,9 @@ class ProfileFragment : Fragment() {
         binding.btnChangeAvatar.setOnClickListener {
             pickImageLauncher.launch("image/*")  // Mở album ảnh trên điện thoại
         }
+        binding.btnLogout.setOnClickListener {
+            showLogoutConfirmDialog()
+        }
 
         setupListeners()
     }
@@ -65,6 +70,9 @@ class ProfileFragment : Fragment() {
     private fun setupListeners() {
         binding.btnChangeName.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_changeNameFragment)
+        }
+        binding.btnChangePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
         }
     }
 
@@ -105,23 +113,25 @@ class ProfileFragment : Fragment() {
                 binding.tvUsername.text = localName
             } else {
                 val email = user.email ?: ""
-                binding.tvUsername.text = if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
+                binding.tvUsername.text =
+                    if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
             }
 
             // Gán vào biến để quản lý và tránh crash
-            nameSnapshotListener = FirebaseFirestore.getInstance().collection("users").document(user.uid)
-                .addSnapshotListener { document, error ->
-                    if (error != null || document == null) return@addSnapshotListener
+            nameSnapshotListener =
+                FirebaseFirestore.getInstance().collection("users").document(user.uid)
+                    .addSnapshotListener { document, error ->
+                        if (error != null || document == null) return@addSnapshotListener
 
-                    // chống crash: Nếu giao diện đã bị tiêu hủy thì dừng lại ngay
-                    if (_binding == null) return@addSnapshotListener
+                        // chống crash: Nếu giao diện đã bị tiêu hủy thì dừng lại ngay
+                        if (_binding == null) return@addSnapshotListener
 
-                    val nameFromServer = document.getString("displayName")
-                    if (!nameFromServer.isNullOrEmpty() && nameFromServer != localName) {
-                        binding.tvUsername.text = nameFromServer
-                        sharedPref.edit { putString("display_name", nameFromServer) }
+                        val nameFromServer = document.getString("displayName")
+                        if (!nameFromServer.isNullOrEmpty() && nameFromServer != localName) {
+                            binding.tvUsername.text = nameFromServer
+                            sharedPref.edit { putString("display_name", nameFromServer) }
+                        }
                     }
-                }
         }
     }
 
@@ -184,6 +194,46 @@ class ProfileFragment : Fragment() {
             e.printStackTrace()
             null
         }
+    }
+
+    private fun showLogoutConfirmDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Đăng xuất")
+            .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này không?")
+            .setPositiveButton("Đăng xuất") { dialog, _ ->
+                performLogout()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Hủy") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun performLogout() {
+        // Dọn dẹp sạch sẽ bộ nhớ đệm (Tên, Ảnh) để tài khoản khác đăng nhập không bị dính
+        requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
+            .edit {
+                clear()
+            }
+
+        // Đăng xuất khỏi Firebase Auth
+        FirebaseAuth.getInstance().signOut()
+
+        // Đăng xuất khỏi Google Sign-in (Để lần sau ấn đăng nhập Google nó cho chọn lại tài khoản khác)
+        val gso = GoogleSignInOptions.Builder(
+            GoogleSignInOptions.DEFAULT_SIGN_IN
+        ).build()
+        GoogleSignIn.getClient(requireContext(), gso).signOut()
+
+        // Chuyển hướng về màn hình Login và xóa sạch lịch sử màn hình cũ
+        val intent = android.content.Intent(
+            requireContext(),
+            com.example.appmoni.ui.auth.LoginActivity::class.java
+        )
+        intent.flags =
+            android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

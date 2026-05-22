@@ -100,6 +100,9 @@
         <action
             android:id="@+id/action_profileFragment_to_changeNameFragment"
             app:destination="@id/changeNameFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -329,4 +332,8 @@
         android:id="@+id/changeNameFragment"
         android:name="com.example.appmoni.ui.main.profile.changeName.ChangeNameFragment"
         android:label="ChangeNameFragment" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.appmoni.ui.main.profile.changePassword.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
 </navigation>

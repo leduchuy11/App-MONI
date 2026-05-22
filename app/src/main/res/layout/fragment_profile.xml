@@ -600,22 +600,23 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="#F0C8C8"
+            app:cardBackgroundColor="#FFEFEE"
             app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardElevation="1dp"
+            app:strokeColor="#fc565b"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_help_settings"
-            app:strokeWidth="0dp">
+            app:strokeWidth="1dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Đăng xuất"
-                android:textColor="#F03F48"
+                android:textColor="#fc565b"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>

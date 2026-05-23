@@ -92,6 +92,12 @@ class ProfileFragment : Fragment() {
         binding.btnDeleteAccount.setOnClickListener {
             showDeleteAccountConfirmDialog()
         }
+        binding.btnHelpAbout.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_aboutFragment)
+        }
+        binding.btnHelpGuide.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_guideFragment)
+        }
     }
 
     // Hàm hiển thị ảnh và tên hiển thị

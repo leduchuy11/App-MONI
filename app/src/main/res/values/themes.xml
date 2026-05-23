@@ -4,6 +4,9 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <!--        <item name="android:statusBarColor">@color/white</item>-->
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+
+        <item name="android:windowBackground">#FFFFFF</item>
     </style>
 
     <style name="Theme.AppMoni" parent="Base.Theme.AppMoni">

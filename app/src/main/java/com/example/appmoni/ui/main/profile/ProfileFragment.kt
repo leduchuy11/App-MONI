@@ -28,6 +28,7 @@ import com.example.appmoni.R
 import com.example.appmoni.ui.main.profile.changeAvatar.AvatarUploadWorker
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
@@ -87,6 +88,9 @@ class ProfileFragment : Fragment() {
         }
         binding.btnDeleteData.setOnClickListener {
             showDeleteDataConfirmDialog()
+        }
+        binding.btnDeleteAccount.setOnClickListener {
+            showDeleteAccountConfirmDialog()
         }
     }
 
@@ -254,7 +258,8 @@ class ProfileFragment : Fragment() {
 
     // PHẦN XỬ LÍ CÀI GIAO DIỆN VÀ NGÔN NGỮ
     private fun showThemeBottomSheet() {
-        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val bottomSheetDialog =
+            com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_theme, null)
         bottomSheetDialog.setContentView(view)
 
@@ -266,7 +271,10 @@ class ProfileFragment : Fragment() {
         }
 
         btnDark.setOnClickListener {
-            requireContext().showCustomToast("Chức năng này hiện tại không khả dụng!", R.drawable.avatar_app)
+            requireContext().showCustomToast(
+                "Chức năng này hiện tại không khả dụng!",
+                R.drawable.avatar_app
+            )
             bottomSheetDialog.dismiss()
         }
 
@@ -274,7 +282,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showLanguageBottomSheet() {
-        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val bottomSheetDialog =
+            com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_language, null)
         bottomSheetDialog.setContentView(view)
 
@@ -286,7 +295,10 @@ class ProfileFragment : Fragment() {
         }
 
         btnLangEn.setOnClickListener {
-            requireContext().showCustomToast("Chức năng này hiện tại không khả dụng!", R.drawable.avatar_app)
+            requireContext().showCustomToast(
+                "Chức năng này hiện tại không khả dụng!",
+                R.drawable.avatar_app
+            )
             bottomSheetDialog.dismiss()
         }
 
@@ -303,15 +315,22 @@ class ProfileFragment : Fragment() {
             binding.layoutLoading.visibility = View.GONE
 
             if (isNetworkAvailable()) {
-                requireContext().showCustomToast("Đồng bộ dữ liệu thành công!", R.drawable.avatar_app)
+                requireContext().showCustomToast(
+                    "Đồng bộ dữ liệu thành công!",
+                    R.drawable.avatar_app
+                )
             } else {
-                requireContext().showCustomToast("Đồng bộ thất bại. Vui lòng kiểm tra kết nối mạng!", R.drawable.avatar_app)
+                requireContext().showCustomToast(
+                    "Đồng bộ thất bại. Vui lòng kiểm tra kết nối mạng!",
+                    R.drawable.avatar_app
+                )
             }
         }
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
         return when {
@@ -339,7 +358,10 @@ class ProfileFragment : Fragment() {
     private fun performDeleteData() {
         // Kiểm tra mạng
         if (!isNetworkAvailable()) {
-            requireContext().showCustomToast("Vui lòng kết nối Internet để thực hiện thao tác này!", R.drawable.avatar_app)
+            requireContext().showCustomToast(
+                "Vui lòng kết nối Internet để thực hiện thao tác này!",
+                R.drawable.avatar_app
+            )
             return
         }
 
@@ -348,7 +370,8 @@ class ProfileFragment : Fragment() {
 
         binding.layoutLoading.visibility = View.VISIBLE
 
-        val collectionsToDelete = listOf("wallets", "transactions", "savings", "limits", "notifications")
+        val collectionsToDelete =
+            listOf("wallets", "transactions", "savings", "limits", "notifications")
 
         // Tổng số tiến trình = 5 bảng dữ liệu + 1 bảng gốc (chứa Tên, Ảnh)
         val totalTasks = collectionsToDelete.size + 1
@@ -402,7 +425,10 @@ class ProfileFragment : Fragment() {
             binding.layoutLoading.visibility = View.GONE
 
             if (hasError) {
-                requireContext().showCustomToast("Có lỗi xảy ra trong quá trình xóa. Vui lòng thử lại!", R.drawable.avatar_app)
+                requireContext().showCustomToast(
+                    "Có lỗi xảy ra trong quá trình xóa. Vui lòng thử lại!",
+                    R.drawable.avatar_app
+                )
             } else {
                 // Xóa sạch bộ nhớ đệm cục bộ để ảnh và tên trên UI biến mất ngay lập tức
                 requireContext().getSharedPreferences("MoniPrefs", Context.MODE_PRIVATE)
@@ -412,11 +438,112 @@ class ProfileFragment : Fragment() {
 
                 // Trả UI về trạng thái mặc định ban đầu
                 val email = FirebaseAuth.getInstance().currentUser?.email ?: ""
-                binding.tvUsername.text = if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
+                binding.tvUsername.text =
+                    if (email.contains("@")) email.substringBefore("@") else "Người dùng Moni"
                 binding.ivAvatar.setImageResource(R.drawable.avatar_app)
 
                 requireContext().showCustomToast("Xóa dữ liệu thành công!", R.drawable.avatar_app)
             }
+        }
+    }
+
+    // PHẦN XÓA TÀI KHOẢN
+    private fun showDeleteAccountConfirmDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Xóa tài khoản")
+            .setMessage("Hành động này sẽ xóa vĩnh viễn tài khoản và toàn bộ dữ liệu của bạn trên hệ thống.\nBạn có chắc chắn muốn tiếp tục?")
+            .setPositiveButton("Xóa") { dialog, _ ->
+                performDeleteAccount()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Hủy") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun performDeleteAccount() {
+        if (!isNetworkAvailable()) {
+            requireContext().showCustomToast("Vui lòng kết nối Internet để thực hiện thao tác này!", R.drawable.avatar_app)
+            return
+        }
+
+        val user = FirebaseAuth.getInstance().currentUser ?: return
+        val userId = user.uid
+        val db = FirebaseFirestore.getInstance()
+
+        binding.layoutLoading.visibility = View.VISIBLE
+
+        // B1: Xóa toàn bộ Database
+        val collectionsToDelete = listOf("wallets", "transactions", "savings", "limits", "notifications", "categories")
+        val totalTasks = collectionsToDelete.size + 1
+        var completedTasks = 0
+        var hasError = false
+
+        // Hàm cục bộ: Kiểm tra nếu xóa DB xong xuôi thì mới tiến hành xóa tài khoản Auth
+        fun checkDbDeleteAndProceed() {
+            if (completedTasks == totalTasks) {
+                if (hasError) {
+                    binding.layoutLoading.visibility = View.GONE
+                    requireContext().showCustomToast("Lỗi xóa dữ liệu máy chủ. Vui lòng thử lại!", R.drawable.avatar_app)
+                    return
+                }
+
+                // B2: Chỉ khi DB đã sạch bóng, mới được phép xóa User Auth
+                user.delete().addOnCompleteListener { task ->
+                    binding.layoutLoading.visibility = View.GONE
+                    if (task.isSuccessful) {
+                        performLogout()
+                        requireContext().showCustomToast("Tài khoản đã được xóa vĩnh viễn!", R.drawable.avatar_app)
+                    } else {
+                        if (task.exception is FirebaseAuthRecentLoginRequiredException) {
+                            requireContext().showCustomToast(
+                                "Thao tác nhạy cảm: Vui lòng đăng xuất và đăng nhập lại trước khi xóa tài khoản!",
+                                R.drawable.avatar_app
+                            )
+                        } else {
+                            requireContext().showCustomToast(
+                                "Xóa tài khoản thất bại: ${task.exception?.message}",
+                                R.drawable.avatar_app
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Xóa Document gốc
+        db.collection("users").document(userId).delete()
+            .addOnCompleteListener {
+                if (!it.isSuccessful) hasError = true
+                completedTasks++
+                checkDbDeleteAndProceed()
+            }
+
+        for (collectionName in collectionsToDelete) {
+            db.collection("users").document(userId).collection(collectionName).get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.isEmpty) {
+                        completedTasks++
+                        checkDbDeleteAndProceed()
+                        return@addOnSuccessListener
+                    }
+                    val batch = db.batch()
+                    for (doc in snapshot.documents) {
+                        batch.delete(doc.reference)
+                    }
+                    batch.commit()
+                        .addOnCompleteListener {
+                            if (!it.isSuccessful) hasError = true
+                            completedTasks++
+                            checkDbDeleteAndProceed()
+                        }
+                }
+                .addOnFailureListener {
+                    hasError = true
+                    completedTasks++
+                    checkDbDeleteAndProceed()
+                }
         }
     }
 

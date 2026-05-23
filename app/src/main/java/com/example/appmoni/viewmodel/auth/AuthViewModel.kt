@@ -94,4 +94,9 @@ class AuthViewModel : ViewModel() {
         val user = repository.getCurrentUser()
         return user != null && user.isEmailVerified
     }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
+    }
+
 }

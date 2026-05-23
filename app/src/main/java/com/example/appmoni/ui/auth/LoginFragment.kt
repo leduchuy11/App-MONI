@@ -118,6 +118,7 @@ class LoginFragment : Fragment() {
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+                viewModel.clearErrorMessage()
             }
         }
 

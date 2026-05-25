@@ -31,6 +31,6 @@
         android:layout_height="wrap_content"
         android:text="Nội dung thông báo"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

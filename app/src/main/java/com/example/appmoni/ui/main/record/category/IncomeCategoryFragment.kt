@@ -17,8 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.data.model.category.CategoryIncomeItem
 import com.example.appmoni.databinding.FragmentIncomeCategoryBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.removeAccents
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.CategorySharedViewModel
 import com.example.appmoni.viewmodel.record.ManageCategoryViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -79,7 +80,7 @@ class IncomeCategoryFragment : Fragment() {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
             }
         }
 

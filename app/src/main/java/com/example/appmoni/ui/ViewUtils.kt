@@ -14,8 +14,33 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
+enum class ToastType {
+    SUCCESS, WARNING, ERROR
+}
 
-// Hàm tạo Toast
+//Hàm tạo toast phiên bản 2
+fun Context.showToast(message: String, type: ToastType) {
+    val inflater = LayoutInflater.from(this)
+
+    val layoutRes = when (type) {
+        ToastType.SUCCESS -> R.layout.layout_toast_success
+        ToastType.WARNING -> R.layout.layout_toast_warning
+        ToastType.ERROR   -> R.layout.layout_toast_failure
+    }
+
+    val view = inflater.inflate(layoutRes, null)
+
+    val tvMessage = view.findViewById<TextView>(R.id.tv_toast_message)
+    tvMessage.text = message
+
+    Toast(this).apply {
+        duration = Toast.LENGTH_SHORT
+        this.view = view
+        show()
+    }
+}
+
+// Hàm tạo Toast phiên bản 1
 fun Context.showCustomToast(message: String, iconResId: Int) {
     // Lấy giao diện XML vừa tạo ra
     val inflater = LayoutInflater.from(this)

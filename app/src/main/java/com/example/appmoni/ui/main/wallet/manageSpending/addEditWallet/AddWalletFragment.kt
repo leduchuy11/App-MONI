@@ -10,12 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.wallet.WalletItem
-import com.example.appmoni.ui.showCustomToast
 import com.example.appmoni.viewmodel.wallet.WalletViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import androidx.core.view.isVisible
 import com.example.appmoni.databinding.FragmentAddWalletBinding
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 
 class AddWalletFragment : Fragment() {
 
@@ -63,7 +64,7 @@ class AddWalletFragment : Fragment() {
         // Hóng thành công
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
             if (message.isNotEmpty()) {
-                requireContext().showCustomToast(message, R.drawable.avatar_app)
+                requireContext().showToast(message, ToastType.SUCCESS)
                 viewModel.clearActionSuccess()
                 findNavController().navigateUp()
             }
@@ -72,7 +73,7 @@ class AddWalletFragment : Fragment() {
         // Hóng lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
                 viewModel.clearErrorMessage()
             }
         }

@@ -13,9 +13,10 @@ import com.example.appmoni.R
 import com.example.appmoni.data.model.transaction.TransactionItem
 import com.example.appmoni.data.model.wallet.SavingsItem
 import com.example.appmoni.databinding.FragmentAddSavingsBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.addCurrencyFormatter
 import com.example.appmoni.ui.parseCurrencyValue
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.wallet.SavingsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -69,12 +70,12 @@ class AddSavingsFragment : Fragment() {
             binding.btnSaveSavings.isEnabled = true
 
             result.onSuccess { message ->
-                requireContext().showCustomToast(message, R.drawable.avatar_app)
+                requireContext().showToast(message, ToastType.SUCCESS)
                 findNavController().navigateUp()
             }
 
             result.onFailure { exception ->
-                requireContext().showCustomToast("${exception.message}", R.drawable.avatar_app)
+                requireContext().showToast("${exception.message}", ToastType.ERROR)
             }
         }
     }
@@ -196,10 +197,7 @@ class AddSavingsFragment : Fragment() {
         }
 
         val fakeFeatureListener = View.OnClickListener {
-            requireContext().showCustomToast(
-                "Chức năng này hiện không khả dụng!",
-                R.drawable.avatar_app
-            )
+            requireContext().showToast("Chức năng này hiện không khả dụng!", ToastType.WARNING)
             bottomSheetDialog.dismiss()
         }
 
@@ -215,15 +213,15 @@ class AddSavingsFragment : Fragment() {
         val interestRate = binding.etInterestRate.text.toString().toDoubleOrNull() ?: 0.0
 
         if (amount <= 0) {
-            requireContext().showCustomToast("Vui lòng nhập số tiền", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng nhập số tiền", ToastType.WARNING)
             return
         }
         if (selectedBankName.isEmpty()) {
-            requireContext().showCustomToast("Vui lòng chọn ngân hàng", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng chọn ngân hàng", ToastType.WARNING)
             return
         }
         if (termMonths <= 0) {
-            requireContext().showCustomToast("Kỳ hạn phải lớn hơn 0", R.drawable.avatar_app)
+            requireContext().showToast("Kỳ hạn phải lớn hơn 0", ToastType.WARNING)
             return
         }
 

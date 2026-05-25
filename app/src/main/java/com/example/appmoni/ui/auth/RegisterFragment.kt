@@ -10,7 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentRegisterBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.auth.AuthViewModel
 
 class RegisterFragment : Fragment() {
@@ -50,18 +51,16 @@ class RegisterFragment : Fragment() {
         // Hóng Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
-                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $errorMessage", ToastType.ERROR)
             }
         }
 
         // Hóng Thành công
         viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                requireContext().showCustomToast(
-                    "Đăng ký thành công! Vui lòng kiểm tra email để xác thực.",
-                    R.drawable.avatar_app
-                )
-                findNavController().popBackStack() // Quay lại màn hình đăng nhập
+                requireContext().showToast("Đăng ký thành công! Vui lòng kiểm tra email để xác thực.",
+                    ToastType.SUCCESS)
+                findNavController().popBackStack()
             }
         }
     }

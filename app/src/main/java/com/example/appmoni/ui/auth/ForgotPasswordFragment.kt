@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentForgotPasswordBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.auth.AuthViewModel
 
 class ForgotPasswordFragment : Fragment() {
@@ -55,7 +57,7 @@ class ForgotPasswordFragment : Fragment() {
         // Hóng Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
-                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $errorMessage", ToastType.ERROR)
             }
         }
 

@@ -15,7 +15,8 @@ import com.example.appmoni.R
 import com.example.appmoni.data.model.transaction.TransactionItem
 import com.example.appmoni.data.model.wallet.SavingsItem
 import com.example.appmoni.databinding.FragmentSettleSavingsBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.wallet.SavingsViewModel
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -179,13 +180,15 @@ class SettleSavingsFragment : Fragment() {
 
                 // Không được chọn ngày trong tương lai
                 if (newCalendar.timeInMillis > System.currentTimeMillis()) {
-                    requireContext().showCustomToast("Ngày tất toán không được lớn hơn ngày hiện tại!", R.drawable.avatar_app)
+                    requireContext().showToast("Ngày tất toán không được lớn hơn ngày hiện tại!",
+                        ToastType.WARNING)
                     return@DatePickerDialog
                 }
 
                 // Không được chọn ngày rút nhỏ hơn ngày gửi
                 if (newCalendar.timeInMillis < savingsItem!!.depositDateInMillis) {
-                    requireContext().showCustomToast("Ngày tất toán không được trước ngày gửi!", R.drawable.avatar_app)
+                    requireContext().showToast("Ngày tất toán không được trước ngày gửi!",
+                        ToastType.WARNING)
                     return@DatePickerDialog
                 }
 
@@ -206,7 +209,8 @@ class SettleSavingsFragment : Fragment() {
 
     private fun validateAndSettle() {
         if (selectedReceiveWalletId.isEmpty()) {
-            requireContext().showCustomToast("Vui lòng chọn tài khoản nhận tiền!", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng chọn tài khoản nhận tiền!",
+                ToastType.WARNING)
             return
         }
 
@@ -266,12 +270,12 @@ class SettleSavingsFragment : Fragment() {
                 binding.btnSettleSavings.isEnabled = true
 
                 result.onSuccess { msg ->
-                    requireContext().showCustomToast(msg, R.drawable.avatar_app)
+                    requireContext().showToast(msg, ToastType.SUCCESS)
                     savingsViewModel.resetSettleStatus()
 
                     findNavController().navigateUp()
                 }.onFailure { e ->
-                    requireContext().showCustomToast("Lỗi: ${e.message}", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: ${e.message}", ToastType.ERROR)
                     savingsViewModel.resetSettleStatus()
                 }
             }

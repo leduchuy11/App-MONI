@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.data.model.wallet.WalletItem
 import com.example.appmoni.databinding.FragmentManageSpendingBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.wallet.WalletViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,7 +55,7 @@ class ManageSpendingFragment : Fragment() {
         if (userId != null) {
             viewModel.loadWallets(userId, "spending")
         } else {
-            requireContext().showCustomToast("Lỗi: Chưa đăng nhập!", R.drawable.avatar_app)
+            requireContext().showToast("Lỗi: Chưa đăng nhập!", ToastType.ERROR)
         }
     }
 
@@ -95,14 +96,14 @@ class ManageSpendingFragment : Fragment() {
         // Hóng thông báo lỗi (nếu có)
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
                 viewModel.clearErrorMessage()
             }
         }
 
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
             if (message.isNotEmpty()) {
-                requireContext().showCustomToast(message, R.drawable.avatar_app)
+                requireContext().showToast(message, ToastType.SUCCESS)
                 viewModel.clearActionSuccess()
             }
         }
@@ -151,11 +152,8 @@ class ManageSpendingFragment : Fragment() {
             // Còn tiền -> Làm mờ nút đi
             btnArchive.alpha = 0.5f
             btnArchive.setOnClickListener {
-                // Bấm vào thì hiện cảnh báo chứ không cho đi tiếp
-                requireContext().showCustomToast(
-                    "Số dư phải bằng 0đ mới có thể ngưng sử dụng!",
-                    R.drawable.avatar_app
-                )
+                requireContext().showToast("Số dư phải bằng 0đ mới có thể ngưng sử dụng!",
+                    ToastType.WARNING)
             }
         } else {
             // Số dư = 0 -> Nút sáng lên bình thường

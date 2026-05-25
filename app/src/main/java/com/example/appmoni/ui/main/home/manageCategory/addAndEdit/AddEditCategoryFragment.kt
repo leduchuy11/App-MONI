@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appmoni.R
 import com.example.appmoni.data.model.category.DefaultCategories
 import com.example.appmoni.databinding.FragmentAddEditCategoryBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.AddEditCategoryViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -97,14 +98,14 @@ class AddEditCategoryFragment : Fragment() {
         // Hóng thông báo Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
             }
         }
 
         // Hóng thông báo Thành công (Cho cả Thêm, Sửa, Xóa)
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
-            requireContext().showCustomToast(message, R.drawable.avatar_app)
-            findNavController().popBackStack() // Tự động lùi trang khi thành công
+            requireContext().showToast(message, ToastType.SUCCESS)
+            findNavController().popBackStack()
         }
 
         // Hóng Data cũ trả về khi bấm vào tính năng "Sửa"
@@ -167,11 +168,11 @@ class AddEditCategoryFragment : Fragment() {
 
         // Validate dữ liệu
         if (name.isEmpty()) {
-            requireContext().showCustomToast("Vui lòng nhập tên danh mục!", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng nhập tên danh mục!", ToastType.WARNING)
             return
         }
         if (categoryType == "expense" && group.isEmpty()) {
-            requireContext().showCustomToast("Vui lòng chọn hoặc nhập tên nhóm!", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng chọn hoặc nhập tên nhóm!", ToastType.WARNING)
             return
         }
 

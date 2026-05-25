@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentChangeNameBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -72,7 +73,7 @@ class ChangeNameFragment : Fragment() {
         FirebaseFirestore.getInstance().collection("users").document(userId)
             .set(data, SetOptions.merge())
 
-        requireContext().showCustomToast("Đã lưu tên hiển thị!", R.drawable.avatar_app)
+        requireContext().showToast("Đã lưu tên hiển thị!", ToastType.SUCCESS)
         findNavController().navigateUp()
     }
 

@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.limit.LimitItem
 import com.example.appmoni.databinding.FragmentLimitDetailBinding
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.home.LimitDetailViewModel
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -52,7 +54,7 @@ class LimitDetailFragment : Fragment() {
         currentLimit = arguments?.getParcelable("limit_item")
 
         if (currentLimit == null) {
-            Toast.makeText(requireContext(), "Lỗi tải dữ liệu hạn mức", Toast.LENGTH_SHORT).show()
+            requireContext().showToast("Lỗi tải dữ liệu hạn mức", ToastType.ERROR)
             findNavController().popBackStack()
             return
         }

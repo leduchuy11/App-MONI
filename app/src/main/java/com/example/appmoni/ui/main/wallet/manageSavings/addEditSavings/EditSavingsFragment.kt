@@ -13,10 +13,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.wallet.SavingsItem
 import com.example.appmoni.databinding.FragmentEditSavingsBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.addCurrencyFormatter
 import com.example.appmoni.ui.parseCurrencyValue
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.wallet.SavingsViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -183,13 +185,13 @@ class EditSavingsFragment : Fragment() {
         val newAmount = binding.etSavingsAmount.text.toString().parseCurrencyValue()
 
         if (newAmount <= 0) {
-            requireContext().showCustomToast("Số tiền phải lớn hơn 0", R.drawable.avatar_app)
+            requireContext().showToast("Số tiền phải lớn hơn 0", ToastType.WARNING)
             return
         }
 
         val newTerm = binding.etTermMonths.text.toString().toIntOrNull() ?: 0
         if (newTerm <= 0) {
-            requireContext().showCustomToast("Kỳ hạn phải lớn hơn 0", R.drawable.avatar_app)
+            requireContext().showToast("Kỳ hạn phải lớn hơn 0", ToastType.WARNING)
             return
         }
 
@@ -220,12 +222,12 @@ class EditSavingsFragment : Fragment() {
                 binding.btnSaveSavings.isEnabled = true
 
                 result.onSuccess { msg ->
-                    requireContext().showCustomToast(msg, R.drawable.avatar_app)
+                    requireContext().showToast(msg, ToastType.SUCCESS)
                     savingsViewModel.resetUpdateStatus()
 
                     findNavController().navigateUp()
                 }.onFailure { e ->
-                    requireContext().showCustomToast("Lỗi: ${e.message}", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: ${e.message}", ToastType.ERROR)
                     savingsViewModel.resetUpdateStatus()
                 }
             }
@@ -233,7 +235,7 @@ class EditSavingsFragment : Fragment() {
     }
 
     private fun showInterestPaymentBottomSheet() {
-        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
 
         val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_interest_type, null)
         bottomSheetDialog.setContentView(view)
@@ -245,19 +247,13 @@ class EditSavingsFragment : Fragment() {
 
         view.findViewById<View>(R.id.btn_start_of_term).setOnClickListener {
             binding.tvInterestPaymentType.text = "Đầu kỳ"
-            requireContext().showCustomToast(
-                "Chức năng này hiện không khả dụng!",
-                R.drawable.avatar_app
-            )
+            requireContext().showToast("Chức năng này hiện không khả dụng!", ToastType.WARNING)
             bottomSheetDialog.dismiss()
         }
 
         view.findViewById<View>(R.id.btn_monthly).setOnClickListener {
             binding.tvInterestPaymentType.text = "Định kỳ hằng tháng"
-            requireContext().showCustomToast(
-                "Chức năng này hiện không khả dụng!",
-                R.drawable.avatar_app
-            )
+            requireContext().showToast("Chức năng này hiện không khả dụng!", ToastType.WARNING)
             bottomSheetDialog.dismiss()
         }
 

@@ -16,7 +16,8 @@ import com.example.appmoni.viewmodel.home.ManageLimitViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.example.appmoni.databinding.LayoutBottomSheetLimitOptionsBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ManageLimitFragment : Fragment() {
@@ -55,7 +56,7 @@ class ManageLimitFragment : Fragment() {
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
-            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+            requireContext().showToast(msg, ToastType.ERROR)
         }
     }
 
@@ -145,7 +146,7 @@ class ManageLimitFragment : Fragment() {
             .setMessage("Bạn có chắc chắn muốn xóa hạn mức '${limit.name}' không? Hành động này không thể hoàn tác.")
             .setPositiveButton("Xóa") { _, _ ->
                 viewModel.deleteLimit(limit)
-                requireContext().showCustomToast("Đã xóa hạn mức",R.drawable.avatar_app)
+                requireContext().showToast("Đã xóa hạn mức", ToastType.SUCCESS)
             }
             .setNegativeButton("Hủy") { dialog, _ ->
                 dialog.dismiss()

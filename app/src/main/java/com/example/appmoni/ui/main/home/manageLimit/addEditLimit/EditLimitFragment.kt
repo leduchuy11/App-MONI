@@ -12,9 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.limit.LimitItem
 import com.example.appmoni.databinding.FragmentEditLimitBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.addCurrencyFormatter
 import com.example.appmoni.ui.parseCurrencyValue
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.home.ManageLimitViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
@@ -55,7 +56,7 @@ class EditLimitFragment : Fragment() {
         if (currentLimit == null) {
             currentLimit = arguments?.getParcelable("limit_item")
             if (currentLimit == null) {
-                Toast.makeText(requireContext(), "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show()
+                requireContext().showToast("Lỗi tải dữ liệu", ToastType.ERROR)
                 findNavController().popBackStack()
                 return
             }
@@ -140,22 +141,16 @@ class EditLimitFragment : Fragment() {
         datePicker.addOnPositiveButtonClickListener { selection ->
             if (isStartDate) {
                 if (selection > endDateInMillis) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ngày bắt đầu không được sau ngày kết thúc",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    requireContext().showToast("Ngày bắt đầu không được sau ngày kết thúc",
+                        ToastType.WARNING)
                 } else {
                     startDateInMillis = selection
                     binding.tvStartDate.text = dateFormatter.format(startDateInMillis)
                 }
             } else {
                 if (selection < startDateInMillis) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ngày kết thúc không được trước ngày bắt đầu",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    requireContext().showToast("Ngày kết thúc không được trước ngày bắt đầu",
+                        ToastType.WARNING)
                 } else {
                     endDateInMillis = selection
                     binding.tvEndDate.text = dateFormatter.format(endDateInMillis)
@@ -170,11 +165,11 @@ class EditLimitFragment : Fragment() {
         val strName = binding.edtLimitName.text.toString().trim()
 
         if (finalAmount <= 0) {
-            requireContext().showCustomToast("Vui lòng nhập số tiền hợp lệ", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng nhập số tiền hợp lệ", ToastType.WARNING)
             return
         }
         if (strName.isEmpty()) {
-            requireContext().showCustomToast("Vui lòng nhập tên hạn mức", R.drawable.avatar_app)
+            requireContext().showToast("Vui lòng nhập tên hạn mức", ToastType.WARNING)
             return
         }
 
@@ -220,7 +215,7 @@ class EditLimitFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.saveStatus.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                Toast.makeText(requireContext(), "Đã cập nhật hạn mức!", Toast.LENGTH_SHORT).show()
+                requireContext().showToast("Đã cập nhật hạn mức!", ToastType.SUCCESS)
                 viewModel.resetSaveStatus()
                 findNavController().popBackStack()
             }

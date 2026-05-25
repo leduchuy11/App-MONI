@@ -20,7 +20,7 @@
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_tick"
+            android:src="@drawable/ic_check"
             app:tint="#3bb54a" />
     </FrameLayout>
 

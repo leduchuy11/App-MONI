@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.data.model.wallet.SavingsItem
 import com.example.appmoni.databinding.FragmentManageSavingsBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.wallet.SavingsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -167,9 +168,9 @@ class ManageSavingsFragment : Fragment() {
             if (result != null) {
                 binding.progressBar.visibility = View.GONE
                 result.onSuccess { msg ->
-                    requireContext().showCustomToast(msg, R.drawable.avatar_app)
+                    requireContext().showToast(msg, ToastType.SUCCESS)
                 }.onFailure { e ->
-                    requireContext().showCustomToast("Lỗi: ${e.message}", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: ${e.message}", ToastType.ERROR)
                 }
                 savingsViewModel.resetDeleteStatus()
             }

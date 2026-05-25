@@ -32,7 +32,6 @@ class ManageCategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Nút Back quay về màn hình trước đó (Home)
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }

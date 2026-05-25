@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentLoginBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.main.MainActivity
-import com.example.appmoni.ui.main.home.notification.AlarmScheduler
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.auth.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -43,10 +43,7 @@ class LoginFragment : Fragment() {
                     viewModel.loginWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     setLoadingState(false)
-                    requireContext().showCustomToast(
-                        "Lỗi Google Sign-In: ${e.message}",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Lỗi Google Sign-In: ${e.message}", ToastType.ERROR)
                 }
             } else {
                 setLoadingState(false)
@@ -59,10 +56,8 @@ class LoginFragment : Fragment() {
         if (isGranted) {
             showWelcomeNotification()
         } else {
-            requireContext().showCustomToast(
-                "Bạn đã tắt thông báo, Moni sẽ không thể nhắc nhở bạn ghi chép!",
-                R.drawable.avatar_app
-            )
+            requireContext().showToast("Bạn đã tắt thông báo, Moni sẽ không thể nhắc nhở bạn ghi chép!",
+                ToastType.WARNING)
         }
         // Xử lý quyền xong xuôi mới được chuyển màn hình
         navigateToMain()
@@ -117,7 +112,7 @@ class LoginFragment : Fragment() {
         // Hóng thông báo lỗi để hiển thị Toast
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
-                requireContext().showCustomToast("Lỗi: $errorMessage", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $errorMessage", ToastType.ERROR)
                 viewModel.clearErrorMessage()
             }
         }
@@ -131,7 +126,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToMain() {
-        requireContext().showCustomToast("Đăng nhập thành công!", R.drawable.avatar_app)
+        requireContext().showToast("Đăng nhập thành công!", ToastType.SUCCESS)
         val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

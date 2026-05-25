@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentRecordBinding
 import com.example.appmoni.databinding.LayoutPopupTransactionBinding
-import com.example.appmoni.ui.showCustomToast
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -24,8 +23,10 @@ import java.util.Locale
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.viewModels
 import com.example.appmoni.data.model.transaction.TransactionItem
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.addCurrencyFormatter
 import com.example.appmoni.ui.parseCurrencyValue
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -288,9 +289,9 @@ class RecordFragment : Fragment() {
 
             if (currentSelectingType.isNotEmpty() && currentSelectingType != returnedType) {
                 val typeName = if (currentSelectingType == "expense") "Chi tiền" else "Thu tiền"
-                requireContext().showCustomToast(
+                requireContext().showToast(
                     "Vui lòng chọn đúng danh mục cho $typeName!",
-                    R.drawable.avatar_app
+                    ToastType.WARNING
                 )
                 return@setFragmentResultListener
             }
@@ -510,24 +511,21 @@ class RecordFragment : Fragment() {
             // KIỂM TRA SỐ TIỀN
             val amountStr = binding.etAmount.text.toString().trim()
             if (amountStr.isEmpty() || amountStr == "0") {
-                requireContext().showCustomToast(
-                    "Bạn chưa nhập số tiền giao dịch!",
-                    R.drawable.avatar_app
-                )
-                return@setOnClickListener // Dừng lại luôn
+                requireContext().showToast("Bạn chưa nhập số tiền giao dịch!", ToastType.WARNING)
+                return@setOnClickListener
             }
 
             // Ép kiểu sang Long để chuẩn bị lưu
             val amount = amountStr.parseCurrencyValue()
             if (amount <= 0) {
-                requireContext().showCustomToast("Số tiền không hợp lệ!", R.drawable.avatar_app)
+                requireContext().showToast("Số tiền không hợp lệ!", ToastType.WARNING)
                 return@setOnClickListener
             }
 
             // Lấy ID người dùng hiện tại
             val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
             if (currentUserId == null) {
-                requireContext().showCustomToast("Lỗi: Chưa đăng nhập!", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: Chưa đăng nhập!", ToastType.ERROR)
                 return@setOnClickListener
             }
 
@@ -543,9 +541,9 @@ class RecordFragment : Fragment() {
             when (currentTransactionType) {
                 "expense" -> {
                     if (selectedExpenseWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản chi tiền!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
@@ -563,9 +561,9 @@ class RecordFragment : Fragment() {
 
                 "income" -> {
                     if (selectedIncomeWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản nhận tiền!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
@@ -583,24 +581,24 @@ class RecordFragment : Fragment() {
 
                 "transfer" -> {
                     if (selectedTransferSourceWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản nguồn!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
                     if (selectedTransferDestWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản đích!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
                     // Tài khoản nguồn và đích không được trùng nhau
                     if (selectedTransferSourceWalletId == selectedTransferDestWalletId) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Tài khoản nguồn và đích phải khác nhau!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
@@ -620,16 +618,16 @@ class RecordFragment : Fragment() {
                 "lend" -> {
                     val debtorName = binding.itemNameLend.etValue.text.toString().trim()
                     if (debtorName.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng nhập tên người vay!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
                     if (selectedLendWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản trích tiền cho vay!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
@@ -645,16 +643,13 @@ class RecordFragment : Fragment() {
                 "borrow" -> {
                     val creditorName = binding.itemNameBorrow.etValue.text.toString().trim()
                     if (creditorName.isEmpty()) {
-                        requireContext().showCustomToast(
-                            "Vui lòng nhập tên chủ nợ!",
-                            R.drawable.avatar_app
-                        )
+                        requireContext().showToast("Vui lòng nhập tên chủ nợ!", ToastType.WARNING)
                         return@setOnClickListener
                     }
                     if (selectedBorrowWalletId.isEmpty()) {
-                        requireContext().showCustomToast(
+                        requireContext().showToast(
                             "Vui lòng chọn tài khoản nhận tiền đi vay!",
-                            R.drawable.avatar_app
+                            ToastType.WARNING
                         )
                         return@setOnClickListener
                     }
@@ -699,15 +694,12 @@ class RecordFragment : Fragment() {
         viewModel.saveResult.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 if (result.isSuccess) {
-                    requireContext().showCustomToast(
-                        "Lưu giao dịch thành công!",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Lưu giao dịch thành công!", ToastType.SUCCESS)
                     // Lưu xong thì quay về màn hình trước đó
                     resetForm()
                 } else {
                     val errorMsg = result.exceptionOrNull()?.message ?: "Có lỗi xảy ra"
-                    requireContext().showCustomToast("Lỗi: $errorMsg", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: $errorMsg", ToastType.ERROR)
                 }
                 // Reset lại trạng thái để không bị hiện Toast nhiều lần nếu xoay màn hình
                 viewModel.resetSaveResult()

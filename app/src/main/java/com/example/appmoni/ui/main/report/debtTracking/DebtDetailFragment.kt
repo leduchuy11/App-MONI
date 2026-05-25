@@ -11,7 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.transaction.TransactionItem
 import com.example.appmoni.databinding.FragmentDebtDetailBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.DecimalFormat
@@ -43,7 +44,7 @@ class DebtDetailFragment : Fragment() {
         currentTransaction = arguments?.getParcelable("transaction_item")
 
         if (currentTransaction == null) {
-            Toast.makeText(requireContext(), "Lỗi tải dữ liệu!", Toast.LENGTH_SHORT).show()
+            requireContext().showToast("Lỗi tải dữ liệu!", ToastType.ERROR)
             findNavController().navigateUp()
             return
         }
@@ -107,14 +108,10 @@ class DebtDetailFragment : Fragment() {
         transactionViewModel.updateStatusResult.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 if (result.isSuccess) {
-                    requireContext().showCustomToast("Đã bỏ theo dõi",R.drawable.avatar_app)
+                    requireContext().showToast("Đã bỏ theo dõi", ToastType.SUCCESS)
                     findNavController().navigateUp()
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Có lỗi xảy ra, vui lòng thử lại!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    requireContext().showToast("Có lỗi xảy ra, vui lòng thử lại!", ToastType.ERROR)
                 }
                 transactionViewModel.resetUpdateStatus()
             }

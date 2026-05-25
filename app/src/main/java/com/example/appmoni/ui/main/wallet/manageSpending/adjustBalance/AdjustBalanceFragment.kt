@@ -13,7 +13,8 @@ import com.example.appmoni.R
 import com.example.appmoni.data.model.transaction.TransactionItem
 import com.example.appmoni.data.model.wallet.WalletItem
 import com.example.appmoni.databinding.FragmentAdjustBalanceBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.google.firebase.auth.FirebaseAuth
 import java.text.DecimalFormat
 
@@ -192,15 +193,12 @@ class AdjustBalanceFragment : Fragment() {
         transactionViewModel.saveResult.observe(viewLifecycleOwner) { result ->
             result?.let {
                 if (it.isSuccess) {
-                    requireContext().showCustomToast(
-                        "Đã điều chỉnh số dư thành công!",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Đã điều chỉnh số dư thành công!", ToastType.SUCCESS)
                     transactionViewModel.resetSaveResult()
                     findNavController().navigateUp()
                 } else {
                     val errorMsg = it.exceptionOrNull()?.message ?: "Lỗi không xác định"
-                    requireContext().showCustomToast("Lỗi: $errorMsg", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: $errorMsg", ToastType.ERROR)
                     transactionViewModel.resetSaveResult()
                 }
             }

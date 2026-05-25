@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.data.model.category.CategoryIncomeItem
 import com.example.appmoni.databinding.FragmentManageIncomeBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.removeAccents
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.CategorySharedViewModel
 import com.example.appmoni.viewmodel.record.ManageCategoryViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -71,7 +72,7 @@ class ManageIncomeFragment : Fragment() {
         // Hóng Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
             }
         }
 
@@ -127,10 +128,6 @@ class ManageIncomeFragment : Fragment() {
                 )
             } catch (e: Exception) {
                 Log.e("NavigationError", "Lỗi chuyển trang bên Thu tiền: ${e.message}")
-                requireContext().showCustomToast(
-                    "Lỗi điều hướng! Kiểm tra lại file Navigation.",
-                    R.drawable.avatar_app
-                )
             }
         }
         binding.rvIncomeCategories.adapter = adapter

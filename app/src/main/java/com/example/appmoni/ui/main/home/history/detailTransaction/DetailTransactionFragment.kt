@@ -10,7 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.transaction.TransactionItem
 import com.example.appmoni.databinding.FragmentDetailTransactionBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.TransactionViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.DecimalFormat
@@ -122,10 +123,8 @@ class DetailTransactionFragment : Fragment() {
             val currentTransaction = transaction ?: return@setOnClickListener
 
             if (currentTransaction.categoryId == "SYSTEM_SAVINGS" || currentTransaction.categoryName == "Gửi tiết kiệm") {
-                requireContext().showCustomToast(
-                    "Đây là giao dịch tự động không thể xóa.Nếu muốn xóa vui lòng tất toán hoặc xóa Sổ tiết kiệm này trước.",
-                    R.drawable.avatar_app
-                )
+                requireContext().showToast("Đây là giao dịch tự động không thể xóa.Nếu muốn xóa vui lòng tất toán hoặc xóa Sổ tiết kiệm này trước.",
+                    ToastType.WARNING)
                 return@setOnClickListener
             }
             MaterialAlertDialogBuilder(requireContext())
@@ -148,11 +147,11 @@ class DetailTransactionFragment : Fragment() {
         viewModel.deleteResult.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 if (result.isSuccess) {
-                    requireContext().showCustomToast("Đã xóa và cập nhật lại số dư ví!", R.drawable.avatar_app)
+                    requireContext().showToast("Đã xóa và cập nhật lại số dư ví!", ToastType.SUCCESS)
                     findNavController().navigateUp()
                 } else {
                     val errorMsg = result.exceptionOrNull()?.message ?: "Lỗi không xác định"
-                    requireContext().showCustomToast("Lỗi: $errorMsg", R.drawable.avatar_app)
+                    requireContext().showToast("Lỗi: $errorMsg", ToastType.ERROR)
                 }
                 viewModel.resetDeleteResult()
             }

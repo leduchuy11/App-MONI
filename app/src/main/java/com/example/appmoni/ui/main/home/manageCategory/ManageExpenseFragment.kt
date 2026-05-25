@@ -14,8 +14,9 @@ import com.example.appmoni.R
 import com.example.appmoni.data.model.category.CategoryExpenseGroup
 import com.example.appmoni.data.model.category.CategoryExpenseItem
 import com.example.appmoni.databinding.FragmentManageExpenseBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.removeAccents
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.CategorySharedViewModel
 import com.example.appmoni.viewmodel.record.ManageCategoryViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -72,7 +73,7 @@ class ManageExpenseFragment : Fragment() {
         // Hóng Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                requireContext().showCustomToast("Lỗi: $error", R.drawable.avatar_app)
+                requireContext().showToast("Lỗi: $error", ToastType.ERROR)
             }
         }
 
@@ -129,10 +130,6 @@ class ManageExpenseFragment : Fragment() {
                 )
             } catch (e: Exception) {
                 Log.e("NavigationError", "Lỗi chuyển trang: ${e.message}")
-                requireContext().showCustomToast(
-                    "Lỗi điều hướng! Kiểm tra lại file Navigation.",
-                    R.drawable.avatar_app
-                )
             }
         }
         binding.rvExpense.adapter = adapter

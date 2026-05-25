@@ -10,8 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentChangePasswordBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.auth.LoginActivity
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.auth.ChangePasswordViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -61,16 +62,14 @@ class ChangePasswordFragment : Fragment() {
                     errorMsg.contains("network error") || errorMsg.contains("network connection") -> "Không có kết nối mạng. Vui lòng kiểm tra Wifi/4G!"
                     else -> "Lỗi: $errorMsg"
                 }
-                requireContext().showCustomToast(friendlyMessage, R.drawable.avatar_app)
+                requireContext().showToast(friendlyMessage, ToastType.ERROR)
             }
         }
 
         viewModel.isSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                requireContext().showCustomToast(
-                    "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.",
-                    R.drawable.avatar_app
-                )
+                requireContext().showToast("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.",
+                    ToastType.SUCCESS)
 
                 FirebaseAuth.getInstance().signOut()
 

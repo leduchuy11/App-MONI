@@ -16,7 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.data.model.category.CategoryExpenseGroup
 import com.example.appmoni.databinding.FragmentSelectCategoryLimitBinding
+import com.example.appmoni.ui.ToastType
 import com.example.appmoni.ui.removeAccents
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.record.ManageCategoryViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -101,7 +103,7 @@ class SelectCategoryLimitFragment : Fragment() {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                Toast.makeText(requireContext(), "Lỗi tải dữ liệu: $error", Toast.LENGTH_SHORT).show()
+                requireContext().showToast("Lỗi tải dữ liệu: $error", ToastType.ERROR)
             }
         }
 

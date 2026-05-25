@@ -18,7 +18,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentExportDataBinding
-import com.example.appmoni.ui.showCustomToast
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 import com.example.appmoni.viewmodel.home.ExportDataViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -103,20 +104,16 @@ class ExportDataFragment : Fragment() {
                 if (isStartDate) {
                     sel.set(year, month, dayOfMonth, 0, 0, 0)
                     if (sel.timeInMillis > endDate) {
-                        requireContext().showCustomToast(
-                            "Ngày bắt đầu không được lớn hơn ngày kết thúc",
-                            R.drawable.avatar_app
-                        )
+                        requireContext().showToast("Ngày bắt đầu không được lớn hơn ngày kết thúc",
+                            ToastType.WARNING)
                         return@DatePickerDialog
                     }
                     startDate = sel.timeInMillis
                 } else {
                     sel.set(year, month, dayOfMonth, 23, 59, 59)
                     if (sel.timeInMillis < startDate) {
-                        requireContext().showCustomToast(
-                            "Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
-                            R.drawable.avatar_app
-                        )
+                        requireContext().showToast("Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
+                            ToastType.WARNING)
                         return@DatePickerDialog
                     }
                     endDate = sel.timeInMillis
@@ -153,14 +150,12 @@ class ExportDataFragment : Fragment() {
         btnConfirm.setOnClickListener {
             val email = edtEmail.text.toString().trim()
             if (email.isEmpty()) {
-                requireContext().showCustomToast("Vui lòng nhập email!", R.drawable.avatar_app)
+                requireContext().showToast("Vui lòng nhập email!", ToastType.WARNING)
                 return@setOnClickListener
             }
 
             targetEmail = email
             dialog.dismiss()
-
-            requireContext().showCustomToast("Đang xử lý...", R.drawable.avatar_app)
 
             val userId = currentUser?.uid ?: return@setOnClickListener
             viewModel.getTransactionsForExport(userId, startDate, endDate)
@@ -174,11 +169,8 @@ class ExportDataFragment : Fragment() {
             if (transactions == null) return@observe
 
             if (transactions.isEmpty()) {
-                Toast.makeText(
-                    context,
-                    "Không có giao dịch nào trong khoảng thời gian này!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                requireContext().showToast("Không có giao dịch nào trong khoảng thời gian này!",
+                    ToastType.WARNING)
                 return@observe
             }
 
@@ -189,8 +181,7 @@ class ExportDataFragment : Fragment() {
             if (excelFile != null) {
                 sendEmailWithAttachment(excelFile, targetEmail)
             } else {
-                Toast.makeText(context, "Đã có lỗi xảy ra khi tạo file Excel!", Toast.LENGTH_SHORT)
-                    .show()
+                requireContext().showToast("Đã có lỗi xảy ra khi tạo file Excel!", ToastType.ERROR)
             }
         }
     }
@@ -218,8 +209,7 @@ class ExportDataFragment : Fragment() {
 
             startActivity(Intent.createChooser(intent, "Chọn ứng dụng gửi mail"))
         } catch (e: Exception) {
-            Toast.makeText(context, "Không tìm thấy ứng dụng hỗ trợ gửi mail!", Toast.LENGTH_SHORT)
-                .show()
+            requireContext().showToast("Không tìm thấy ứng dụng hỗ trợ gửi mail!", ToastType.ERROR)
         }
     }
 

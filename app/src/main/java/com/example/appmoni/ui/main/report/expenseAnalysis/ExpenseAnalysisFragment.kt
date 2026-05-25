@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmoni.R
 import com.example.appmoni.databinding.FragmentExpenseAnalysisBinding
-import com.example.appmoni.ui.showCustomToast
 import com.example.appmoni.viewmodel.report.ExpenseAnalysisViewModel
 import com.example.appmoni.viewmodel.report.TimeMode
 import com.github.mikephil.charting.components.Legend
@@ -34,6 +33,8 @@ import java.util.Date
 import java.util.Locale
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import com.example.appmoni.ui.ToastType
+import com.example.appmoni.ui.showToast
 
 class ExpenseAnalysisFragment : Fragment() {
 
@@ -217,19 +218,15 @@ class ExpenseAnalysisFragment : Fragment() {
 
                 if (isStartDate) {
                     if (selTime > endDate) {
-                        requireContext().showCustomToast(
-                            "Ngày bắt đầu không được lớn hơn ngày kết thúc",
-                            R.drawable.avatar_app
-                        )
+                        requireContext().showToast("Ngày bắt đầu không được lớn hơn ngày kết thúc",
+                            ToastType.WARNING)
                         return@DatePickerDialog
                     }
                     startDate = selTime
                 } else {
                     if (selTime < startDate) {
-                        requireContext().showCustomToast(
-                            "Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
-                            R.drawable.avatar_app
-                        )
+                        requireContext().showToast("Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
+                            ToastType.WARNING)
                         return@DatePickerDialog
                     }
                     endDate = selTime
@@ -237,10 +234,7 @@ class ExpenseAnalysisFragment : Fragment() {
 
                 // Giới hạn 91 ngày
                 if ((endDate - startDate) / (1000 * 60 * 60 * 24) > 91) {
-                    requireContext().showCustomToast(
-                        "Tab Ngày hỗ trợ xem tối đa 91 ngày",
-                        R.drawable.ic_horizontal_triangle
-                    )
+                    requireContext().showToast("Tab Ngày hỗ trợ xem tối đa 91 ngày", ToastType.WARNING)
                     if (isStartDate) endDate = startDate + (91L * 24 * 60 * 60 * 1000)
                     else startDate = endDate - (91L * 24 * 60 * 60 * 1000)
                 }
@@ -287,10 +281,8 @@ class ExpenseAnalysisFragment : Fragment() {
             if (isStartDate) {
                 selCal.set(selYear, selMonth, 1, 0, 0, 0)
                 if (selCal.timeInMillis > endDate) {
-                    requireContext().showCustomToast(
-                        "Tháng bắt đầu không được lớn hơn tháng kết thúc",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Tháng bắt đầu không được lớn hơn tháng kết thúc",
+                        ToastType.WARNING)
                     return@setOnClickListener
                 }
                 startDate = selCal.timeInMillis
@@ -305,10 +297,8 @@ class ExpenseAnalysisFragment : Fragment() {
                 selCal.set(Calendar.SECOND, 59)
 
                 if (selCal.timeInMillis < startDate) {
-                    requireContext().showCustomToast(
-                        "Tháng kết thúc không được nhỏ hơn tháng bắt đầu",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Tháng kết thúc không được nhỏ hơn tháng bắt đầu",
+                        ToastType.WARNING)
                     return@setOnClickListener
                 }
                 endDate = selCal.timeInMillis
@@ -347,20 +337,16 @@ class ExpenseAnalysisFragment : Fragment() {
             if (isStartDate) {
                 selCal.set(selYear, Calendar.JANUARY, 1, 0, 0, 0)
                 if (selCal.timeInMillis > endDate) {
-                    requireContext().showCustomToast(
-                        "Năm bắt đầu không được lớn hơn năm kết thúc",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Năm bắt đầu không được lớn hơn năm kết thúc",
+                        ToastType.WARNING)
                     return@setOnClickListener
                 }
                 startDate = selCal.timeInMillis
             } else {
                 selCal.set(selYear, Calendar.DECEMBER, 31, 23, 59, 59)
                 if (selCal.timeInMillis < startDate) {
-                    requireContext().showCustomToast(
-                        "Năm kết thúc không được nhỏ hơn năm bắt đầu",
-                        R.drawable.avatar_app
-                    )
+                    requireContext().showToast("Năm kết thúc không được nhỏ hơn năm bắt đầu",
+                        ToastType.WARNING)
                     return@setOnClickListener
                 }
                 endDate = selCal.timeInMillis

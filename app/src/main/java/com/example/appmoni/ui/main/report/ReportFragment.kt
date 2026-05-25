@@ -19,6 +19,7 @@ import androidx.core.graphics.toColorInt
 import androidx.navigation.fragment.findNavController
 import com.example.appmoni.R
 import com.example.appmoni.data.model.report.ExpenseCategoryReport
+import com.github.mikephil.charting.data.PieEntry
 
 class ReportFragment : Fragment() {
 
@@ -152,7 +153,7 @@ class ReportFragment : Fragment() {
         binding.layoutEmptyChart.visibility = View.GONE
 
         val entries = data.mapIndexed { index, item ->
-            com.github.mikephil.charting.data.PieEntry(item.percent, "")
+            PieEntry(item.percent, "")
         }
         val dataSet = com.github.mikephil.charting.data.PieDataSet(entries, "").apply {
             colors = chartColors

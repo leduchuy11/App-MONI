@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Tại màn hình chính, bạn hãy bấm vào nút (+) màu xanh ở thanh điều hướng dưới cùng. Sau đó nhập số tiền, chọn danh mục và lưu lại."
+                        android:text="Tại màn hình chính, bạn hãy bấm vào nút (+) ở thanh điều hướng dưới cùng. Sau đó nhập thông tin và lưu lại."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Có. Khi bạn thêm giao dịch mới và chọn 'Danh mục', hãy cuộn xuống cuối cùng và chọn 'Thêm danh mục mới' để tự thiết kế tên và biểu tượng theo ý thích."
+                        android:text="Có. Bạn vào trang chủ và chọn 'Danh mục thu/chi', nút 'Thêm danh mục mới' (+) ở ngay góc màn hình, tùy theo bạn muốn thêm danh mục loại thu/chi để chọn tab phù hợp sau đó tự thiết kế tên và biểu tượng theo sở thích."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Sổ tiết kiệm giúp bạn theo dõi các mục tiêu tài chính dài hạn (mua xe, mua nhà...). Bạn có thể trích tiền từ ví chính để gửi vào các sổ này và theo dõi tiến độ hoàn thành."
+                        android:text="Phần này giúp bạn theo dõi các sổ tiết kiệm mà bạn gửi ở các ngân hàng,nó có khả năng tự động tính toán lãi suất theo lãi suất bạn muốn. Bạn có thể trích tiền từ ví chi tiêu để gửi vào các sổ này và rút vào ví mà bạn muốn."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -200,7 +200,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Bạn hãy chuyển sang tab 'Báo cáo' (Biểu đồ). Tại đây ứng dụng sẽ phân tích chi tiết bạn đã tiêu tiền vào mục nào nhiều nhất theo từng tháng/năm."
+                        android:text="Bạn hãy chuyển sang tab 'Báo cáo'. Tại đây ứng dụng sẽ phân tích chi tiết tình hình thu/chi của bạn theo từng tháng/năm."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -234,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Sử dụng tính năng 'Hạn mức' (Budget). Bạn có thể quy định mỗi tháng chỉ được tiêu tối đa 2 triệu cho việc Ăn uống. Moni sẽ tự động cảnh báo khi bạn sắp vượt hạn mức."
+                        android:text="Bạn có thể sử dụng tính năng 'Hạn mức chi' ở trang chủ. Bạn có thể quy định mỗi tháng chỉ được tiêu tối đa bao nhiêu tiền. Moni sẽ tự động cảnh báo khi bạn vượt hạn mức."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -268,7 +268,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Không. Toàn bộ dữ liệu của bạn được đồng bộ tự động và an toàn trên hệ thống máy chủ của Google. Khi đổi điện thoại, bạn chỉ cần đăng nhập lại đúng tài khoản là dữ liệu sẽ tự động tải về."
+                        android:text="Không. Toàn bộ dữ liệu của bạn được đồng bộ tự động và an toàn trên hệ thống máy chủ của Moni. Khi đổi điện thoại, bạn chỉ cần đăng nhập lại đúng tài khoản là dữ liệu sẽ tự động tải về."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -302,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Khi bạn nhập giao dịch trong lúc không có mạng (Wifi/4G), dữ liệu sẽ lưu tạm trên máy. Nút 'Đồng bộ' giúp bạn ép ứng dụng đẩy các dữ liệu kẹt đó lên máy chủ ngay lập tức khi có mạng trở lại."
+                        android:text="Khi bạn nhập giao dịch trong lúc không có mạng (Wifi/4G), dữ liệu sẽ lưu tạm trên máy. Nút 'Đồng bộ' giúp bạn ép ứng dụng đẩy các dữ liệu kẹt đó lên máy chủ ngay lập tức, phần này yêu cầu internet để hoạt động."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -370,7 +370,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="Vào Cài đặt Tài khoản -> Xóa dữ liệu. Thao tác này sẽ dọn dẹp sạch sẽ toàn bộ ví, giao dịch, sổ tiết kiệm nhưng vẫn giữ lại thông tin tài khoản và danh mục để bạn bắt đầu lại từ đầu."
+                        android:text="Vào Tài khoản -> Xóa dữ liệu. Thao tác này sẽ dọn dẹp sạch sẽ toàn bộ ví, giao dịch, sổ tiết kiệm nhưng vẫn giữ lại thông tin tài khoản và danh mục để bạn bắt đầu lại từ đầu."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>

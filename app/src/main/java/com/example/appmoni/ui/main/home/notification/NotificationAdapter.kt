@@ -48,13 +48,27 @@ class NotificationAdapter :
                 return "Hôm nay"
             }
 
-            val currentTime = System.currentTimeMillis()
-            val diffInMillis = currentTime - timeInMillis
+            val today = java.util.Calendar.getInstance().apply {
+                set(java.util.Calendar.HOUR_OF_DAY, 0)
+                set(java.util.Calendar.MINUTE, 0)
+                set(java.util.Calendar.SECOND, 0)
+                set(java.util.Calendar.MILLISECOND, 0)
+            }
+
+            val notiDate = java.util.Calendar.getInstance().apply {
+                this.timeInMillis = timeInMillis
+                set(java.util.Calendar.HOUR_OF_DAY, 0)
+                set(java.util.Calendar.MINUTE, 0)
+                set(java.util.Calendar.SECOND, 0)
+                set(java.util.Calendar.MILLISECOND, 0)
+            }
+
+            val diffInMillis = today.timeInMillis - notiDate.timeInMillis
             val days = (diffInMillis / (1000 * 60 * 60 * 24)).toInt()
 
             return when {
                 days == 1 -> "Hôm qua"
-                days in 2..9 -> "$days ngày trước"
+                days in 2..5 -> "$days ngày trước"
                 else -> {
                     val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     sdf.format(Date(timeInMillis))

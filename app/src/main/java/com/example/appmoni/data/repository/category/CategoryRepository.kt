@@ -35,7 +35,6 @@ class CategoryRepository {
             batch.set(categoryRef.document(item.id), item)
         }
 
-        // Đẩy lên mây trong 1 lần duy nhất
         return batch.commit()
     }
 

@@ -22,17 +22,17 @@ data class TransactionItem(
     var categoryName: String = "",
     var categoryIcon: String = "",
 
-    // Ví chính: Ví nguồn (Chi, Chuyển, Cho vay) HOẶC Ví đích (Thu, Đi vay)
+    // Ví chính: Ví nguồn (Chi, Chuyển, Cho vay) hoặc Ví đích (Thu, Đi vay)
     var walletId: String = "",
     var walletName: String = "",
     var walletIcon: String = "",
 
-    // Ví đích phụ (CHỈ DÙNG cho Chuyển khoản)
+    // Ví đích phụ (chỉ dùng cho Chuyển khoản)
     var destWalletId: String = "",
     var destWalletName: String = "",
     var destWalletIcon: String = "",
 
-    // Tên người (CHỈ DÙNG cho Cho vay / Đi vay)
+    // Tên người (chỉ dùng cho Cho vay / Đi vay)
     var personName: String = "",
     @get:PropertyName("isPaid")
     @set:PropertyName("isPaid")

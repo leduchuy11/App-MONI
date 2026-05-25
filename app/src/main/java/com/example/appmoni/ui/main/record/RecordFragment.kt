@@ -337,7 +337,7 @@ class RecordFragment : Fragment() {
             "expense" -> {
                 binding.tvTypeName.text = "Chi tiền"
                 binding.ivTypeIcon.setImageResource(R.drawable.ic_flying_money)
-                binding.btnQr.visibility = View.VISIBLE
+                binding.btnQr.visibility = View.GONE
                 binding.cardDetailsExpense.visibility = View.VISIBLE
             }
 

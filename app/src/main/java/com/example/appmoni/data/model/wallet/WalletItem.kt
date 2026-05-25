@@ -15,7 +15,7 @@ data class WalletItem(
 
     @get:PropertyName("isActive")
     @set:PropertyName("isActive")
-    var isActive: Boolean = true        // Thuộc tính xác định ví còn hoạt động ko
+    var isActive: Boolean = true
 ) : Serializable {
 
     // Hàm phụ trợ để lấy ID của Icon từ tên chuỗi

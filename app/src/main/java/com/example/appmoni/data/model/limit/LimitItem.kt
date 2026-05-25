@@ -19,6 +19,6 @@ data class LimitItem(
 
     var walletId: String = "all",
 
-    var startDateInMillis: Long = 0L,    // Ngày bắt đầu
-    var endDateInMillis: Long = 0L       // Ngày kết thúc
+    var startDateInMillis: Long = 0L,
+    var endDateInMillis: Long = 0L
 ) : Parcelable

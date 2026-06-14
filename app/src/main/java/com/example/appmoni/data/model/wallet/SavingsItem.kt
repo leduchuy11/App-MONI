@@ -25,6 +25,6 @@ data class SavingsItem(
     var note: String = "",
 
     // 4. TRẠNG THÁI SỔ
-    var status: String = "active",          // Trạng thái: "active" (Đang gửi) hoặc "closed" (Đã tất toán)
+    var status: String = "active",          // Trạng thái: "active" (Đang gửi) hoặc "notActive" (Đã tất toán)
     var createdDateInMillis: Long = System.currentTimeMillis() // Ngày thao tác tạo sổ trên app
 ) : Serializable

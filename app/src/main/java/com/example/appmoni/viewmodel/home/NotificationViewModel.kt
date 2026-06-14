@@ -24,7 +24,6 @@ class NotificationViewModel : ViewModel() {
             .addSnapshotListener { snapshot, error ->
                 _isLoading.value = false
                 if (error != null) {
-                    // Xử lý lỗi nếu cần
                     return@addSnapshotListener
                 }
 

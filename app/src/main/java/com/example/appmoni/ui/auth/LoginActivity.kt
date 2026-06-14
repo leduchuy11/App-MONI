@@ -33,22 +33,18 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             // Đóng LoginActivity lại để khi ấn nút Back ở MainActivity không bị quay lại đây
             finish()
-            // Return luôn để không chạy các lệnh vẽ giao diện bên dưới nữa
             return
         }
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Thiết lập Toolbar thông qua binding
         setSupportActionBar(binding.toolbarLogin)
 
-        // Tìm NavController
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        // Kết nối Toolbar với NavController
         setupActionBarWithNavController(navController)
 
         // Ẩn Toolbar ở LoginFragment, hiện ở các Fragment khác
@@ -92,7 +88,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Xử lý sự kiện nhấn nút back trên Toolbar
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }

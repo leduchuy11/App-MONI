@@ -19,26 +19,21 @@ class ManageIncomeAdapter(
         fun bind(item: CategoryIncomeItem, position: Int) {
             val context = binding.root.context
 
-            // Đổ tên danh mục ra màn hình
             binding.tvCategoryName.text = item.name
 
-            // Load Icon động từ tên file lưu trên mây
             val imageResId = context.resources.getIdentifier(
                 item.iconName, "drawable", context.packageName
             )
             if (imageResId != 0) {
                 binding.ivCategoryIcon.setImageResource(imageResId)
             } else {
-                // Nếu lỗi không tìm thấy icon thì gán 1 cái mặc định cho đỡ trống
                 binding.ivCategoryIcon.setImageResource(R.drawable.ic_category_salary)
             }
 
-            // Bắt sự kiện bấm nút sửa
             binding.btnEditCategory.setOnClickListener {
                 onEditClick(item)
             }
 
-            // Bấm vào cả cái dòng đó cũng gọi lệnh Sửa cho trải nghiệm bấm dễ hơn
             binding.root.setOnClickListener {
                 onEditClick(item)
             }

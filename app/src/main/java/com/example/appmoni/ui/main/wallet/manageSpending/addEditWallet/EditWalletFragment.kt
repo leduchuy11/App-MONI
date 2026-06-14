@@ -163,7 +163,6 @@ class EditWalletFragment : Fragment() {
             name = finalName,
             iconName = currentIconName,
             bankName = currentBankName
-            // Balance và AccountType giữ nguyên không đổi
         )
 
         viewModel.updateWalletInfo(userId, updatedWallet)

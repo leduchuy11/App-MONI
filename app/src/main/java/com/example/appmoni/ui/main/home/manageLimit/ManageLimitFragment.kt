@@ -136,7 +136,6 @@ class ManageLimitFragment : Fragment() {
             showDeleteConfirmDialog(limit)
         }
 
-        // Hiển thị lên màn hình
         dialog.show()
     }
 

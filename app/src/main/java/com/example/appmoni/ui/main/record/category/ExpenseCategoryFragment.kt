@@ -50,7 +50,6 @@ class ExpenseCategoryFragment : Fragment() {
             ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
         viewModel = ViewModelProvider(this).get(ManageCategoryViewModel::class.java)
 
-        // Lắng nghe sự kiện
         setupObservers()
 
         // Ra lệnh cho ViewModel lấy dữ liệu

@@ -101,7 +101,6 @@ class SelectCategoryLimitAdapter(
                 childBinding.root.setOnClickListener(clickListener)
                 childBinding.cbCategory.setOnClickListener(clickListener)
 
-                // Nhét dòng hạng mục này vào trong khung chứa
                 binding.llItemsContainer.addView(childBinding.root)
             }
         }

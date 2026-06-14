@@ -34,10 +34,8 @@ class ForgotPasswordFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
-        // Gọi hàm lắng nghe kết quả từ ViewModel
         setupObservers()
 
-        // Bắt sự kiện khi nhấn nút "Tiếp tục"
         binding.btnContinue.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             // Nếu email hợp lệ thì giao việc cho ViewModel gửi mail

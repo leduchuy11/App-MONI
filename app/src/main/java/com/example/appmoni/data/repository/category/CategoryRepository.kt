@@ -10,8 +10,8 @@ import com.google.firebase.firestore.QuerySnapshot
 class CategoryRepository {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    // 1. Lấy danh sách danh mục từ mây (Dùng chung cho cả Thu và Chi)
-    // Chỉ cần truyền chữ "expense" hoặc "income" vào biến type
+    // 1. Lấy danh sách danh mục từ cloud (Dùng chung cho cả Thu và Chi)
+    // Chỉ cần truyền "expense" hoặc "income" vào biến type
     fun getCategoriesByType(userId: String, type: String): Task<QuerySnapshot> {
         return db.collection("users").document(userId).collection("categories")
             .whereEqualTo("type", type)
@@ -48,7 +48,6 @@ class CategoryRepository {
         val categoryRef = db.collection("users").document(userId).collection("categories")
         val newDocRef = categoryRef.document()
 
-        // Gắn ID tự tạo vào Map dữ liệu
         categoryData["id"] = newDocRef.id
         return newDocRef.set(categoryData)
     }

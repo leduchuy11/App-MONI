@@ -209,7 +209,6 @@ class EditSavingsFragment : Fragment() {
             interestRate = newInterestRate,
             earlyWithdrawalRate = newEarlyRate,
             note = binding.etSavingsNote.text.toString().trim()
-            // Không copy/sửa sourceWalletId hay sourceWalletName ở đây
         )
 
         binding.btnSaveSavings.isEnabled = false

@@ -420,7 +420,6 @@ class RecordFragment : Fragment() {
             val walletName = bundle.getString("selected_wallet_name")
             val walletIcon = bundle.getString("selected_wallet_icon") ?: ""
 
-            // Màu đen đậm dùng khi đã chọn xong
             val activeColor = "#333333".toColorInt()
 
             when (currentSelectingWalletFor) {

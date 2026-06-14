@@ -40,7 +40,7 @@ class ManageCategoryViewModel : ViewModel() {
                         val expenses = DefaultCategories.getExpenseCategories()
                         val incomes = DefaultCategories.getIncomeCategories()
 
-                        // Đẩy CẢ HAI lên Firebase
+                        // Đẩy cả hai lên Firebase
                         repository.createAllDefaultCategories(userId, expenses, incomes)
                             .addOnSuccessListener {
                                 _expenseList.value = expenses
@@ -77,7 +77,7 @@ class ManageCategoryViewModel : ViewModel() {
                         val expenses = DefaultCategories.getExpenseCategories()
                         val incomes = DefaultCategories.getIncomeCategories()
 
-                        // Đẩy CẢ HAI lên Firebase
+                        // Đẩy cả hai lên Firebase
                         repository.createAllDefaultCategories(userId, expenses, incomes)
                             .addOnSuccessListener {
                                 _incomeList.value = incomes

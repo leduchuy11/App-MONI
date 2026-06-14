@@ -65,7 +65,7 @@ class LimitDetailViewModel(application: Application) : AndroidViewModel(applicat
             var index = 0f
 
             while (calendar.timeInMillis <= endMillis) {
-                // Nhãn trục X
+
                 xLabels.add(sdf.format(calendar.timeInMillis))
 
                 // Lọc các giao dịch rơi vào ngày này

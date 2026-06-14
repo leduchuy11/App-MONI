@@ -47,7 +47,6 @@ class ManageExpenseFragment : Fragment() {
             ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
         viewModel = ViewModelProvider(requireActivity()).get(ManageCategoryViewModel::class.java)
 
-        // Lắng nghe sự kiện
         setupObservers()
 
         // BẮT ĐẦU LẤY DỮ LIỆU
@@ -64,13 +63,13 @@ class ManageExpenseFragment : Fragment() {
 
     // HÀM NGỒI NGHE KẾT QUẢ TỪ VIEWMODEL
     private fun setupObservers() {
-        // Hóng Loading
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.rvExpense.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
         }
 
-        // Hóng Lỗi
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showToast("Lỗi: $error", ToastType.ERROR)

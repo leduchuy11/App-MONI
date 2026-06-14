@@ -10,15 +10,15 @@ import com.example.appmoni.data.model.transaction.TransactionItem
 @Dao
 interface TransactionDao {
 
-    // THÊM HOẶC CẬP NHẬT GIAO DỊCH
+    //1.  THÊM HOẶC CẬP NHẬT GIAO DỊCH
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionItem)
 
-    // LẤY DANH SÁCH GIAO DỊCH
+    // 2. LẤY DANH SÁCH GIAO DỊCH
     @Query("SELECT * FROM transactions WHERE userId = :uid ORDER BY dateInMillis DESC")
     fun getAllTransactions(uid: String): LiveData<List<TransactionItem>>
 
-    // XÓA GIAO DỊCH
+    // 3. XÓA GIAO DỊCH
     @Query("DELETE FROM transactions WHERE id = :transactionId")
     suspend fun deleteTransaction(transactionId: String)
 
@@ -44,7 +44,7 @@ interface TransactionDao {
         categoryIds: List<String>
     ): Long?
 
-    // 6. Hàm tính tổng nết chọn "Tất cả hạng mục"
+    // 6. Hàm tính tổng nếu chọn "Tất cả hạng mục"
     @Query(
         """
         SELECT SUM(amount) FROM transactions 

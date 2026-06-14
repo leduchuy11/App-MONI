@@ -33,7 +33,6 @@ class RegisterFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
-        // Gọi hàm lắng nghe kết quả
         setupObservers()
 
         binding.btnRegister.setOnClickListener {
@@ -43,19 +42,17 @@ class RegisterFragment : Fragment() {
 
     // HÀM OBSERVE TỪ VIEWMODEL
     private fun setupObservers() {
-        // Hóng Loading
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             setLoadingState(isLoading)
         }
 
-        // Hóng Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 requireContext().showToast("Lỗi: $errorMessage", ToastType.ERROR)
             }
         }
 
-        // Hóng Thành công
         viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 requireContext().showToast("Đăng ký thành công! Vui lòng kiểm tra email để xác thực.",

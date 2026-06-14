@@ -66,7 +66,7 @@ class ManageLimitViewModel(application: Application) : AndroidViewModel(applicat
                     }
 
                     limit.spentAmount = spent
-                    limit // Trả về object đã được cập nhật
+                    limit
                 }
             }
 

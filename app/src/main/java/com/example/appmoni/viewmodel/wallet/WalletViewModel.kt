@@ -82,7 +82,6 @@ class WalletViewModel : ViewModel() {
         _selectedAccountType.value = type
         _accountTypeName.value = typeName
         _accountTypeIcon.value = typeIcon
-        // Khi đổi loại tài khoản thì reset lại tên tổ chức
         _selectedInstitutionName.value = ""
         _selectedInstitutionIcon.value = ""
     }
@@ -107,7 +106,6 @@ class WalletViewModel : ViewModel() {
 
         repository.updateWallet(userId, updatedWallet)
 
-        // Phản hồi UI ngay
         _isLoading.value = false
         _actionSuccess.value = "Cập nhật tài khoản thành công!"
     }

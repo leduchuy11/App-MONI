@@ -58,7 +58,6 @@ class AddEditCategoryFragment : Fragment() {
         // Thiết lập giao diện theo Logic
         setupUI()
 
-        // Xử lý các nút bấm
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -89,20 +88,17 @@ class AddEditCategoryFragment : Fragment() {
 
     // HÀM NGỒI HÓNG KẾT QUẢ TỪ VIEWMODEL
     private fun setupObservers() {
-        // Hóng Loading để khóa/mở khóa các nút bấm, tránh người dùng bấm nhiều lần
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.btnSave.isEnabled = !isLoading
             binding.btnDelete.isEnabled = !isLoading
         }
 
-        // Hóng thông báo Lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showToast("Lỗi: $error", ToastType.ERROR)
             }
         }
 
-        // Hóng thông báo Thành công (Cho cả Thêm, Sửa, Xóa)
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
             requireContext().showToast(message, ToastType.SUCCESS)
             findNavController().popBackStack()

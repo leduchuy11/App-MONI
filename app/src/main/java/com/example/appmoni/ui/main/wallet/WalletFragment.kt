@@ -115,9 +115,9 @@ class WalletFragment : Fragment() {
             if (savings != null) {
                 if (savings.isEmpty()) {
                     binding.rvSavingsAccounts.visibility = View.GONE
-                    binding.cardEmptySavings.visibility = View.VISIBLE // <-- SỬA Ở ĐÂY
+                    binding.cardEmptySavings.visibility = View.VISIBLE
                 } else {
-                    binding.cardEmptySavings.visibility = View.GONE    // <-- SỬA Ở ĐÂY
+                    binding.cardEmptySavings.visibility = View.GONE
                     binding.rvSavingsAccounts.visibility = View.VISIBLE
                     savingsAdapter.updateData(savings)
                 }

@@ -76,7 +76,6 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
-        // Gọi hàm lắng nghe dữ liệu từ ViewModel
         setupObservers()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -104,12 +103,10 @@ class LoginFragment : Fragment() {
 
     // HÀM OBSERVE KẾT QUẢ TỪ VIEWMODEL
     private fun setupObservers() {
-        // Hóng trạng thái Loading để bật/tắt vòng xoay
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             setLoadingState(isLoading)
         }
 
-        // Hóng thông báo lỗi để hiển thị Toast
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 requireContext().showToast("Lỗi: $errorMessage", ToastType.ERROR)
@@ -117,7 +114,6 @@ class LoginFragment : Fragment() {
             }
         }
 
-        // Hóng trạng thái thành công để chuyển trang
         viewModel.isAuthSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 checkAndRequestNotificationPermission()
@@ -190,7 +186,7 @@ class LoginFragment : Fragment() {
         }
 
         val builder = androidx.core.app.NotificationCompat.Builder(requireContext(), channelId)
-            .setSmallIcon(R.drawable.ic_congratulations) // Đảm bảo bạn có icon này
+            .setSmallIcon(R.drawable.ic_congratulations)
             .setContentTitle("Chào mừng bạn đến với Moni")
             .setContentText("Hãy bắt đầu ghi chép chi tiêu ngay hôm nay nhé!")
             .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)

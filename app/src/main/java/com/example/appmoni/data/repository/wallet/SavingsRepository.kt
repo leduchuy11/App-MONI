@@ -20,7 +20,7 @@ class SavingsRepository(private val db: FirebaseFirestore = FirebaseFirestore.ge
                 .collection("savings").document(savings.id)
             batch.set(savingsRef, savings)
 
-            // Nếu CÓ chọn ví nguồn thì lưu Giao dịch và Trừ tiền
+            // Nếu có chọn ví nguồn thì lưu Giao dịch và Trừ tiền
             if (transaction != null && savings.sourceWalletId.isNotEmpty()) {
                 // Lưu giao dịch
                 val transactionRef = db.collection("users").document(savings.userId)

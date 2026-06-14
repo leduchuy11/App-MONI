@@ -93,7 +93,6 @@ fun EditText.addCurrencyFormatter() {
                         this@addCurrencyFormatter.setText(formatted)
                         this@addCurrencyFormatter.setSelection(formatted.length)
                     } catch (e: NumberFormatException) {
-                        // Bỏ qua nếu số quá giới hạn của Long
                     }
                 } else {
                     current = ""

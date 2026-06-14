@@ -121,7 +121,7 @@ class LimitDetailFragment : Fragment() {
             binding.tvDetailCategories.text = "Tất cả hạng mục"
         } else {
             binding.tvDetailCategories.text =
-                "Đang tải..." // Hiển thị tạm trong lúc chờ Observer cập nhật
+                "Đang tải..."
         }
 
         val context = binding.root.context

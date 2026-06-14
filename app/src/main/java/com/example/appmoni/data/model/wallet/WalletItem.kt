@@ -9,7 +9,7 @@ data class WalletItem(
     var name: String = "",
     var balance: Long = 0L,
     var iconName: String = "",
-    var type: String = "spending",      // Mặc định là tài khoản chi tiêu
+    var type: String = "spending",
     var accountType: String = "cash",   // Phân biệt Tiền mặt / Ngân hàng / Ví điện tử
     var bankName: String = "",
 

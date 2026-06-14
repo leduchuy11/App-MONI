@@ -41,13 +41,10 @@ class ManageSpendingFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(WalletViewModel::class.java)
 
-        // Cài đặt danh sách (RecyclerView) và Adapter
         setupRecyclerView()
 
-        // Lắng nghe dữ liệu từ ViewModel
         setupObservers()
 
-        // Bắt sự kiện các nút bấm
         setupClickListeners()
 
         // Tải dữ liệu từ mây về (chỉ lấy loại "spending" - chi tiêu)
@@ -93,7 +90,6 @@ class ManageSpendingFragment : Fragment() {
             }
         }
 
-        // Hóng thông báo lỗi (nếu có)
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showToast("Lỗi: $error", ToastType.ERROR)
@@ -121,12 +117,11 @@ class ManageSpendingFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        // Nút lùi về
+
         binding.btnBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        // Nút thêm ví mới
         binding.fabAddWallet.setOnClickListener {
             findNavController().navigate(R.id.action_manageSpendingFragment_to_addWalletFragment)
         }

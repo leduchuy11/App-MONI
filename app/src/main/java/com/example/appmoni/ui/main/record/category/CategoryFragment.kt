@@ -39,11 +39,9 @@ class CategoryFragment : Fragment() {
 
         // Lắng nghe bàn phím và phát tín hiệu
         binding.etSearch.addTextChangedListener { text ->
-            // Mỗi khi gõ 1 chữ, cập nhật chữ đó cho sharedViewModel
             sharedViewModel.updateQuery(text.toString().trim())
         }
 
-        // Nút Back quay về màn hình Ghi chép
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }

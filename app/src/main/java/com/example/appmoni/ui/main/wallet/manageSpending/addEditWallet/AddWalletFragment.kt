@@ -55,13 +55,11 @@ class AddWalletFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        // Hóng trạng thái loading
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.btnSaveWallet.isEnabled = !isLoading
         }
 
-        // Hóng thành công
         viewModel.actionSuccess.observe(viewLifecycleOwner) { message ->
             if (message.isNotEmpty()) {
                 requireContext().showToast(message, ToastType.SUCCESS)
@@ -70,7 +68,6 @@ class AddWalletFragment : Fragment() {
             }
         }
 
-        // Hóng lỗi
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showToast("Lỗi: $error", ToastType.ERROR)

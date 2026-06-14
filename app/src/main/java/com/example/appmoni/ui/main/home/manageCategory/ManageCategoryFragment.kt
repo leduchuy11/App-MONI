@@ -36,7 +36,6 @@ class ManageCategoryFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        // Kết nối ViewModel và lắng nghe thanh tìm kiếm
         sharedViewModel =
             ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
 
@@ -47,7 +46,6 @@ class ManageCategoryFragment : Fragment() {
             sharedViewModel.updateQuery(text.toString().trim())
         }
 
-        // Khởi tạo ViewPager2 và TabLayout
         val pagerAdapter = ManageCategoryPagerAdapter(this)
         binding.viewPagerManage.adapter = pagerAdapter
 
@@ -60,7 +58,6 @@ class ManageCategoryFragment : Fragment() {
 
         // Xử lý Nút Nổi: Thêm danh mục
         binding.fabAddCategory.setOnClickListener {
-            // Lấy Tab hiện tại để biết người dùng muốn thêm danh mục Thu hay Chi
             val currentTab = binding.viewPagerManage.currentItem
             val type = if (currentTab == 0) "expense" else "income"
 
@@ -73,7 +70,6 @@ class ManageCategoryFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Dọn dẹp ViewBinding để tránh rò rỉ bộ nhớ
         _binding = null
     }
 
@@ -84,8 +80,8 @@ class ManageCategoryFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ManageExpenseFragment() // Mình sẽ tạo Class này ở bước tiếp theo
-                1 -> ManageIncomeFragment()  // Mình sẽ tạo Class này ở bước tiếp theo
+                0 -> ManageExpenseFragment()
+                1 -> ManageIncomeFragment()
                 else -> Fragment()
             }
         }

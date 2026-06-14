@@ -142,7 +142,6 @@ class AddLimitFragment : Fragment() {
         // Nhấn ok
         datePicker.addOnPositiveButtonClickListener { selection ->
             if (isStartDate) {
-                // Ràng buộc: Không cho ngày bắt đầu lớn hơn ngày kết thúc
                 if (selection > endDateInMillis) {
                     requireContext().showToast("Ngày bắt đầu không được sau ngày kết thúc",
                         ToastType.WARNING)
@@ -161,7 +160,6 @@ class AddLimitFragment : Fragment() {
             }
         }
 
-        // Hiển thị lịch lên màn hình
         datePicker.show(parentFragmentManager, "DATE_PICKER")
     }
 

@@ -47,7 +47,6 @@ class ManageIncomeFragment : Fragment() {
             ViewModelProvider(requireActivity()).get(CategorySharedViewModel::class.java)
         viewModel = ViewModelProvider(requireActivity()).get(ManageCategoryViewModel::class.java)
 
-        // Lắng nghe sự kiện
         setupObservers()
 
         // Ra lệnh cho viewmodel lấy dữ liệu
@@ -63,13 +62,13 @@ class ManageIncomeFragment : Fragment() {
 
     // Hàm ngồi nghe từ viewmodel
     private fun setupObservers() {
-        // Hóng Loading
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.rvIncomeCategories.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
         }
 
-        // Hóng Lỗi
+
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 requireContext().showToast("Lỗi: $error", ToastType.ERROR)

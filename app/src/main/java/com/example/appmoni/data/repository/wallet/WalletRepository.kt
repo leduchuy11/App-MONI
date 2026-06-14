@@ -26,7 +26,6 @@ class WalletRepository {
                     return@addSnapshotListener
                 }
                 if (snapshots != null) {
-                    // Dữ liệu trong Local Cache thay đổi là nó tự đẩy lên UI ngay
                     val list = snapshots.toObjects(WalletItem::class.java)
                     onResult(list)
                 }
@@ -70,7 +69,7 @@ class WalletRepository {
                             "walletIcon", wallet.iconName
                         )
                     }
-                    batch.commit() // Firebase tự xử lý: offline thì lưu tạm, online thì đẩy lên
+                    batch.commit()
                 }
             }
 

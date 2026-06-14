@@ -19,10 +19,8 @@ class ManageInnerCategoryAdapter(
         fun bind(item: CategoryExpenseItem, position: Int) {
             val context = binding.root.context
 
-            // Đổ tên danh mục
             binding.tvCategoryName.text = item.name
 
-            // Lấy Icon
             val imageResId = context.resources.getIdentifier(
                 item.iconName, "drawable", context.packageName
             )
@@ -32,12 +30,10 @@ class ManageInnerCategoryAdapter(
                 binding.ivCategoryIcon.setImageResource(R.drawable.ic_category_breakfast)
             }
 
-            // BẮT SỰ KIỆN BẤM VÀO NÚT SỬA (CÂY BÚT)
             binding.btnEditCategory.setOnClickListener {
                 onEditClick(item)
             }
 
-            // Bạn cũng có thể cho phép bấm vào cả dòng để sửa cho tiện
             binding.root.setOnClickListener {
                 onEditClick(item)
             }

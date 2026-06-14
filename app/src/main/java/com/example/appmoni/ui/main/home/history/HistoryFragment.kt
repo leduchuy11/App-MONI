@@ -163,7 +163,7 @@ class HistoryFragment : Fragment() {
 
         // Lấy chuỗi ngày hôm nay và hôm qua để so sánh
         val todayStr = sdfDate.format(Date())
-        val yesterdayStr = sdfDate.format(Date(System.currentTimeMillis() - 86400000)) // Trừ đi 24h (tính bằng millisecond)
+        val yesterdayStr = sdfDate.format(Date(System.currentTimeMillis() - 86400000))
 
         // Xử lý từng nhóm ngày
         for ((dateStr, listTrans) in groupedMap) {
@@ -173,7 +173,7 @@ class HistoryFragment : Fragment() {
                 yesterdayStr -> "Hôm qua"
                 else -> {
                     val dateObj = sdfDate.parse(dateStr)
-                    val sdfDayOfWeek = SimpleDateFormat("EEEE", Locale("vi", "VN")) // Ra chữ "Thứ 2", "Thứ 3"
+                    val sdfDayOfWeek = SimpleDateFormat("EEEE", Locale("vi", "VN"))
                     dateObj?.let { sdfDayOfWeek.format(it) } ?: ""
                 }
             }
@@ -235,7 +235,7 @@ class HistoryFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
-    // BỔ SUNG HÀM NÀY ĐỂ HIỆN BẢNG CHỌN THÁNG/NĂM
+    // HÀM NÀY ĐỂ HIỆN BẢNG CHỌN THÁNG/NĂM
     private fun showDatePickerForOtherMonth() {
         // Gọi giao diện vừa tạo
         val dialogView = layoutInflater.inflate(R.layout.dialog_month_year_picker, null)
@@ -264,7 +264,6 @@ class HistoryFragment : Fragment() {
                 val selectedMonth = monthPicker.value
                 val selectedYear = yearPicker.value
 
-                // Format lại thành "MM/yyyy"
                 val formattedMonth = String.format("%02d", selectedMonth)
                 val selectedMonthYear = "$formattedMonth/$selectedYear"
 
